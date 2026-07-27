@@ -162,13 +162,13 @@ app.use(
                 version: "2.0.0",
                 description: `# Kangwifi APIs v2
 
-Koleksi **168 REST API endpoint** yang siap pakai, gratis, tanpa API key.
+Koleksi **179 REST API endpoint** yang siap pakai, gratis, tanpa API key.
 
 ## Kenapa Pakai API Ini?
 
 - **Super cepat** — Dibangun di atas **Bun + Elysia**, response time sub-millisecond
 - **Gratis & tanpa API key** — Langsung pakai, tidak perlu registrasi
-- **168 endpoint** — AI, downloader, search, tools, Islamic, anime, dan banyak lagi
+- **179 endpoint** — AI, downloader, search, tools, Islamic, anime, dan banyak lagi
 - **Mudah dipakai** — Support **GET** (query params) dan **POST** (JSON body)
 
 ## Cara Pakai — 2 Metode
@@ -222,11 +222,11 @@ curl "http://localhost:47291/tools/gempa"
 
 | Tag | Jumlah | Contoh |
 |-----|--------|--------|
-| **AI** | 10 | \`/ai/gemini\`, \`/ai/chatgpt\`, \`/ai/chatdeep\`, \`/ai/deepai-chat\` |
-| **Downloader** | 37 | \`/downloader/tiktokio\`, \`/downloader/savetube\`, \`/downloader/flickreels\` |
+| **AI** | 13 | \`/ai/gemini\`, \`/ai/chatgpt\`, \`/ai/chatdeep\`, \`/ai/deepai-chat\` |
+| **Downloader** | 38 | \`/downloader/tiktokio\`, \`/downloader/savetube\`, \`/downloader/flickreels\` |
 | **Search** | 16 | \`/search/wikipedia\`, \`/search/kbbi\`, \`/search/genius-lyrics\` |
 | **Tools** | 30 | \`/tools/qrcode\`, \`/tools/tts\`, \`/tools/tempmail\`, \`/tools/sekolah\` |
-| **Anime** | 9 | \`/anime/livechart\`, \`/anime/hurawatch\`, \`/anime/nontonanime\` |
+| **Anime** | 18 | \`/anime/livechart\`, \`/anime/hurawatch\`, \`/anime/nontonanime\` |
 | **Maker** | 4 | \`/maker/brat\`, \`/maker/qc\` |
 | **Islamic** | 6 | \`/islamic/quran-list\`, \`/islamic/jadwal-sholat\` |
 
@@ -470,7 +470,7 @@ pre { background: #0f3460; padding: 15px; border-radius: 8px; overflow-x: auto; 
 <body>
 <div class="container">
 <h1>Kangwifi APIs v2</h1>
-<p class="subtitle">168 endpoint — Gratis, tanpa API key — Support GET + POST</p>
+<p class="subtitle">179 endpoint — Gratis, tanpa API key — Support GET + POST</p>
 
 <div class="card">
 <h2>Cara Pakai</h2>
@@ -526,11 +526,11 @@ curl -X POST "http://localhost:${PORT}/ai/pollinations" \\
 <div class="card">
 <h2>Kategori Endpoint</h2>
 <div class="grid">
-<div class="grid-item"><a href="/docs">🤖 AI (10)</a></div>
-<div class="grid-item"><a href="/docs">⬇️ Downloader (37)</a></div>
+<div class="grid-item"><a href="/docs">🤖 AI (13)</a></div>
+<div class="grid-item"><a href="/docs">⬇️ Downloader (38)</a></div>
 <div class="grid-item"><a href="/docs">🔍 Search (16)</a></div>
 <div class="grid-item"><a href="/docs">🛠️ Tools (30)</a></div>
-<div class="grid-item"><a href="/docs">📺 Anime (9)</a></div>
+<div class="grid-item"><a href="/docs">📺 Anime (18)</a></div>
 <div class="grid-item"><a href="/docs">🎨 Maker (4)</a></div>
 <div class="grid-item"><a href="/docs">🕌 Islamic (6)</a></div>
 </div>
