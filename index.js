@@ -13,7 +13,7 @@
 //   - CORS headers added (Access-Control-Allow-Origin: *)
 //   - Root "/" returns a simple usage guide (not just redirect to /docs)
 //   - Better mobile/Hoppscotch UX — POST with {"prompt": "..."} is way easier
-//   - Docs UI switched to RapiDoc (mobile-friendly, built-in Try it, dark theme)
+//   - Docs UI: custom Swagger UI (FastAPI-style, clean, properly configured)
 // ============================================================================
 
 import { Elysia } from "elysia"
@@ -283,46 +283,46 @@ curl "http://localhost:47291/tools/gempa"
     }),
 )
 
-// ─── Custom Docs UI — RapiDoc (mobile-friendly, built-in "Try it", dark theme) ──
+// ─── Custom Docs UI — Swagger UI (FastAPI-style, clean, properly configured) ──
 app.get("/docs", () => {
     const html = `<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kangwifi APIs — Docs</title>
-    <style>
-        body { margin: 0; padding: 0; background: #1a1a2e; }
-        rapi-doc { width: 100%; min-height: 100vh; }
-    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css">
+    <title>Kangwifi APIs - Swagger UI</title>
 </head>
 <body>
-    <rapi-doc
-        spec-url="/swagger/json"
-        theme="dark"
-        layout="read"
-        render-style="read"
-        schema-style="table"
-        default-schema-tab="example"
-        show-header="false"
-        allow-search="true"
-        allow-advanced-search="true"
-        sort-endpoints-by="method"
-        show-curl-before-try="true"
-        allow-try="true"
-        api-key-name="x-api-key"
-        api-key-location="header"
-        font-size="default"
-        primary-color="#9b59b6"
-        nav-bg-color="#1a1a2e"
-        nav-text-color="#e0e0e0"
-        nav-hover-bg-color="#0f3460"
-        nav-accent-color="#e94560"
-        bg-color="#16213e"
-        text-color="#e0e0e0"
-        header-color="#9b59b6"
-    ></rapi-doc>
-    <script src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
+<div id="swagger-ui"></div>
+<script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+<script>
+const ui = SwaggerUIBundle({
+    url: "/swagger/json",
+    dom_id: "#swagger-ui",
+    presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIBundle.SwaggerUIStandalonePreset
+    ],
+    layout: "BaseLayout",
+    docExpansion: "list",
+    defaultModelsExpandDepth: 1,
+    defaultModelExpandDepth: 1,
+    displayRequestDuration: true,
+    filter: true,
+    showExtensions: true,
+    showCommonExtensions: true,
+    tryItOutEnabled: true,
+    operationsSorter: "method",
+    tagsSorter: "alpha",
+    persistAuthorization: true,
+    deepLinking: true,
+    syntaxHighlight: {
+        activate: true,
+        theme: "monokai"
+    }
+})
+</script>
 </body>
 </html>`
     return new Response(html, {
@@ -560,7 +560,7 @@ app.listen(PORT, () => {
     console.log("")
     console.log("  Kangwifi APIs  →  Elysia + Bun edition (v2: POST + CORS)")
     console.log(`  Listen         →  http://localhost:${PORT}`)
-    console.log(`  Docs (RapiDoc) →  http://localhost:${PORT}/docs`)
+    console.log(`  Docs (Swagger) →  http://localhost:${PORT}/docs`)
     console.log(`  Routes         →  ${features.length} endpoint (GET + POST = ${features.length * 2} total)`)
     console.log("")
 })
