@@ -162,13 +162,13 @@ app.use(
                 version: "2.0.0",
                 description: `# Kangwifi APIs v2
 
-Koleksi **179 REST API endpoint** yang siap pakai, gratis, tanpa API key.
+Koleksi **178 REST API endpoint** yang siap pakai, gratis, tanpa API key.
 
 ## Kenapa Pakai API Ini?
 
 - **Super cepat** — Dibangun di atas **Bun + Elysia**, response time sub-millisecond
 - **Gratis & tanpa API key** — Langsung pakai, tidak perlu registrasi
-- **179 endpoint** — AI, downloader, search, tools, Islamic, anime, dan banyak lagi
+- **178 endpoint** — AI, downloader, search, tools, Islamic, anime, dan banyak lagi
 - **Mudah dipakai** — Support **GET** (query params) dan **POST** (JSON body)
 
 ## Cara Pakai — 2 Metode
@@ -222,11 +222,11 @@ curl "http://localhost:47291/tools/gempa"
 
 | Tag | Jumlah | Contoh |
 |-----|--------|--------|
-| **AI** | 13 | \`/ai/gemini\`, \`/ai/chatgpt\`, \`/ai/chatdeep\`, \`/ai/deepai-chat\` |
-| **Downloader** | 38 | \`/downloader/tiktokio\`, \`/downloader/savetube\`, \`/downloader/flickreels\` |
-| **Search** | 16 | \`/search/wikipedia\`, \`/search/kbbi\`, \`/search/genius-lyrics\` |
-| **Tools** | 30 | \`/tools/qrcode\`, \`/tools/tts\`, \`/tools/tempmail\`, \`/tools/sekolah\` |
-| **Anime** | 18 | \`/anime/livechart\`, \`/anime/hurawatch\`, \`/anime/nontonanime\` |
+| **AI** | 20 | \`/ai/gemini\`, \`/ai/chatgpt\`, \`/ai/chatdeep\`, \`/ai/claude3\`, \`/ai/quillbotai\` |
+| **Downloader** | 55 | \`/downloader/tiktokio\`, \`/downloader/savetube\`, \`/downloader/aiodl\`, \`/downloader/snaptik\` |
+| **Search** | 27 | \`/search/wikipedia\`, \`/search/kbbi\`, \`/search/komiku\`, \`/search/otakudesu\` |
+| **Tools** | 49 | \`/tools/qrcode\`, \`/tools/tts\`, \`/tools/bmkg\`, \`/tools/colorizer\` |
+| **Anime** | 17 | \`/anime/livechart\`, \`/anime/hurawatch\`, \`/anime/nontonanime\` |
 | **Maker** | 4 | \`/maker/brat\`, \`/maker/qc\` |
 | **Islamic** | 6 | \`/islamic/quran-list\`, \`/islamic/jadwal-sholat\` |
 
@@ -257,19 +257,19 @@ curl "http://localhost:47291/tools/gempa"
             tags: [
                 {
                     name: "AI",
-                    description: "Chat & text generation — Gemini, ChatGPT, Mistral, Qwen, DeepSeek, dll. Kirim prompt via GET (query) atau POST (JSON body).",
+                    description: "Chat & text generation — Gemini, ChatGPT, Mistral, Qwen, DeepSeek, Claude3, Quillbot, dll. Kirim prompt via GET (query) atau POST (JSON body).",
                 },
                 {
                     name: "Downloader",
-                    description: "Media downloaders — TikTok, Instagram, YouTube, Spotify, dll. Kirim URL via GET (query) atau POST (JSON body).",
+                    description: "Media downloaders — TikTok, Instagram, YouTube, Spotify, Apple Music, dll. Kirim URL via GET (query) atau POST (JSON body).",
                 },
                 {
                     name: "Search",
-                    description: "Search engines — Wikipedia, KBBI, Tokopedia, Pinterest, dll.",
+                    description: "Search engines — Wikipedia, KBBI, Tokopedia, Pinterest, Komiku, Otakudesu, dll.",
                 },
                 {
                     name: "Tools",
-                    description: "Utility tools — QR code, TTS, URL shortener, weather, gempa, translate, dll.",
+                    description: "Utility tools — QR code, TTS, URL shortener, BMKG weather, gempa, translate, image tools, dll.",
                 },
                 {
                     name: "Maker",
@@ -470,7 +470,7 @@ pre { background: #0f3460; padding: 15px; border-radius: 8px; overflow-x: auto; 
 <body>
 <div class="container">
 <h1>Kangwifi APIs v2</h1>
-<p class="subtitle">179 endpoint — Gratis, tanpa API key — Support GET + POST</p>
+<p class="subtitle">${features.length} endpoint — Gratis, tanpa API key — Support GET + POST</p>
 
 <div class="card">
 <h2>Cara Pakai</h2>
@@ -526,11 +526,11 @@ curl -X POST "http://localhost:${PORT}/ai/pollinations" \\
 <div class="card">
 <h2>Kategori Endpoint</h2>
 <div class="grid">
-<div class="grid-item"><a href="/docs">🤖 AI (13)</a></div>
-<div class="grid-item"><a href="/docs">⬇️ Downloader (38)</a></div>
-<div class="grid-item"><a href="/docs">🔍 Search (16)</a></div>
-<div class="grid-item"><a href="/docs">🛠️ Tools (30)</a></div>
-<div class="grid-item"><a href="/docs">📺 Anime (18)</a></div>
+<div class="grid-item"><a href="/docs">🤖 AI (20)</a></div>
+<div class="grid-item"><a href="/docs">⬇️ Downloader (55)</a></div>
+<div class="grid-item"><a href="/docs">🔍 Search (27)</a></div>
+<div class="grid-item"><a href="/docs">🛠️ Tools (49)</a></div>
+<div class="grid-item"><a href="/docs">📺 Anime (17)</a></div>
 <div class="grid-item"><a href="/docs">🎨 Maker (4)</a></div>
 <div class="grid-item"><a href="/docs">🕌 Islamic (6)</a></div>
 </div>
