@@ -1,7 +1,7 @@
 {
   "name": "kangwifi-apis",
   "version": "1.0.0",
-  "description": "Kangwifi APIs — REST API collection on Elysia + Bun. Fork of kaminoa-api with kana scrapers integrated.",
+  "description": "Kangwifi APIs — REST API collection on Elysia + Bun. 142 endpoints, Swagger docs, sub-ms latency.",
   "license": "ISC",
   "type": "module",
   "main": "index.js",

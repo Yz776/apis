@@ -1,6 +1,6 @@
 # Kangwifi APIs
 
-> High-performance REST API collection built on **Elysia + Bun**. Fork of [kaminoa-api](https://github.com/jauhariel/kaminoa-api) with 41 scrapers integrated from [r2-kana.vercel.app](https://r2-kana.vercel.app/), documented with [@elysiajs/swagger](https://elysiajs.com/plugins/swagger), and rebranded as **Kangwifi APIs**.
+> High-performance REST API collection built on **Elysia + Bun**. 142 endpoints, Swagger docs, sub-ms latency, no API key required.
 
 ![Bun](https://img.shields.io/badge/Bun-1.3+-000000?logo=bun&logoColor=white)
 ![Elysia](https://img.shields.io/badge/Elysia-1.x-00eggf?logo=elysia&logoColor=white)
@@ -13,11 +13,10 @@
 ## ✨ Fitur Utama
 
 - 🚀 **Super cepat** — Bun HTTP server (Zig + JavaScriptCore) + Elysia compiled router. Latency sub-millisecond untuk endpoint statis, ~800 req/s throughput.
-- 📚 **Swagger UI otomatis** — Buka `/docs` di browser untuk UI Scalar yang **ramah pemula**: dark mode, search bar, try-it-out button, contoh kode di banyak bahasa (curl, JS, Python, Go, PHP, dll.), tag ber-emoji, dan intro Markdown dengan tutorial cepat.
+- 📚 **Swagger UI otomatis** — Buka `/docs` di browser untuk UI Scalar yang **ramah pemula**: dark mode, search bar, try-it-out button, contoh kode di banyak bahasa (curl, JS, Python, Go, PHP, dll.), tag ber-emoji, dan intro Markdown dengan tutorial cepat. **Self-hosted** — tidak butuh internet.
 - 🔌 **Auto-discovery** — Drop file `.js` di folder `fitur/`, restart, endpoint baru langsung live. Tidak perlu edit file lain.
 - 🔓 **Tanpa API key** — Semua endpoint terbuka tanpa autentikasi (bisa diaktifkan via `ENABLE_AUTH=true` di `.env` kalau perlu).
-- 🧩 **41 scraper tambahan dari r2-kana** — Di-port otomatis ke endpoint `/kana/*`, **digabung ke kategori yang sama** dengan endpoint asli (AI, Downloader, Search, Tools) — tidak ada pemisahan "Kana ·".
-- 🛠️ **Express-compatible** — Semua 101 file fitur asli kaminoa tetap utuh tanpa perubahan. Adapter Express-style di `index.js` map ke Elysia context.
+- 🛠️ **Express-compatible** — Handler pakai signature Express-style `(req, res)`. Adapter di `index.js` map ke Elysia context.
 
 ---
 
@@ -26,8 +25,6 @@
 | Metric | Value |
 |---|---|
 | Total endpoints | **142** |
-| Endpoint asli kaminoa | 101 |
-| Endpoint kana (baru) | 41 |
 | Boot time | ~100ms (parallel import) |
 | `/docs` latency | ~0.3ms |
 | `/docs/json` latency | ~10ms |
@@ -77,21 +74,22 @@ kangwifi-apis/
 ├── package.json
 ├── scripts/
 │   ├── bench.js          # micro-benchmark
-│   └── convert_kana.py   # kana snippet → feature file converter
+│   └── convert_kana.py   # snippet → feature file converter
 ├── fitur/                # 142 endpoint files
-│   ├── ai/               # 10 AI scrapers (kaminoa original)
-│   ├── downloader/       # 36 media downloaders (kaminoa original)
-│   ├── islamic/          # 6 Islamic utilities (kaminoa original)
-│   ├── maker/            # 4 image/text makers (kaminoa original)
-│   ├── search/           # 15 search scrapers (kaminoa original)
-│   ├── tools/            # 30 utility tools (kaminoa original)
-│   └── kana/             # 41 scrapers ported from r2-kana.vercel.app
+│   ├── ai/               # AI scrapers
+│   ├── downloader/       # media downloaders
+│   ├── islamic/          # Islamic utilities
+│   ├── maker/            # image/text makers
+│   ├── search/           # search scrapers
+│   ├── tools/            # utility tools
+│   └── kana/             # additional scrapers
 ├── lib/
 │   ├── qwen.js
 │   └── uploader.js
 ├── assets/               # fonts, JSON data, images used by features
 └── public/
-    └── docs.html         # (legacy docs UI, no longer served — Swagger takes over)
+    ├── docs.html         # (legacy docs UI, no longer served — Swagger takes over)
+    └── scalar.js         # Self-hosted Scalar UI bundle (no CDN dependency)
 ```
 
 ---
@@ -110,6 +108,7 @@ Akses di `http://localhost:47291/docs` — UI Scalar-powered dengan fitur:
 - 🏷️ **Tag ber-emoji** — Setiap kategori punya emoji (🤖 AI, ⬇️ Downloader, 🔍 Search, 🛠️ Tools, 🎨 Maker, 🕌 Islamic) untuk navigasi visual
 - 📥 **Download OpenAPI spec** — Tombol untuk download JSON spec, bisa di-import ke Postman/Insomnia
 - 🚫 **Hidden clients** — Sembunyikan HTTP client obscure (C, Swift, Kotlin, Dart, dll.) supaya tidak overwhelming
+- 🔌 **Self-hosted Scalar bundle** — Tidak butuh internet untuk load docs UI
 
 ### OpenAPI 3 Spec
 
@@ -117,22 +116,18 @@ Raw JSON spec di `http://localhost:47291/docs/json` — bisa di-import ke Postma
 
 ### Tags
 
-Endpoint kana **digabung** dengan endpoint kaminoa asli di kategori yang sama (tidak ada prefix "Kana · "). Semua endpoint AI (baik kaminoa maupun kana) muncul di bawah tag `AI`, semua endpoint downloader di bawah `Downloader`, dan seterusnya.
-
-| Tag | Total | Kaminoa | Kana | Deskripsi |
-|---|---|---|---|---|
-| `AI` | 17 | 10 | 7 | 🤖 Chat & text generation (Gemini, ChatGPT, Mistral, Qwen, GPT-kana, Claude, DeepSeek, Quillbot, dll.) |
-| `Downloader` | 48 | 36 | 12 | ⬇️ Media downloaders (TikTok, IG, YouTube, Spotify, ytmp3, snaptik, aiodl, dll.) |
-| `Search` | 24 | 15 | 9 | 🔍 Search engines (Wikipedia, KBBI, Tokopedia, lk21, otakudesu, apkmody, dll.) |
-| `Tools` | 43 | 30 | 13 | 🛠️ Utility tools (QR, TTS, weather, URL shortener, bmkg, yttranscript, dll.) |
-| `Maker` | 4 | 4 | 0 | 🎨 Image/text makers (brat, quote card, dll.) |
-| `Islamic` | 6 | 6 | 0 | 🕌 Islamic utilities (Quran, jadwal sholat, asmaul husna, dll.) |
+| Tag | Total | Deskripsi |
+|---|---|---|
+| `AI` | 17 | 🤖 Chat & text generation (Gemini, ChatGPT, Mistral, Qwen, Claude, DeepSeek, Quillbot, dll.) |
+| `Downloader` | 49 | ⬇️ Media downloaders (TikTok, IG, YouTube, Spotify, ytmp3, snaptik, aiodl, dll.) |
+| `Search` | 26 | 🔍 Search engines (Wikipedia, KBBI, Tokopedia, lk21, otakudesu, apkmody, dll.) |
+| `Tools` | 47 | 🛠️ Utility tools (QR, TTS, weather, URL shortener, bmkg, yttranscript, dll.) |
+| `Maker` | 4 | 🎨 Image/text makers (brat, quote card, dll.) |
+| `Islamic` | 6 | 🕌 Islamic utilities (Quran, jadwal sholat, asmaul husna, dll.) |
 
 ---
 
 ## 🧩 Contoh Endpoint
-
-### Original kaminoa (Express-style, tetap utuh)
 
 ```js
 // fitur/ai/gemini.js
@@ -157,37 +152,6 @@ export default {
 }
 ```
 
-### Kana scraper (auto-generated dari r2-kana snippet)
-
-```js
-// fitur/kana/bmkg.js (auto-generated from snippet "bmkg.js" by convert_kana.py)
-// Auto-generated from r2-kana.vercel.app snippet "bmkg.js" (ihGzhdB)
-
-async function bmkgWeather() {
-  // ... original snippet code ...
-}
-
-export default {
-  route: {
-    method: "get",
-    path: "/kana/bmkg",
-    auth: false,
-    tags: ["Tools"],
-    summary: "bmkg",
-    parameters: [],
-    responses: { 200: { description: "Berhasil" } },
-  },
-  handler: async (req, res) => {
-    try {
-      const result = await bmkgWeather()
-      return res.json({ ok: true, result })
-    } catch (e) {
-      return res.status(500).json({ ok: false, error: e.message })
-    }
-  },
-}
-```
-
 ---
 
 ## ➕ Menambah Endpoint Baru
@@ -200,7 +164,7 @@ export default {
   route: {
     method: "get",                    // get | post | put | patch | delete
     path: "/kategori/nama",
-    auth: false,                      // true untuk butuh API key
+    auth: false,                      // true untuk butuh API key (saat ENABLE_AUTH=true)
     tags: ["Kategori"],
     summary: "Deskripsi singkat",
     description: "Deskripsi panjang (opsional)",
@@ -235,24 +199,6 @@ Restart server — endpoint baru muncul di `/docs` otomatis.
 
 ---
 
-## 🔧 Menambah Scraper dari r2-kana
-
-Re-run converter untuk fetch snippet terbaru dari r2-kana.vercel.app:
-
-```bash
-python3 scripts/convert_kana.py
-```
-
-Script akan:
-1. Fetch semua snippet dari `https://r2-kana.vercel.app/api/snippets`
-2. Skip snippet Python, snippet dengan dependency unavailable (socket.io-client, playwright, dll.), dan snippet dengan top-level side effects
-3. Strip demo invocation (top-level `await`, IIFE, top-level `const x = await foo()`, dll.) menggunakan tokenizer char-by-char
-4. Deteksi nama fungsi utama dari demo invocation
-5. Wrap snippet dalam feature file dengan route metadata
-6. Tulis ke `fitur/kana/<slug>.js`
-
----
-
 ## ⚡ Performance
 
 ### Mengapa cepat?
@@ -260,7 +206,7 @@ Script akan:
 1. **Bun HTTP server** — Dibangun dengan Zig di atas JavaScriptCore (engine Safari). Startup ~5x lebih cepat dari Node.js, overhead per-request jauh lebih rendah.
 2. **Elysia compiled router** — Route tree di-compile saat registration, setiap request hit flat switch bukan middleware chain.
 3. **Parallel feature loading** — 142 file fitur di-import paralel via `Promise.all` saat boot. Cold start dari ~1s sequential jadi ~100ms parallel.
-4. **In-memory cache** — `docs.html` di-load sekali ke memory, swagger spec di-cache per host. Zero disk I/O per request.
+4. **In-memory cache** — Swagger spec di-cache per host. Zero disk I/O per request.
 5. **Inline auth** — Auth check di-inline sebagai `beforeHandle` hook, tidak ada middleware indirection.
 6. **Native `fetch`** — Bun ship native `fetch` (dipakai oleh `lib/uploader.js`), lebih cepat dari polyfill.
 
@@ -307,9 +253,9 @@ Di Swagger UI, tombol "Authorize" muncul di kanan atas untuk input API key (hany
 
 ```bash
 # Langsung pakai — tanpa header
-http://localhost:47291/kana/bmkg
 http://localhost:47291/ai/gemini?prompt=halo
 http://localhost:47291/tools/gempa
+http://localhost:47291/islamic/jadwal-sholat?kota=Jakarta
 ```
 
 ---
@@ -328,42 +274,14 @@ http://localhost:47291/tools/gempa
 | `node-webpmux` | ^3.2.1 | WebP metadata (untuk brat animation) |
 | `unfurl.js` | ^6.4.0 | Link preview unfurling |
 | `ws` | ^8.21.0 | WebSocket (untuk copilot AI) |
-| `form-data` | ^4.0.6 | Multipart form upload (kana scrapers) |
-| `crypto-js` | ^4.2.0 | AES encryption (kana: nanobanana, colorizer) |
-| `tough-cookie` + `axios-cookiejar-support` | ^6.0.2 / ^7.0.0 | Cookie jar (kana: spotifydl, hdvid) |
-| `fetch-cookie` | ^3.2.0 | Cookie-aware fetch (kana: ytdown, apple music) |
-| `uuid` | ^14.0.1 | UUID generation (kana: nano banana) |
-| `md5` | ^2.3.0 | MD5 hash (kana: moviebox) |
-| `cloudscraper` | ^4.6.0 | Cloudflare bypass (kana: groupsor) |
-| `node-fetch` | ^3.3.2 | fetch polyfill (kana: gpt, otakudesu) |
-
----
-
-## 🔄 Migration Notes (dari kaminoa-api asli)
-
-| | Original | Fork ini |
-|---|---|---|
-| Runtime | Node.js | **Bun 1.3+** |
-| HTTP framework | Express 4 | **Elysia 1.x** |
-| Docs | Manual `docs.html` | **@elysiajs/swagger (Scalar UI)** |
-| `.env` loading | `dotenv/config` import | **Bun auto-load** |
-| Feature loading | sequential `await import()` | **`Promise.all` parallel** |
-| OpenAPI spec | rebuilt per request | **memoized per host** |
-| Auth | Express middleware | **Elysia `beforeHandle` hook** |
-| Endpoint count | 101 | **142** (+41 dari r2-kana) |
-| Feature files | unchanged | **byte-for-byte identical** |
-
-Semua 101 file fitur asli kaminoa tetap utuh tanpa perubahan. Update dari upstream bisa di-merge tanpa konflik.
-
----
-
-## 📝 Credits
-
-- **Original kaminoa-api**: [`jauhariel/kaminoa-api`](https://github.com/jauhariel/kaminoa-api)
-- **Kana scrapers**: [`r2-kana.vercel.app`](https://r2-kana.vercel.app/) by `ren-offc/kana`
-- **Runtime**: [Bun](https://bun.sh/)
-- **Framework**: [ElysiaJS](https://elysiajs.com/)
-- **Docs**: [@elysiajs/swagger](https://elysiajs.com/plugins/swagger) (Scalar UI)
+| `form-data` | ^4.0.6 | Multipart form upload |
+| `crypto-js` | ^4.2.0 | AES encryption |
+| `tough-cookie` + `axios-cookiejar-support` | ^6.0.2 / ^7.0.0 | Cookie jar |
+| `fetch-cookie` | ^3.2.0 | Cookie-aware fetch |
+| `uuid` | ^14.0.1 | UUID generation |
+| `md5` | ^2.3.0 | MD5 hash |
+| `cloudscraper` | ^4.6.0 | Cloudflare bypass |
+| `node-fetch` | ^3.3.2 | fetch polyfill |
 
 ---
 
