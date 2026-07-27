@@ -22,6 +22,7 @@ SKIP_LANGS = {"python"}
 
 SKIP_IDS = {
     "j1D224W",  # jkt.js — interactive CLI
+    "uAIt1d",   # hdvid.js — WhatsApp bot plugin, requires ../src/utils/tmp.js + sock/m framework
 }
 
 def derive_route(title, description):
@@ -235,6 +236,27 @@ def strip_demo_invocation(code):
             cur_stmt_start = None
             i += 1
             continue
+
+        # ASI (Automatic Semicolon Insertion) handling:
+        # If we hit a newline at depth==0 / paren_depth==0 and the NEXT
+        # non-whitespace character starts a new statement keyword (const, let,
+        # var, function, async, import, export, await, console, fetch, etc.),
+        # treat this as the end of the current statement.
+        # This catches snippets that don't use semicolons (very common in
+        # r2-kana snippets).
+        if (c == "\n" and depth == 0 and paren_depth == 0
+                and not after_semicolon_or_brace
+                and not in_string and not in_line_comment and not in_block_comment):
+            # Look ahead to the next non-whitespace character.
+            j = i + 1
+            while j < n and code[j] in " \t\r\n":
+                j += 1
+            if j < n:
+                rest = code[j:j+30]
+                # Keywords that definitely start a new statement
+                if re.match(r'(?:const|let|var|function|async\s+function|import|export|await|console|fetch|axios|fs\.|return|if|for|while|try|throw|class)\b', rest):
+                    after_semicolon_or_brace = True
+                    cur_stmt_start = None
 
         i += 1
 

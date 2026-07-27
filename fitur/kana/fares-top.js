@@ -27,7 +27,7 @@ const get = async(url) => {
 
 const fetchAllGames = async() => {
     const data = await get(`${base}/api/games/list?all=true`)
-    return data ? .games || data ? .data || []
+    return data?.games || data?.data || []
 }
 
 const searchGames = (games, query) => {
@@ -87,46 +87,32 @@ const printResult = (info, steam, lookup, download) => {
 
 
 
-const main = async() => {
-    const query = 100
+const main = async(queryInput) => {
+    const query = String(queryInput || "").trim() || "100"
     const games = await fetchAllGames()
-    if (!games.length) return console.log("failed")
+    if (!games.length) return { status: "failed", message: "Tidak ada game ditemukan" }
 
     const results = searchGames(games, query)
 
     if (!results.length) {
-        const {
-            steam, lookup, download
-        } = await fetchAllDetails(query)
-        if (!Object.keys(lookup)
-            .length && !Object.keys(steam)
-            .length) return
-        printResult({
-            game_id: query
-        }, steam, lookup, download)
-        return
+        const { steam, lookup, download } = await fetchAllDetails(query)
+        return {
+            info: { game_id: query },
+            steam: steam || {},
+            lookup: lookup || {},
+            download: download || {},
+        }
     }
 
     const allDetails = await Promise.all(
-    results.map(async(g) => {
-        const gid = g.game_id || g.id
-        const {
-            steam, lookup, download
-        } = await fetchAllDetails(gid)
-        return {
-            info: g,
-            steam,
-            lookup,
-            download
-        }
-    }))
+        results.map(async (g) => {
+            const gid = g.game_id || g.id
+            const { steam, lookup, download } = await fetchAllDetails(gid)
+            return { info: g, steam, lookup, download }
+        })
+    )
 
-    for (const {
-        info, steam, lookup, download
-    }
-    of allDetails) {
-        printResult(info, steam, lookup, download)
-    }
+    return { results: allDetails }
 }
 
 export default {
@@ -139,11 +125,11 @@ export default {
         description: "Search & detail game by id",
         parameters: [
             {
-                name: "input",
+                name: "query",
                 in: "query",
                 required: true,
-                description: "Parameter input",
-                schema: { type: "string" },
+                description: "Nama game atau game ID yang dicari (mis. 'roblox' atau '100')",
+                schema: { type: "string", example: "roblox" },
             },
         ],
         responses: {
@@ -167,12 +153,12 @@ export default {
     },
 
     handler: async (req, res) => {
-        const { input } = req.query
-        if (!input || !String(input).trim()) {
-            return res.status(400).json({ ok: false, error: `input wajib diisi` })
+        const { query } = req.query
+        if (!query || !String(query).trim()) {
+            return res.status(400).json({ ok: false, error: `query wajib diisi` })
         }
         try {
-            const result = await main(String(input).trim())
+            const result = await main(String(query).trim())
             return res.json({ ok: true, result })
         } catch (e) {
             return res.status(500).json({ ok: false, error: e.message })

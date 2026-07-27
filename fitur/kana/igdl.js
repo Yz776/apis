@@ -72,10 +72,6 @@ async function igdl(igUrl) {
   return { status: 200, links: links };
 }
 
-const result = await igdl("https://www.instagram.com/reel/DTSmpArgKSf/?igsh=MWhzOTgwMG1sZG4zeQ==")
-
-console.log(result)
-
 export default {
     route: {
         method: "get",

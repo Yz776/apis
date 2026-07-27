@@ -56,27 +56,27 @@ function _extract(html) {
   return out;
 }
 
-export async function search_it(q) {
+async function search_it(q) {
   const html = await _scrape(_ep.search(q));
   return _extract(html);
 }
 
-export async function get_live_cats() {
+async function get_live_cats() {
   const r = await _get(_ep.live_cat());
   return r.data || [];
 }
 
-export async function get_streams() {
+async function get_streams() {
   const r = await _get(_ep.live_all());
   return r.data || [];
 }
 
-export async function stream_detail(slug) {
+async function stream_detail(slug) {
   const r = await _get(_ep.live_one(slug));
   return r.data || null;
 }
 
-export async function read_article(slug) {
+async function read_article(slug) {
   const u = slug.startsWith('http') ? slug : _ep.article(slug);
   const html = await _scrape(u);
   const res = { url: u, title: null, body: [] };
@@ -94,13 +94,11 @@ export async function read_article(slug) {
   return res;
 }
 
-export async function get_news(cat = 'news/indonesia') {
+async function get_news(cat = 'news/indonesia') {
   const path = cat === 'tekno' ? 'tech' : cat;
   const html = await _scrape(_ep.category(path));
   return _extract(html);
 }
-
-export default { search_it, get_live_cats, get_streams, stream_detail, read_article, get_news };
 
 export default {
     route: {

@@ -72,9 +72,6 @@ async function latest() {
   return items.slice(0, 20)
 }
 
-export { search_it, manga_info, chapter_imgs, latest }
-export default { search_it, manga_info, chapter_imgs, latest }
-
 export default {
     route: {
         method: "get",
@@ -118,7 +115,7 @@ export default {
             return res.status(400).json({ ok: false, error: `query wajib diisi` })
         }
         try {
-            const result = await _req(String(query).trim())
+            const result = await search_it(String(query).trim())
             return res.json({ ok: true, result })
         } catch (e) {
             return res.status(500).json({ ok: false, error: e.message })
