@@ -162,13 +162,13 @@ app.use(
                 version: "2.0.0",
                 description: `# Kangwifi APIs v2
 
-Koleksi **178 REST API endpoint** yang siap pakai, gratis, tanpa API key.
+Koleksi **180 REST API endpoint** yang siap pakai, gratis, tanpa API key.
 
 ## Kenapa Pakai API Ini?
 
 - **Super cepat** — Dibangun di atas **Bun + Elysia**, response time sub-millisecond
 - **Gratis & tanpa API key** — Langsung pakai, tidak perlu registrasi
-- **178 endpoint** — AI, downloader, search, tools, Islamic, anime, dan banyak lagi
+- **180 endpoint** — AI, downloader, search, tools, Islamic, anime, dan banyak lagi
 - **Mudah dipakai** — Support **GET** (query params) dan **POST** (JSON body)
 
 ## Cara Pakai — 2 Metode
@@ -223,9 +223,9 @@ curl "http://localhost:47291/tools/gempa"
 | Tag | Jumlah | Contoh |
 |-----|--------|--------|
 | **AI** | 20 | \`/ai/gemini\`, \`/ai/chatgpt\`, \`/ai/chatdeep\`, \`/ai/claude3\`, \`/ai/quillbotai\` |
-| **Downloader** | 55 | \`/downloader/tiktokio\`, \`/downloader/savetube\`, \`/downloader/aiodl\`, \`/downloader/snaptik\` |
+| **Downloader** | 56 | \`/downloader/tiktokio\`, \`/downloader/savetube\`, \`/downloader/aiodl\`, \`/downloader/snaptik\` |
 | **Search** | 27 | \`/search/wikipedia\`, \`/search/kbbi\`, \`/search/komiku\`, \`/search/otakudesu\` |
-| **Tools** | 49 | \`/tools/qrcode\`, \`/tools/tts\`, \`/tools/bmkg\`, \`/tools/colorizer\` |
+| **Tools** | 50 | \`/tools/qrcode\`, \`/tools/tts\`, \`/tools/bmkg\`, \`/tools/colorizer\` |
 | **Anime** | 17 | \`/anime/livechart\`, \`/anime/hurawatch\`, \`/anime/nontonanime\` |
 | **Maker** | 4 | \`/maker/brat\`, \`/maker/qc\` |
 | **Islamic** | 6 | \`/islamic/quran-list\`, \`/islamic/jadwal-sholat\` |
@@ -261,7 +261,7 @@ curl "http://localhost:47291/tools/gempa"
                 },
                 {
                     name: "Downloader",
-                    description: "Media downloaders — TikTok, Instagram, YouTube, Spotify, Apple Music, dll. Kirim URL via GET (query) atau POST (JSON body).",
+                    description: "Media downloaders — TikTok, Instagram, YouTube, Spotify, Apple Music, OneForAll, dll. Kirim URL via GET (query) atau POST (JSON body).",
                 },
                 {
                     name: "Search",
@@ -269,7 +269,7 @@ curl "http://localhost:47291/tools/gempa"
                 },
                 {
                     name: "Tools",
-                    description: "Utility tools — QR code, TTS, URL shortener, BMKG weather, gempa, translate, image tools, dll.",
+                    description: "Utility tools — QR code, TTS, URL shortener, BMKG weather, gempa, translate, image tools, unggah uploader, dll.",
                 },
                 {
                     name: "Maker",
@@ -527,9 +527,9 @@ curl -X POST "http://localhost:${PORT}/ai/pollinations" \\
 <h2>Kategori Endpoint</h2>
 <div class="grid">
 <div class="grid-item"><a href="/docs">🤖 AI (20)</a></div>
-<div class="grid-item"><a href="/docs">⬇️ Downloader (55)</a></div>
+<div class="grid-item"><a href="/docs">⬇️ Downloader (56)</a></div>
 <div class="grid-item"><a href="/docs">🔍 Search (27)</a></div>
-<div class="grid-item"><a href="/docs">🛠️ Tools (49)</a></div>
+<div class="grid-item"><a href="/docs">🛠️ Tools (50)</a></div>
 <div class="grid-item"><a href="/docs">📺 Anime (17)</a></div>
 <div class="grid-item"><a href="/docs">🎨 Maker (4)</a></div>
 <div class="grid-item"><a href="/docs">🕌 Islamic (6)</a></div>
