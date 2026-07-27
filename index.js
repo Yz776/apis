@@ -13,7 +13,7 @@
 //   - CORS headers added (Access-Control-Allow-Origin: *)
 //   - Root "/" returns a simple usage guide (not just redirect to /docs)
 //   - Better mobile/Hoppscotch UX — POST with {"prompt": "..."} is way easier
-//   - Docs UI switched from Scalar to Swagger UI (simpler, more familiar)
+//   - Docs UI switched to RapiDoc (mobile-friendly, built-in Try it, dark theme)
 // ============================================================================
 
 import { Elysia } from "elysia"
@@ -151,36 +151,11 @@ app.options("*", ({ set }) => {
     return ""
 })
 
-// ─── Swagger / OpenAPI docs (Swagger UI — simpler & more familiar) ───────────
+// ─── Swagger / OpenAPI spec generator (internal — spec served at /swagger/json) ──
 app.use(
     swagger({
-        path: "/docs",
-        // Use Swagger UI — simpler, more familiar, everyone knows it
-        provider: "swagger-ui",
-        // Swagger UI customization options
-        swaggerUIConfig: {
-            // Default: expand all operations (easier to browse)
-            docExpansion: "list",
-            // Show request duration
-            displayRequestDuration: true,
-            // Operations sorter: method (GET before POST, etc.)
-            operationsSorter: "method",
-            // Tags sorter: alphabetical
-            tagsSorter: "alpha",
-            // Try it out enabled by default (no need to click "Try it out" first)
-            tryItOutEnabled: true,
-            // Persist authorization
-            persistAuthorization: true,
-            // Show filter bar (search across all endpoints)
-            filter: true,
-            // Deep linking (click an operation, URL changes — shareable)
-            deepLinking: true,
-            // Syntax highlight for responses
-            syntaxHighlight: {
-                activate: true,
-                theme: "monokai",
-            },
-        },
+        // Internal path: /swagger for spec HTML (not used), /swagger/json for OpenAPI JSON
+        path: "/swagger",
         documentation: {
             info: {
                 title: "Kangwifi APIs",
@@ -307,6 +282,59 @@ curl "http://localhost:47291/tools/gempa"
         },
     }),
 )
+
+// ─── Custom Docs UI — RapiDoc (mobile-friendly, built-in "Try it", dark theme) ──
+app.get("/docs", () => {
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kangwifi APIs — Docs</title>
+    <style>
+        body { margin: 0; padding: 0; background: #1a1a2e; }
+        rapi-doc { width: 100%; min-height: 100vh; }
+    </style>
+</head>
+<body>
+    <rapi-doc
+        spec-url="/swagger/json"
+        theme="dark"
+        layout="read"
+        render-style="read"
+        schema-style="table"
+        default-schema-tab="example"
+        show-header="false"
+        allow-search="true"
+        allow-advanced-search="true"
+        sort-endpoints-by="method"
+        show-curl-before-try="true"
+        allow-try="true"
+        api-key-name="x-api-key"
+        api-key-location="header"
+        font-size="default"
+        primary-color="#9b59b6"
+        nav-bg-color="#1a1a2e"
+        nav-text-color="#e0e0e0"
+        nav-hover-bg-color="#0f3460"
+        nav-accent-color="#e94560"
+        bg-color="#16213e"
+        text-color="#e0e0e0"
+        header-color="#9b59b6"
+    ></rapi-doc>
+    <script src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
+</body>
+</html>`
+    return new Response(html, {
+        headers: { "content-type": "text/html; charset=utf-8", "access-control-allow-origin": "*" },
+    })
+})
+
+// Convenience: /docs/json → redirect to OpenAPI spec
+app.get("/docs/json", () => new Response(null, {
+    status: 302,
+    headers: { "location": "/swagger/json", "access-control-allow-origin": "*" },
+}))
 
 // ─── Register every feature route (GET + POST auto-registration) ─────────────
 for (const f of features) {
@@ -496,8 +524,8 @@ curl -X POST "http://localhost:${PORT}/ai/pollinations" \\
 </div>
 
 <div style="text-align:center; margin-top:20px">
-<a class="btn" href="/docs">Buka Swagger UI Docs</a>
-<a class="btn" href="/docs/json">Download OpenAPI Spec</a>
+<a class="btn" href="/docs">Buka API Docs</a>
+<a class="btn" href="/swagger/json">Download OpenAPI Spec</a>
 </div>
 </div>
 </body>
@@ -532,7 +560,7 @@ app.listen(PORT, () => {
     console.log("")
     console.log("  Kangwifi APIs  →  Elysia + Bun edition (v2: POST + CORS)")
     console.log(`  Listen         →  http://localhost:${PORT}`)
-    console.log(`  Docs (Swagger) →  http://localhost:${PORT}/docs`)
+    console.log(`  Docs (RapiDoc) →  http://localhost:${PORT}/docs`)
     console.log(`  Routes         →  ${features.length} endpoint (GET + POST = ${features.length * 2} total)`)
     console.log("")
 })
