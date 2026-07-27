@@ -144,16 +144,212 @@ const app = new Elysia()
 // controls how it appears in the docs (tags, summary, description, params,
 // responses, security). We map our feature-file `route` metadata into
 // Elysia's `detail` so the existing 140+ feature files work unchanged.
+//
+// BEGINNER-FRIENDLY DOCS:
+// We use the Scalar provider with the "purple" theme (easy on the eyes),
+// modern layout, dark mode by default, hidden model schemas (overwhelming
+// for beginners), and a curated set of HTTP clients (curl, fetch, JS, Python,
+// Go) instead of showing all 20+ clients. We also embed a Markdown intro
+// in the info.description so newcomers see examples + how-to-use right in
+// the docs header.
 app.use(
     swagger({
         path: "/docs",
+        // Use Scalar (default) — much nicer than Swagger UI
+        provider: "scalar",
+        // Pin to a stable Scalar version
+        scalarVersion: "latest",
+        scalarConfig: {
+            // Visual theme — purple is high-contrast and beginner-friendly
+            theme: "purple",
+            // Modern layout: sidebar + main content (cleaner than classic)
+            layout: "modern",
+            // Start in dark mode (most developers prefer it; toggle is still visible)
+            darkMode: true,
+            // Show sidebar (with search + tag list)
+            showSidebar: true,
+            // Show the search bar in the sidebar (super useful with 142 endpoints)
+            hideSearch: false,
+            // Hide "Models" section — overwhelming for beginners, they just
+            // want to see endpoints and try them
+            hideModels: true,
+            // Show "Download OpenAPI Document" button (for Postman/Insomnia import)
+            hideDownloadButton: false,
+            // Show "Test Request" button (Try-it-out) — key for beginners
+            hideTestRequestButton: false,
+            // Open all tags by default? No — with 6 tags and 142 endpoints it'd
+            // be overwhelming. User clicks a tag to expand it.
+            defaultOpenAllTags: false,
+            // Sort tags alphabetically for predictable navigation
+            tagsSorter: "alpha",
+            // Default HTTP client: curl (most universal, easy to copy-paste)
+            defaultHttpClient: {
+                targetKey: "node",
+                clientKey: "fetch",
+            },
+            // Hide obscure HTTP clients to reduce cognitive load
+            // Keep only: curl, fetch (JS), python, go, php, java, csharp, ruby
+            hiddenClients: {
+                // Hide shell variants (wget, httpie) — curl is enough
+                shell: true,
+                // Hide C, ObjC, Swift, Kotlin, Dart, R, Rust, OCaml, etc.
+                c: true,
+                objc: true,
+                swift: true,
+                kotlin: true,
+                dart: true,
+                r: true,
+                rust: true,
+                ocaml: true,
+                // Hide node variants (axios, request, unirest, native, jquery)
+                // — keep only fetch
+                node: ["axios", "request", "unirest", "native", "jquery"],
+            },
+            // SEO + social preview metadata
+            metaData: {
+                title: "Kangwifi APIs — Documentation",
+                description: "REST API collection with 142 endpoints. Built on Elysia + Bun. Free, no API key required.",
+                ogTitle: "Kangwifi APIs",
+                ogDescription: "REST API collection with 142 endpoints. Built on Elysia + Bun.",
+                ogImage: "https://opengraph.githubassets.com/1/Yz776/apis",
+                twitterCard: "summary_large_image",
+                twitterTitle: "Kangwifi APIs",
+                twitterDescription: "REST API collection with 142 endpoints.",
+            },
+            // Custom CSS — small touches that make the UI feel more polished
+            customCss: `
+                /* Larger, more readable fonts */
+                :root {
+                    --scalar-font-size-base: 15px;
+                    --scalar-font-size-small: 13px;
+                    --scalar-spacing: 12px;
+                }
+                /* Slightly wider sidebar so tag names don't truncate */
+                .t-doc__sidebar {
+                    min-width: 300px !important;
+                    max-width: 360px !important;
+                }
+                /* Make the tag headings more prominent */
+                .schema-card-title {
+                    font-weight: 600 !important;
+                }
+                /* Highlight the "Try it out" button */
+                .scalar-button.scalar-button--stretch {
+                    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%) !important;
+                    border: none !important;
+                    font-weight: 600 !important;
+                    transition: transform 0.15s ease;
+                }
+                .scalar-button.scalar-button--stretch:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4) !important;
+                }
+                /* Nicer code blocks */
+                pre {
+                    border-radius: 8px !important;
+                    font-size: 13px !important;
+                }
+                /* Better spacing for endpoint cards */
+                .endpoint-card {
+                    margin-bottom: 16px !important;
+                }
+            `,
+        },
         documentation: {
             info: {
                 title: "Kangwifi APIs",
                 version: "1.0.0",
-                description:
-                    "Koleksi REST API by kangwifi. Dibangun di atas Elysia + Bun untuk performa maksimal. " +
-                    "Endpoint asli kaminoa-api tetap utuh; tambahan endpoint `/kana/*` di-port dari r2-kana.vercel.app.",
+                description: `# 🚀 Kangwifi APIs
+
+Selamat datang di **Kangwifi APIs** — koleksi **142 REST API endpoint** yang siap pakai, gratis, tanpa API key.
+
+## ✨ Kenapa Pakai API Ini?
+
+- ⚡ **Super cepat** — Dibangun di atas **Bun + Elysia**, response time sub-millisecond
+- 🆓 **Gratis & tanpa API key** — Langsung pakai, tidak perlu registrasi
+- 📚 **142 endpoint** — AI, downloader, search, tools, Islamic, dan banyak lagi
+- 🎯 **Mudah dipakai** — Cukup kirim HTTP request, dapatkan JSON response
+
+## 🎮 Cara Pakai (Pemula)
+
+### 1. Pilih endpoint dari sidebar kiri
+Klik salah satu tag (misalnya \`AI\`, \`Downloader\`, \`Search\`) untuk melihat endpoint yang tersedia.
+
+### 2. Klik endpoint untuk melihat detail
+Akan muncul: deskripsi, parameter yang dibutuhkan, dan contoh response.
+
+### 3. Klik tombol "Test Request"
+Tombol ungu di kanan atas — isi parameter, lalu klik **Send** untuk mencoba endpoint langsung dari browser.
+
+### 4. Atau pakai curl / fetch di kode kamu
+Scroll ke bawah endpoint untuk lihat contoh kode siap copy-paste di berbagai bahasa (curl, JavaScript, Python, Go, PHP, dll).
+
+## 📋 Contoh Cepat
+
+\`\`\`bash
+# Chat dengan Gemini AI
+curl "http://localhost:47291/ai/gemini?prompt=halo"
+
+# Download TikTok video (tanpa watermark)
+curl "http://localhost:47291/downloader/tiktokio?url=https://vm.tiktok.com/..."
+
+# Cari manga di komiku
+curl "http://localhost:47291/kana/komiku?query=naruto"
+
+# BMKG data gempa terkini
+curl "http://localhost:47291/tools/gempa"
+
+# Jadwal sholat Jakarta
+curl "http://localhost:47291/islamic/jadwal-sholat?kota=Jakarta"
+\`\`\`
+
+## 🏷️ Kategori Endpoint
+
+| Tag | Jumlah | Contoh |
+|-----|--------|--------|
+| **AI** | 17 | \`/ai/gemini\`, \`/ai/chatgpt\`, \`/kana/claude3\` |
+| **Downloader** | 49 | \`/downloader/tiktokio\`, \`/kana/ytmp3\`, \`/kana/snaptik\` |
+| **Search** | 26 | \`/search/wikipedia\`, \`/kana/komiku\`, \`/kana/apkmodysearch\` |
+| **Tools** | 47 | \`/tools/qrcode\`, \`/tools/tts\`, \`/kana/bmkg\` |
+| **Maker** | 4 | \`/maker/brat\`, \`/maker/qc\` |
+| **Islamic** | 6 | \`/islamic/quran-list\`, \`/islamic/jadwal-sholat\` |
+
+## 🔐 Autentikasi
+
+**Tidak perlu API key!** Semua endpoint terbuka untuk umum secara default.
+
+(Jika kamu self-host dan ingin mengaktifkan auth, set \`ENABLE_AUTH=true\` + \`API_KEY=xxx\` di file \`.env\`.)
+
+## 📖 Format Response
+
+Semua endpoint mengembalikan JSON dengan format konsisten:
+
+\`\`\`json
+{
+  "ok": true,
+  "result": { ... },
+  "text": "...",
+  "error": "..." // hanya saat ok=false
+}
+\`\`\`
+
+## 🛠️ Stack Teknis
+
+- **Runtime**: [Bun 1.3+](https://bun.sh/) (Zig + JavaScriptCore)
+- **Framework**: [ElysiaJS](https://elysiajs.com/)
+- **Docs**: [@elysiajs/swagger](https://elysiajs.com/plugins/swagger) (Scalar UI)
+- **Source**: [github.com/Yz776/apis](https://github.com/Yz776/apis)
+
+---
+
+## 💡 Tips
+
+- Gunakan **search bar** di sidebar kiri (atau tekan \`Ctrl+K\`) untuk cari endpoint cepat
+- Klik tag heading untuk **expand/collapse** semua endpoint di kategori itu
+- Setiap endpoint punya **contoh response** di bagian bawah — lihat dulu sebelum pakai
+- Kalau endpoint error \`500\`, kemungkinan API upstream sedang down — coba endpoint lain
+
+Selamat bereksplorasi! 🎉`,
             },
             components: {
                 securitySchemes: {
@@ -165,12 +361,30 @@ app.use(
                 },
             },
             tags: [
-                { name: "AI", description: "Chat & text generation (kaminoa + kana)" },
-                { name: "Downloader", description: "Media downloaders (kaminoa + kana)" },
-                { name: "Search", description: "Search engines (kaminoa + kana)" },
-                { name: "Tools", description: "Utility tools (kaminoa + kana)" },
-                { name: "Maker", description: "Image / text makers" },
-                { name: "Islamic", description: "Islamic utilities" },
+                {
+                    name: "AI",
+                    description: "🤖 Chat & text generation — Gemini, ChatGPT, Mistral, Qwen, Claude, DeepSeek, dll. Kirim prompt, dapatkan jawaban AI.",
+                },
+                {
+                    name: "Downloader",
+                    description: "⬇️ Media downloaders — TikTok, Instagram, YouTube, Spotify, Twitter, Threads, dll. Tanpa watermark.",
+                },
+                {
+                    name: "Search",
+                    description: "🔍 Search engines — Wikipedia, KBBI, Tokopedia, komiku, otakudesu, apkmody, dll.",
+                },
+                {
+                    name: "Tools",
+                    description: "🛠️ Utility tools — QR code, TTS, URL shortener, weather, gempa, translate, dll.",
+                },
+                {
+                    name: "Maker",
+                    description: "🎨 Image & text makers — brat generator, quote card, IQC.",
+                },
+                {
+                    name: "Islamic",
+                    description: "🕌 Islamic utilities — Quran, jadwal sholat, asmaul husna, doa harian, hadits.",
+                },
             ],
         },
     }),

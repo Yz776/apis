@@ -13,7 +13,7 @@
 ## ✨ Fitur Utama
 
 - 🚀 **Super cepat** — Bun HTTP server (Zig + JavaScriptCore) + Elysia compiled router. Latency sub-millisecond untuk endpoint statis, ~800 req/s throughput.
-- 📚 **Swagger UI otomatis** — Buka `/docs` di browser, langsung dapat dokumentasi interaktif Scalar-powered untuk semua 142 endpoint.
+- 📚 **Swagger UI otomatis** — Buka `/docs` di browser untuk UI Scalar yang **ramah pemula**: dark mode, search bar, try-it-out button, contoh kode di banyak bahasa (curl, JS, Python, Go, PHP, dll.), tag ber-emoji, dan intro Markdown dengan tutorial cepat.
 - 🔌 **Auto-discovery** — Drop file `.js` di folder `fitur/`, restart, endpoint baru langsung live. Tidak perlu edit file lain.
 - 🔓 **Tanpa API key** — Semua endpoint terbuka tanpa autentikasi (bisa diaktifkan via `ENABLE_AUTH=true` di `.env` kalau perlu).
 - 🧩 **41 scraper tambahan dari r2-kana** — Di-port otomatis ke endpoint `/kana/*`, **digabung ke kategori yang sama** dengan endpoint asli (AI, Downloader, Search, Tools) — tidak ada pemisahan "Kana ·".
@@ -98,13 +98,18 @@ kangwifi-apis/
 
 ## 📚 Dokumentasi API
 
-### Swagger UI
+### Swagger UI (Beginner-Friendly)
 
-Akses di `http://localhost:47291/docs` — interactive Scalar-powered UI dengan:
-- List semua 142 endpoint, dikelompokkan per tag
-- Try-it-out button untuk test endpoint langsung
-- Schema request/response lengkap
-- API key input untuk endpoint yang butuh auth
+Akses di `http://localhost:47291/docs` — UI Scalar-powered dengan fitur:
+
+- 🎨 **Tema purple** — Dark mode default, mudah dilihat berjam-jam
+- 🔍 **Search bar** — Tekan `Ctrl+K` untuk cari endpoint di antara 142 endpoint
+- 🎮 **Try-it-out button** — Tombol ungu gradient, klik untuk test endpoint langsung dari browser
+- 💻 **Contoh kode multi-bahasa** — curl, JavaScript (fetch), Python, Go, PHP, Java, C#, Ruby — siap copy-paste
+- 📝 **Intro Markdown** — Tutorial cara pakai, contoh cepat, dan tabel kategori langsung di halaman utama docs
+- 🏷️ **Tag ber-emoji** — Setiap kategori punya emoji (🤖 AI, ⬇️ Downloader, 🔍 Search, 🛠️ Tools, 🎨 Maker, 🕌 Islamic) untuk navigasi visual
+- 📥 **Download OpenAPI spec** — Tombol untuk download JSON spec, bisa di-import ke Postman/Insomnia
+- 🚫 **Hidden clients** — Sembunyikan HTTP client obscure (C, Swift, Kotlin, Dart, dll.) supaya tidak overwhelming
 
 ### OpenAPI 3 Spec
 
@@ -116,12 +121,12 @@ Endpoint kana **digabung** dengan endpoint kaminoa asli di kategori yang sama (t
 
 | Tag | Total | Kaminoa | Kana | Deskripsi |
 |---|---|---|---|---|
-| `AI` | 17 | 10 | 7 | Chat & text generation (Gemini, ChatGPT, Mistral, Qwen, GPT-kana, Claude, DeepSeek, Quillbot, dll.) |
-| `Downloader` | 48 | 36 | 12 | Media downloaders (TikTok, IG, YouTube, Spotify, ytmp3, snaptik, aiodl, dll.) |
-| `Search` | 24 | 15 | 9 | Search engines (Wikipedia, KBBI, Tokopedia, lk21, otakudesu, apkmody, dll.) |
-| `Tools` | 43 | 30 | 13 | Utility tools (QR, TTS, weather, URL shortener, bmkg, yttranscript, dll.) |
-| `Maker` | 4 | 4 | 0 | Image/text makers (brat, quote card, dll.) |
-| `Islamic` | 6 | 6 | 0 | Islamic utilities (Quran, jadwal sholat, asmaul husna, dll.) |
+| `AI` | 17 | 10 | 7 | 🤖 Chat & text generation (Gemini, ChatGPT, Mistral, Qwen, GPT-kana, Claude, DeepSeek, Quillbot, dll.) |
+| `Downloader` | 48 | 36 | 12 | ⬇️ Media downloaders (TikTok, IG, YouTube, Spotify, ytmp3, snaptik, aiodl, dll.) |
+| `Search` | 24 | 15 | 9 | 🔍 Search engines (Wikipedia, KBBI, Tokopedia, lk21, otakudesu, apkmody, dll.) |
+| `Tools` | 43 | 30 | 13 | 🛠️ Utility tools (QR, TTS, weather, URL shortener, bmkg, yttranscript, dll.) |
+| `Maker` | 4 | 4 | 0 | 🎨 Image/text makers (brat, quote card, dll.) |
+| `Islamic` | 6 | 6 | 0 | 🕌 Islamic utilities (Quran, jadwal sholat, asmaul husna, dll.) |
 
 ---
 
