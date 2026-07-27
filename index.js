@@ -353,7 +353,12 @@ for (const f of features) {
     const handler = adapt(f)
     const enforceAuth = ENABLE_AUTH && auth
 
-    const buildDetail = (forPost = false) => {
+    // ─── Build route options (detail + hook schemas) ──────────────────────────
+    // In Elysia, `detail` holds OpenAPI metadata (summary, tags, description, etc.)
+    // while `query`, `params`, `body`, `response` are route hook schemas used
+    // by @elysiajs/swagger to generate OpenAPI parameters & requestBody.
+    // They must be passed as separate properties, NOT inside `detail`.
+    const buildRouteOptions = (forPost = false) => {
         const detail = {
             tags,
             ...(summary && { summary: forPost ? `${summary} (POST)` : summary }),
@@ -361,37 +366,66 @@ for (const f of features) {
             ...(enforceAuth && { security: [{ ApiKeyAuth: [] }] }),
         }
 
-        if (!forPost && parameters) {
-            detail.params = parameters.filter(p => p.in === "path")
-            detail.query = parameters.filter(p => p.in === "query")
-        }
+        const schemas = {} // query, params, body, response — separate from detail
 
-        if (forPost && parameters) {
+        // ─── Convert OpenAPI-style parameters to Elysia/TypeBox schema ────
+        // The @elysiajs/swagger plugin reads hook.query / hook.params / hook.body
+        // to generate OpenAPI parameters & requestBody in the spec.
+
+        if (!forPost && parameters) {
+            // Path params → hook.params (TypeBox schema)
+            const pathParams = parameters.filter(p => p.in === "path")
+            if (pathParams.length > 0) {
+                const props = {}
+                const req = []
+                for (const p of pathParams) {
+                    props[p.name] = { ...(p.schema || { type: "string" }) }
+                    if (p.required) req.push(p.name)
+                }
+                schemas.params = { type: "object", properties: props, ...(req.length > 0 && { required: req }) }
+            }
+
+            // Query params → hook.query (TypeBox schema)
             const queryParams = parameters.filter(p => p.in === "query")
             if (queryParams.length > 0) {
-                const properties = {}
-                const required = []
+                const props = {}
+                const req = []
                 for (const p of queryParams) {
-                    properties[p.name] = {
+                    props[p.name] = {
                         ...(p.schema || { type: "string" }),
                         ...(p.description && { description: p.description }),
                     }
-                    if (p.required) required.push(p.name)
+                    if (p.required) req.push(p.name)
                 }
-                detail.body = {
-                    type: "object",
-                    properties,
-                    ...(required.length > 0 && { required }),
+                schemas.query = { type: "object", properties: props, ...(req.length > 0 && { required: req }) }
+            }
+        }
+
+        if (forPost && parameters) {
+            // POST body → hook.body (TypeBox schema, same params as query, in JSON body)
+            const queryParams = parameters.filter(p => p.in === "query")
+            const pathParams = parameters.filter(p => p.in === "path")
+            const allParams = [...pathParams, ...queryParams]
+            if (allParams.length > 0) {
+                const props = {}
+                const req = []
+                for (const p of allParams) {
+                    props[p.name] = {
+                        ...(p.schema || { type: "string" }),
+                        ...(p.description && { description: p.description }),
+                    }
+                    if (p.required) req.push(p.name)
                 }
+                schemas.body = { type: "object", properties: props, ...(req.length > 0 && { required: req }) }
             }
         }
 
         if (forPost && requestBody) {
-            detail.body = requestBody
+            schemas.body = requestBody
         }
 
         if (responses) {
-            detail.response = Object.fromEntries(
+            schemas.response = Object.fromEntries(
                 Object.entries(responses).map(([code, r]) => [
                     code,
                     r?.content?.["application/json"]?.schema ?? {},
@@ -399,7 +433,7 @@ for (const f of features) {
             )
         }
 
-        return detail
+        return { detail, ...schemas }
     }
 
     const authHook = enforceAuth ? {
@@ -415,11 +449,11 @@ for (const f of features) {
     } : {}
 
     // Register original method (usually GET)
-    app[verb](routePath, handler, { detail: buildDetail(false), ...authHook })
+    app[verb](routePath, handler, { ...buildRouteOptions(false), ...authHook })
 
     // Auto-register POST for every GET endpoint
     if (verb === "get") {
-        app.post(routePath, handler, { detail: buildDetail(true), ...authHook })
+        app.post(routePath, handler, { ...buildRouteOptions(true), ...authHook })
         console.log(`  [dual] ${routePath} → GET + POST`)
     }
 }
