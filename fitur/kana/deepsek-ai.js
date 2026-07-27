@@ -10,9 +10,6 @@ Note: Bantu push followers --> 50
 Sumber: https://whatsapp.com/channel/0029VbC5OZT7T8bXkKXY2d30
 */
 
-
-
-
 import { randomBytes } from "crypto";
 
 const base = "https://api-preview.chatgot.io";
@@ -55,14 +52,12 @@ async function chat(message) {
       try {
         const json = JSON.parse(line.slice(5).trim());
         if (json?.data?.content) {
-          process.stdout.write(json.data.content);
           data += json.data.content;
         }
       } catch {}
     }
   }
 
-  console.log();
   return data;
 }
 
@@ -72,15 +67,18 @@ export default {
         path: "/kana/deepsek-ai",
         auth: false,
         tags: ["AI"],
-        summary: "deepsek ai",
-        description: "chat with ai deepsek",
+        summary: "DeepSeek AI (deepseekfree.ai)",
+        description:
+            "Chat with DeepSeek AI via deepseekfree.ai.\n\n" +
+            "**RECOMMENDED: Gunakan POST** — lebih mudah di HP:\n" +
+            "```\nPOST /kana/deepsek-ai\nContent-Type: application/json\n{\"prompt\": \"halo\"}\n```",
         parameters: [
             {
                 name: "prompt",
                 in: "query",
                 required: true,
                 description: "Pertanyaan / prompt untuk AI",
-                schema: { type: "string" },
+                schema: { type: "string", example: "Apa itu AI?" },
             },
         ],
         responses: {
@@ -92,7 +90,7 @@ export default {
                             type: "object",
                             properties: {
                                 ok: { type: "boolean", example: true },
-                                result: { type: "object" },
+                                result: { type: "string", description: "Jawaban AI" },
                             },
                         },
                     },
@@ -106,7 +104,11 @@ export default {
     handler: async (req, res) => {
         const { prompt } = req.query
         if (!prompt || !String(prompt).trim()) {
-            return res.status(400).json({ ok: false, error: `prompt wajib diisi` })
+            return res.status(400).json({
+                ok: false,
+                error: "prompt wajib diisi",
+                hint: "Kirim via GET: /kana/deepsek-ai?prompt=halo atau POST: {\"prompt\": \"halo\"}"
+            })
         }
         try {
             const result = await chat(String(prompt).trim())

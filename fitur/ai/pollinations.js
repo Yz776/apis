@@ -43,7 +43,7 @@ export default {
         auth: false,
         tags: ["AI"],
         summary: "Chat AI gratis via Pollinations (GPT-OSS 20B)",
-        description: "Kirim pesan ke model AI Pollinations tanpa login. Mendukung system prompt opsional.",
+        description: "Kirim pesan ke model AI Pollinations tanpa login. Mendukung system prompt opsional.\n\n**RECOMMENDED: Gunakan POST** — lebih mudah di HP/Hoppscotch:\n```\nPOST /ai/pollinations\nContent-Type: application/json\n{\"prompt\": \"Apa itu fotosintesis?\"}\n```",
         parameters: [
             {
                 name: "prompt",
@@ -97,7 +97,7 @@ export default {
     handler: async (req, res) => {
         const { prompt, model = "openai", system } = req.query
         if (!prompt || !prompt.trim()) {
-            return res.status(400).json({ ok: false, error: "prompt wajib diisi" })
+            return res.status(400).json({ ok: false, error: "prompt wajib diisi", hint: "Kirim via GET: /ai/pollinations?prompt=halo atau POST dengan JSON body: {\"prompt\": \"halo\"}" })
         }
         if (!MODELS.includes(model)) {
             return res.status(400).json({ ok: false, error: `model tidak valid, pilih: ${MODELS.join(", ")}` })

@@ -246,7 +246,7 @@ export default {
         auth: false,
         tags: ["AI"],
         summary: "Chat dengan Mistral AI",
-        description: "Kirim prompt ke Mistral AI (le-chat) dan dapatkan respons teks. Support session untuk melanjutkan percakapan.",
+        description: "Kirim prompt ke Mistral AI (le-chat) dan dapatkan respons teks. Support session untuk melanjutkan percakapan.\n\n**RECOMMENDED: Gunakan POST** — lebih mudah di HP/Hoppscotch:\n```\nPOST /ai/mistral\nContent-Type: application/json\n{\"prompt\": \"Apa itu artificial intelligence?\"}\n```",
         parameters: [
             {
                 name: "prompt",
@@ -293,7 +293,7 @@ export default {
     handler: async (req, res) => {
         const { prompt, session } = req.query
         if (!prompt || !prompt.trim()) {
-            return res.status(400).json({ ok: false, error: "prompt wajib diisi" })
+            return res.status(400).json({ ok: false, error: "prompt wajib diisi", hint: "Kirim via GET: /ai/mistral?prompt=halo atau POST dengan JSON body: {\"prompt\": \"halo\"}" })
         }
 
         try {

@@ -25,7 +25,7 @@ async function getNonce() {
             if (nonce) return nonce
         } catch {}
     }
-    const m = String(html).match(/"nonce"\s*:\s*"([a-zA-Z0-9]+)"/i)
+    const m = String(html).match(/"nonce"\s*:\s*"([a-zA-Z0-9]+)""/i)
     if (m) return m[1]
 
     throw new Error("Gagal mengambil WP-Nonce (anti-bot atau struktur halaman berubah)")
@@ -76,7 +76,11 @@ export default {
         auth: false,
         tags: ["AI"],
         summary: "Chat dengan DeepSeek (chat-deep.ai)",
-        description: "Kirim pesan ke model DeepSeek lewat chat-deep.ai tanpa login. Mengembalikan jawaban beserta proses berpikir (reasoning).",
+        description:
+            "Kirim pesan ke model DeepSeek lewat chat-deep.ai tanpa login. " +
+            "Mengembalikan jawaban beserta proses berpikir (reasoning).\n\n" +
+            "**RECOMMENDED: Gunakan POST** — lebih mudah di HP/Hoppscotch:\n" +
+            "```\nPOST /ai/chatdeep\nContent-Type: application/json\n{\"prompt\": \"Apa itu lubang hitam?\", \"thinking\": true}\n```",
         parameters: [
             {
                 name: "prompt",
@@ -89,7 +93,7 @@ export default {
                 name: "thinking",
                 in: "query",
                 required: false,
-                description: "Aktifkan mode berpikir mendalam",
+                description: "Aktifkan mode berpikir mendalam (true/false)",
                 schema: { type: "boolean", default: false }
             }
         ],
@@ -123,7 +127,11 @@ export default {
     handler: async (req, res) => {
         const { prompt } = req.query
         if (!prompt || !prompt.trim()) {
-            return res.status(400).json({ ok: false, error: "prompt wajib diisi" })
+            return res.status(400).json({
+                ok: false,
+                error: "prompt wajib diisi",
+                hint: "Kirim via GET: /ai/chatdeep?prompt=halo atau POST: {\"prompt\": \"halo\"}"
+            })
         }
         const thinking = req.query.thinking === "true" || req.query.thinking === "1"
         try {

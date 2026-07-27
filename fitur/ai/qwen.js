@@ -12,7 +12,8 @@ export default {
         description:
             "Kirim pesan ke Qwen model lewat API Android Qwen Chat (chat.qwen.ai). " +
             "Mendukung: chat teks, vision (lampirkan gambar/video via URL), web search, thinking/reasoning, text-to-image, image-to-image, text-to-video. " +
-            `Model: ${MODELS_DESC}`,
+            `Model: ${MODELS_DESC}` +
+            "\n\n**RECOMMENDED: Gunakan POST** — lebih mudah di HP/Hoppscotch:\n```\nPOST /ai/qwen\nContent-Type: application/json\n{\"prompt\": \"Jelaskan relativitas\", \"model\": \"qwen3.7-plus\"}\n```",
         parameters: [
             {
                 name: "prompt",
@@ -101,7 +102,7 @@ export default {
         const { prompt, model, size, fileUrl } = req.query
 
         if (!prompt || !prompt.trim()) {
-            return res.status(400).json({ ok: false, error: "prompt wajib diisi" })
+            return res.status(400).json({ ok: false, error: "prompt wajib diisi", hint: "Kirim via GET: /ai/qwen?prompt=halo atau POST dengan JSON body: {\"prompt\": \"halo\"}" })
         }
 
         const mode = req.query.mode || "chat"

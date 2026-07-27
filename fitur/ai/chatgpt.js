@@ -197,7 +197,7 @@ export default {
         auth: false,
         tags: ['AI'],
         summary: 'Chat dengan ChatGPT (OpenAI)',
-        description: 'Kirim prompt ke ChatGPT anon endpoint. Mendukung sesi obrolan (dengan mengirim chatId dan auth) dan Web Search internal.',
+        description: 'Kirim prompt ke ChatGPT anon endpoint. Mendukung sesi obrolan (dengan mengirim chatId dan auth) dan Web Search internal.\n\n**RECOMMENDED: Gunakan POST** — lebih mudah di HP/Hoppscotch:\n```\nPOST /ai/chatgpt\nContent-Type: application/json\n{"prompt": "Halo, kamu siapa?"}\n```',
         parameters: [
             {
                 name: 'prompt',
@@ -259,7 +259,7 @@ export default {
         }
 
         if (!prompt || !prompt.trim()) {
-            return res.status(400).json({ ok: false, error: 'prompt wajib diisi' })
+            return res.status(400).json({ ok: false, error: 'prompt wajib diisi', hint: 'Kirim via GET: /ai/chatgpt?prompt=halo atau POST: {"prompt": "halo"}' })
         }
         try {
             const result = await chatgpt(prompt.trim(), auth, chatId)

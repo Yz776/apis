@@ -138,7 +138,7 @@ export default {
         auth: false,
         tags: ['AI'],
         summary: 'Chat dengan Gemini AI',
-        description: 'Kirim prompt ke Gemini AI (Google) dan dapatkan respons teks.',
+        description: 'Kirim prompt ke Gemini AI (Google) dan dapatkan respons teks.\n\n**RECOMMENDED: Gunakan POST** — lebih mudah di HP/Hoppscotch:\n```\nPOST /ai/gemini\nContent-Type: application/json\n{"prompt": "Siapa penemu telepon?"}\n```',
         parameters: [
             {
                 name: 'prompt',
@@ -197,7 +197,7 @@ export default {
     handler: async (req, res) => {
         const { prompt } = req.query
         if (!prompt || !prompt.trim()) {
-            return res.status(400).json({ ok: false, error: 'prompt wajib diisi' })
+            return res.status(400).json({ ok: false, error: 'prompt wajib diisi', hint: 'Kirim via GET: /ai/gemini?prompt=halo atau POST: {"prompt": "halo"}' })
         }
         try {
             const text = await geminiChat(prompt.trim())

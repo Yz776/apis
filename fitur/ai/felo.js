@@ -90,7 +90,7 @@ export default {
         auth: false,
         tags: ["AI"],
         summary: "Felo AI Search",
-        description: "Cari dan tanya jawab menggunakan Felo AI.",
+        description: "Cari dan tanya jawab menggunakan Felo AI.\n\n**RECOMMENDED: Gunakan POST** — lebih mudah di HP/Hoppscotch:\n```\nPOST /ai/felo\nContent-Type: application/json\n{\"query\": \"siapa presiden indonesia sekarang?\"}\n```",
         parameters: [
             {
                 name: "query",
@@ -137,7 +137,7 @@ export default {
 
     handler: async (req, res) => {
         const { query, lang = "id", mode = "concise" } = req.query
-        if (!query?.trim()) return res.status(400).json({ ok: false, error: "query wajib diisi" })
+        if (!query?.trim()) return res.status(400).json({ ok: false, error: "query wajib diisi", hint: "Kirim via GET: /ai/felo?query=halo atau POST dengan JSON body: {\"query\": \"halo\"}" })
         if (!LANGS.includes(lang)) return res.status(400).json({ ok: false, error: `lang tidak valid, pilih: ${LANGS.join(", ")}` })
         if (!MODES.includes(mode)) return res.status(400).json({ ok: false, error: `mode tidak valid, pilih: ${MODES.join(", ")}` })
         try {

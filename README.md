@@ -1,42 +1,26 @@
-# Kangwifi APIs
+# Kangwifi APIs v2
 
-> High-performance REST API collection built on **Elysia + Bun**. 142 endpoints, Swagger docs, sub-ms latency, no API key required.
+> High-performance REST API collection built on **Elysia + Bun**. 142 endpoints, Swagger docs, sub-ms latency, no API key required. **Now supports both GET + POST!**
 
 ![Bun](https://img.shields.io/badge/Bun-1.3+-000000?logo=bun&logoColor=white)
 ![Elysia](https://img.shields.io/badge/Elysia-1.x-00eggf?logo=elysia&logoColor=white)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 ![Endpoints](https://img.shields.io/badge/endpoints-142-success)
-![Swagger](https://img.shields.io/badge/docs-Swagger-85EA2D?logo=swagger&logoColor=black)
+![POST](https://img.shields.io/badge/POST-supported-9b59b6)
 
 ---
 
-## ✨ Fitur Utama
+## What's New in v2
 
-- 🚀 **Super cepat** — Bun HTTP server (Zig + JavaScriptCore) + Elysia compiled router. Latency sub-millisecond untuk endpoint statis, ~800 req/s throughput.
-- 📚 **Swagger UI otomatis** — Buka `/docs` di browser untuk UI Scalar yang **ramah pemula**: dark mode, search bar, try-it-out button, contoh kode di banyak bahasa (curl, JS, Python, Go, PHP, dll.), tag ber-emoji, dan intro Markdown dengan tutorial cepat. **Self-hosted** — tidak butuh internet.
-- 🔌 **Auto-discovery** — Drop file `.js` di folder `fitur/`, restart, endpoint baru langsung live. Tidak perlu edit file lain.
-- 🔓 **Tanpa API key** — Semua endpoint terbuka tanpa autentikasi (bisa diaktifkan via `ENABLE_AUTH=true` di `.env` kalau perlu).
-- 🛠️ **Express-compatible** — Handler pakai signature Express-style `(req, res)`. Adapter di `index.js` map ke Elysia context.
-
----
-
-## 📊 Statistik
-
-| Metric | Value |
-|---|---|
-| Total endpoints | **142** |
-| Boot time | ~100ms (parallel import) |
-| `/docs` latency | ~0.3ms |
-| `/docs/json` latency | ~10ms |
-| Throughput (`/docs`, 200 concurrent) | ~800 req/s |
+- **POST support** — Every GET endpoint now also accepts POST with JSON body. Much easier on mobile/Hoppscotch!
+- **CORS headers** — All responses include `Access-Control-Allow-Origin: *`. Works in browsers, mobile apps, and cross-origin requests.
+- **Smart parameter merging** — On POST, JSON body params override URL query params. Handlers work unchanged for both methods.
+- **Better error hints** — When you miss a parameter, the error response tells you how to fix it (GET vs POST examples).
+- **Mobile-friendly landing page** — Root `/` now shows a simple usage guide instead of just redirecting to /docs.
 
 ---
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- [Bun](https://bun.sh/) >= 1.3
+## Quick Start
 
 ### Install & Run
 
@@ -47,11 +31,11 @@ bun install
 bun run index.js
 ```
 
-Server jalan di `http://localhost:47291`. Buka `http://localhost:47291/docs` untuk Swagger UI.
+Server runs at `http://localhost:47291`. Open `http://localhost:47291/docs` for Swagger UI.
 
-### Konfigurasi
+### Configuration
 
-Buat file `.env` (Bun auto-load):
+Create `.env` (Bun auto-loads):
 
 ```env
 # Auth (default: disabled — all endpoints open)
@@ -62,27 +46,127 @@ API_KEY=your-secret-key-here
 PORT=47291
 ```
 
-Jika `ENABLE_AUTH=false` (default), semua endpoint terbuka tanpa API key. Set `ENABLE_AUTH=true` untuk mengaktifkan pengecekan `x-api-key` pada endpoint dengan `auth: true`.
+---
+
+## How to Use — 2 Methods
+
+### Method 1: GET (for quick testing)
+
+```bash
+# Chat with DeepSeek AI
+curl "http://localhost:47291/ai/chatdeep?prompt=halo"
+
+# Chat with Gemini
+curl "http://localhost:47291/ai/gemini?prompt=Siapa+penemu+telepon?"
+
+# Download TikTok video
+curl "http://localhost:47291/downloader/tiktokio?url=https://vm.tiktok.com/xxx"
+```
+
+### Method 2: POST (RECOMMENDED — easier on mobile/Hoppscotch)
+
+```bash
+# Chat with DeepSeek AI
+curl -X POST "http://localhost:47291/ai/chatdeep" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "halo"}'
+
+# Chat with Gemini
+curl -X POST "http://localhost:47291/ai/gemini" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Siapa penemu telepon?"}'
+
+# Chat with ChatGPT
+curl -X POST "http://localhost:47291/ai/chatgpt" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Halo, kamu siapa?"}'
+
+# Chat with Mistral AI
+curl -X POST "http://localhost:47291/ai/mistral" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Apa itu artificial intelligence?"}'
+
+# DeepSeek with thinking mode
+curl -X POST "http://localhost:47291/ai/chatdeep" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Apa itu lubang hitam?", "thinking": true}'
+
+# Qwen with custom model
+curl -X POST "http://localhost:47291/ai/qwen" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Jelaskan relativitas", "model": "qwen3.7-plus"}'
+
+# Download TikTok video
+curl -X POST "http://localhost:47291/downloader/tiktokio" \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://vm.tiktok.com/xxx"}'
+
+# Search Wikipedia
+curl -X POST "http://localhost:47291/search/wikipedia" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "indonesia"}'
+
+# BMKG earthquake data (no params needed)
+curl "http://localhost:47291/tools/gempa"
+
+# Prayer times
+curl -X POST "http://localhost:47291/islamic/jadwal-sholat" \
+  -H "Content-Type: application/json" \
+  -d '{"kota": "Jakarta"}'
+```
+
+**Why POST is better:**
+- No need to URL-encode parameters
+- Can send long prompts without issues
+- JSON format is cleaner and easier to read
+- Just fill in the body in Hoppscotch/Postman — no fuss
+
+### JavaScript Example (POST)
+
+```javascript
+const res = await fetch("http://localhost:47291/ai/chatdeep", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ prompt: "Apa itu lubang hitam?" })
+})
+const data = await res.json()
+console.log(data.answer)
+```
 
 ---
 
-## 📁 Struktur Folder
+## Using in Hoppscotch (Mobile)
+
+1. Set method to **POST**
+2. Set URL: `http://your-server:47291/ai/chatdeep`
+3. Set Content-Type: `application/json`
+4. Set Body:
+   ```json
+   {
+     "prompt": "halo"
+   }
+   ```
+5. Click **Send** — done!
+
+---
+
+## Folder Structure
 
 ```
 kangwifi-apis/
-├── index.js              # Elysia server + Express adapter + swagger plugin
+├── index.js              # Elysia server + Express adapter + CORS + POST support
 ├── package.json
 ├── scripts/
 │   ├── bench.js          # micro-benchmark
 │   └── convert_kana.py   # snippet → feature file converter
 ├── fitur/                # 142 endpoint files
-│   ├── ai/               # AI scrapers
-│   ├── downloader/       # media downloaders
-│   ├── islamic/          # Islamic utilities
-│   ├── maker/            # image/text makers
-│   ├── search/           # search scrapers
-│   ├── tools/            # utility tools
-│   └── kana/             # additional scrapers
+│   ├── ai/               # AI scrapers (GET + POST)
+│   ├── downloader/       # media downloaders (GET + POST)
+│   ├── islamic/          # Islamic utilities (GET + POST)
+│   ├── maker/            # image/text makers (GET + POST)
+│   ├── search/           # search scrapers (GET + POST)
+│   ├── tools/            # utility tools (GET + POST)
+│   └── kana/             # additional scrapers (GET + POST)
 ├── lib/
 │   ├── qwen.js
 │   └── uploader.js
@@ -94,100 +178,67 @@ kangwifi-apis/
 
 ---
 
-## 📚 Dokumentasi API
+## API Documentation
 
 ### Swagger UI (Beginner-Friendly)
 
-Akses di `http://localhost:47291/docs` — UI Scalar-powered dengan fitur:
+Access at `http://localhost:47291/docs` — Scalar-powered UI with features:
 
-- 🎨 **Tema purple** — Dark mode default, mudah dilihat berjam-jam
-- 🔍 **Search bar** — Tekan `Ctrl+K` untuk cari endpoint di antara 142 endpoint
-- 🎮 **Try-it-out button** — Tombol ungu gradient, klik untuk test endpoint langsung dari browser
-- 💻 **Contoh kode multi-bahasa** — curl, JavaScript (fetch), Python, Go, PHP, Java, C#, Ruby — siap copy-paste
-- 📝 **Intro Markdown** — Tutorial cara pakai, contoh cepat, dan tabel kategori langsung di halaman utama docs
-- 🏷️ **Tag ber-emoji** — Setiap kategori punya emoji (🤖 AI, ⬇️ Downloader, 🔍 Search, 🛠️ Tools, 🎨 Maker, 🕌 Islamic) untuk navigasi visual
-- 📥 **Download OpenAPI spec** — Tombol untuk download JSON spec, bisa di-import ke Postman/Insomnia
-- 🚫 **Hidden clients** — Sembunyikan HTTP client obscure (C, Swift, Kotlin, Dart, dll.) supaya tidak overwhelming
-- 🔌 **Self-hosted Scalar bundle** — Tidak butuh internet untuk load docs UI
-
-### OpenAPI 3 Spec
-
-Raw JSON spec di `http://localhost:47291/docs/json` — bisa di-import ke Postman, Insomnia, atau tools OpenAPI lainnya.
+- Purple theme — dark mode default
+- Search bar — press `Ctrl+K` to search across 142 endpoints
+- Try-it-out button — test endpoints directly from the browser
+- Code examples in multiple languages — curl, JS, Python, Go, PHP, etc.
+- Intro Markdown with tutorials and quick examples
+- Download OpenAPI spec — import into Postman/Insomnia
+- Self-hosted Scalar bundle — works without internet
 
 ### Tags
 
-| Tag | Total | Deskripsi |
+| Tag | Total | Description |
 |---|---|---|
-| `AI` | 17 | 🤖 Chat & text generation (Gemini, ChatGPT, Mistral, Qwen, Claude, DeepSeek, Quillbot, dll.) |
-| `Downloader` | 49 | ⬇️ Media downloaders (TikTok, IG, YouTube, Spotify, ytmp3, snaptik, aiodl, dll.) |
-| `Search` | 26 | 🔍 Search engines (Wikipedia, KBBI, Tokopedia, lk21, otakudesu, apkmody, dll.) |
-| `Tools` | 47 | 🛠️ Utility tools (QR, TTS, weather, URL shortener, bmkg, yttranscript, dll.) |
-| `Maker` | 4 | 🎨 Image/text makers (brat, quote card, dll.) |
-| `Islamic` | 6 | 🕌 Islamic utilities (Quran, jadwal sholat, asmaul husna, dll.) |
+| `AI` | 17 | Chat & text generation (Gemini, ChatGPT, Mistral, Qwen, DeepSeek, etc.) |
+| `Downloader` | 49 | Media downloaders (TikTok, IG, YouTube, Spotify, etc.) |
+| `Search` | 26 | Search engines (Wikipedia, KBBI, Tokopedia, Pinterest, etc.) |
+| `Tools` | 47 | Utility tools (QR, TTS, weather, URL shortener, BMKG, etc.) |
+| `Maker` | 4 | Image/text makers (brat, quote card, etc.) |
+| `Islamic` | 6 | Islamic utilities (Quran, prayer times, asmaul husna, etc.) |
 
 ---
 
-## 🧩 Contoh Endpoint
+## Adding New Endpoints
+
+Create a `.js` file in `fitur/<category>/`:
 
 ```js
-// fitur/ai/gemini.js
+// fitur/category/newfeature.js
 export default {
   route: {
-    method: "get",
-    path: "/ai/gemini",
+    method: "get",                    // All GET endpoints auto-get POST too
+    path: "/category/newfeature",
     auth: false,
-    tags: ["AI"],
-    summary: "Chat dengan Gemini AI",
-    parameters: [
-      { name: "prompt", in: "query", required: true, schema: { type: "string" } },
-    ],
-    responses: { 200: { description: "Berhasil" } },
-  },
-  handler: async (req, res) => {
-    const { prompt } = req.query
-    if (!prompt) return res.status(400).json({ ok: false, error: "prompt wajib diisi" })
-    const text = await geminiChat(prompt)
-    res.json({ ok: true, text })
-  },
-}
-```
-
----
-
-## ➕ Menambah Endpoint Baru
-
-Buat file `.js` di `fitur/<kategori>/`:
-
-```js
-// fitur/kategori/namafitur.js
-export default {
-  route: {
-    method: "get",                    // get | post | put | patch | delete
-    path: "/kategori/nama",
-    auth: false,                      // true untuk butuh API key (saat ENABLE_AUTH=true)
-    tags: ["Kategori"],
-    summary: "Deskripsi singkat",
-    description: "Deskripsi panjang (opsional)",
+    tags: ["Category"],
+    summary: "Short description",
+    description: "Long description (appears in docs)",
     parameters: [
       {
-        name: "input",
-        in: "query",                  // query | path | header
+        name: "prompt",
+        in: "query",
         required: true,
-        description: "Keterangan parameter",
-        schema: { type: "string", example: "contoh" },
+        description: "What to send",
+        schema: { type: "string", example: "hello" },
       },
     ],
     responses: {
-      "200": { description: "Berhasil" },
-      "400": { description: "Parameter tidak valid" },
-      "500": { description: "Kesalahan server" },
+      "200": { description: "Success" },
+      "400": { description: "Bad request" },
+      "500": { description: "Server error" },
     },
   },
   handler: async (req, res) => {
-    const { input } = req.query
-    if (!input) return res.status(400).json({ ok: false, error: "input wajib diisi" })
+    const { prompt } = req.query
+    if (!prompt) return res.status(400).json({ ok: false, error: "prompt wajib diisi", hint: "GET: ?prompt=halo or POST: {\"prompt\": \"halo\"}" })
     try {
-      res.json({ ok: true, result: input })
+      res.json({ ok: true, result: prompt })
     } catch (e) {
       res.status(500).json({ ok: false, error: e.message })
     }
@@ -195,102 +246,37 @@ export default {
 }
 ```
 
-Restart server — endpoint baru muncul di `/docs` otomatis.
+Restart server — new endpoint appears in `/docs` automatically. It will also accept POST with JSON body.
 
 ---
 
-## ⚡ Performance
+## Auth (Optional — Disabled by Default)
 
-### Mengapa cepat?
+All endpoints are open without API key by default. To enable auth:
 
-1. **Bun HTTP server** — Dibangun dengan Zig di atas JavaScriptCore (engine Safari). Startup ~5x lebih cepat dari Node.js, overhead per-request jauh lebih rendah.
-2. **Elysia compiled router** — Route tree di-compile saat registration, setiap request hit flat switch bukan middleware chain.
-3. **Parallel feature loading** — 142 file fitur di-import paralel via `Promise.all` saat boot. Cold start dari ~1s sequential jadi ~100ms parallel.
-4. **In-memory cache** — Swagger spec di-cache per host. Zero disk I/O per request.
-5. **Inline auth** — Auth check di-inline sebagai `beforeHandle` hook, tidak ada middleware indirection.
-6. **Native `fetch`** — Bun ship native `fetch` (dipakai oleh `lib/uploader.js`), lebih cepat dari polyfill.
-
-### Benchmark
-
-```bash
-bun run scripts/bench.js
-```
-
-Hasil tipikal di sistem routes:
-
-| Route | Avg Latency | P50 | P95 |
-|---|---|---|---|
-| `/docs` (Swagger UI, cached) | 0.13ms | 0.10ms | 0.39ms |
-| `/docs/json` (OpenAPI spec, cached) | 1.15ms | 1.15ms | 1.50ms |
-| `/islamic/asmaul-husna` (local JSON) | 0.14ms | 0.11ms | 0.26ms |
-| `/missing` (404) | 0.07ms | 0.06ms | 0.10ms |
-| Throughput (200 concurrent `/docs`) | — | — | **842 req/s** |
-
----
-
-## 🔐 Auth (Optional — Disabled by Default)
-
-**Semua endpoint terbuka tanpa API key** secara default. Flag `auth: true` di feature file **diabaikan** kecuali Anda mengaktifkan auth secara eksplisit.
-
-Untuk mengaktifkan auth:
-
-1. Edit `.env`:
-   ```env
-   ENABLE_AUTH=true
-   API_KEY=your-secret-key-here
-   ```
-2. Restart server.
-
-Sekarang endpoint dengan `auth: true` akan menolak request tanpa header `x-api-key`:
-
-```bash
-curl "http://localhost:47291/endpoint" -H "x-api-key: your_key"
-```
-
-Di Swagger UI, tombol "Authorize" muncul di kanan atas untuk input API key (hanya saat `ENABLE_AUTH=true`).
-
-### Default behavior (no auth)
-
-```bash
-# Langsung pakai — tanpa header
-http://localhost:47291/ai/gemini?prompt=halo
-http://localhost:47291/tools/gempa
-http://localhost:47291/islamic/jadwal-sholat?kota=Jakarta
+```env
+ENABLE_AUTH=true
+API_KEY=your-secret-key-here
 ```
 
 ---
 
-## 📦 Dependencies
+## Performance
 
-### Production
-
-| Package | Versi | Untuk |
-|---|---|---|
-| `elysia` | ^1.3.0 | HTTP framework |
-| `@elysiajs/swagger` | ^1.3.1 | Swagger UI + OpenAPI spec generator |
-| `axios` | ^1.18.1 | HTTP client (dipakai banyak feature files) |
-| `cheerio` | ^1.2.0 | HTML parser |
-| `@napi-rs/canvas` | ^1.0.0 | Canvas untuk image generation (brat, quote) |
-| `node-webpmux` | ^3.2.1 | WebP metadata (untuk brat animation) |
-| `unfurl.js` | ^6.4.0 | Link preview unfurling |
-| `ws` | ^8.21.0 | WebSocket (untuk copilot AI) |
-| `form-data` | ^4.0.6 | Multipart form upload |
-| `crypto-js` | ^4.2.0 | AES encryption |
-| `tough-cookie` + `axios-cookiejar-support` | ^6.0.2 / ^7.0.0 | Cookie jar |
-| `fetch-cookie` | ^3.2.0 | Cookie-aware fetch |
-| `uuid` | ^14.0.1 | UUID generation |
-| `md5` | ^2.3.0 | MD5 hash |
-| `cloudscraper` | ^4.6.0 | Cloudflare bypass |
-| `node-fetch` | ^3.3.2 | fetch polyfill |
+- Bun HTTP server (Zig + JavaScriptCore) — sub-ms latency
+- Elysia compiled router — flat switch dispatch
+- Parallel feature loading — ~100ms cold start
+- CORS headers added inline — no middleware overhead
+- POST support via smart parameter merging — zero handler changes
 
 ---
 
-## 📜 License
+## License
 
 ISC — see [LICENSE](LICENSE).
 
 ---
 
-## 👤 Author
+## Author
 
 **kangwifi** — [GitHub](https://github.com/Yz776)
