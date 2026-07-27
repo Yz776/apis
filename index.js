@@ -1,11 +1,12 @@
 // ============================================================================
-// Kangwifi APIs — Elysia + Bun edition (v3: Rate Limit + Auto-update)
+// Kangwifi APIs — Elysia + Bun edition (v3: Rate Limit + Auto-update + DDoS Shield)
 // ============================================================================
 // REST API collection on Elysia + Bun. Auto-discovery: drop a file in
 // `fitur/`, restart, and the endpoint is live.
 //
 // v3 IMPROVEMENTS:
 //   - Rate limiting per IP (60 req/min, burst 10) + anti-DDoS protection
+//   - **Auto DDoS Production Mode** — kalau serangan terdeteksi, otomatis naik level
 //   - Simplified docs description (shorter, cleaner)
 //   - Auto-update endpoint: POST /admin/sync fetches new code from all sources
 //   - Every GET endpoint also accepts POST with JSON body
@@ -24,9 +25,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const ENABLE_AUTH = process.env.ENABLE_AUTH === "true"
 const API_KEY = process.env.API_KEY
 const PORT = Number(process.env.PORT) || 47291
-const RATE_LIMIT_PER_MIN = Number(process.env.RATE_LIMIT) || 60   // requests per minute per IP
-const RATE_LIMIT_BURST = Number(process.env.RATE_BURST) || 10     // burst allowance
+const RATE_LIMIT_PER_MIN = Number(process.env.RATE_LIMIT) || 60   // normal: requests per minute per IP
+const RATE_LIMIT_BURST = Number(process.env.RATE_BURST) || 10     // normal: burst allowance
+const DDOS_RATE_LIMIT = Number(process.env.DDOS_RATE_LIMIT) || 15 // production mode: stricter limit
+const DDOS_BURST = Number(process.env.DDOS_BURST) || 3            // production mode: minimal burst
 const SYNC_SECRET = process.env.SYNC_SECRET || "changeme"          // secret for /admin/sync
+const DDOS_SPIKE_THRESHOLD = Number(process.env.DDOS_SPIKE) || 3  // spike = 3x normal traffic = DDoS signal
+const DDOS_UNIQUE_IP_THRESHOLD = Number(process.env.DDOS_IPS) || 50 // >50 unique IPs in 30s = suspicious
+const DDOS_COOLDOWN_MINUTES = Number(process.env.DDOS_COOLDOWN) || 5 // auto-recovery after 5 min of normal traffic
 
 if (ENABLE_AUTH && !API_KEY) {
     console.warn("[auth] ENABLE_AUTH=true tapi API_KEY belum di-set.")
@@ -34,15 +40,24 @@ if (ENABLE_AUTH && !API_KEY) {
 if (!ENABLE_AUTH) {
     console.log("[auth] Auth dinonaktifkan — semua endpoint terbuka.")
 }
-console.log(`[rate-limit] ${RATE_LIMIT_PER_MIN} req/min per IP, burst ${RATE_LIMIT_BURST}`)
+console.log(`[rate-limit] Normal: ${RATE_LIMIT_PER_MIN} req/min, burst ${RATE_LIMIT_BURST}`)
+console.log(`[rate-limit] DDoS Production: ${DDOS_RATE_LIMIT} req/min, burst ${DDOS_BURST}`)
+console.log(`[ddos-shield] Spike threshold: ${DDOS_SPIKE_THRESHOLD}x, Unique IPs: ${DDOS_UNIQUE_IP_THRESHOLD}, Cooldown: ${DDOS_COOLDOWN_MINUTES} min)`)
 
-// ─── Rate Limiter (in-memory, per IP) ────────────────────────────────────────
+// ─── Rate Limiter (in-memory, per IP, dynamic limits) ──────────────────────────
 class RateLimiter {
     constructor(maxPerMin, burst) {
         this.maxPerMin = maxPerMin
         this.burst = burst
-        this.clients = new Map()  // ip → { tokens, lastRefill }
+        this.clients = new Map()  // ip → { tokens, lastRefill, violations }
         this.cleanupInterval = setInterval(() => this._cleanup(), 60_000)
+    }
+
+    // Dynamically adjust limits (for DDoS production mode)
+    setLimits(maxPerMin, burst) {
+        this.maxPerMin = maxPerMin
+        this.burst = burst
+        console.log(`[rate-limit] Limits updated → ${maxPerMin} req/min, burst ${burst}`)
     }
 
     _cleanup() {
@@ -56,7 +71,7 @@ class RateLimiter {
         const now = Date.now()
         let data = this.clients.get(ip)
         if (!data) {
-            data = { tokens: this.maxPerMin + this.burst, lastRefill: now }
+            data = { tokens: this.maxPerMin + this.burst, lastRefill: now, violations: 0 }
             this.clients.set(ip, data)
         }
         const elapsed = now - data.lastRefill
@@ -70,7 +85,10 @@ class RateLimiter {
     check(ip) {
         this._refill(ip)
         const data = this.clients.get(ip)
-        if (data.tokens <= 0) return false
+        if (data.tokens <= 0) {
+            data.violations = (data.violations || 0) + 1
+            return false
+        }
         data.tokens--
         return true
     }
@@ -81,6 +99,15 @@ class RateLimiter {
         return data ? data.tokens : this.maxPerMin + this.burst
     }
 
+    getViolations(ip) {
+        const data = this.clients.get(ip)
+        return data ? data.violations || 0 : 0
+    }
+
+    getTotalClients() {
+        return this.clients.size
+    }
+
     destroy() {
         clearInterval(this.cleanupInterval)
     }
@@ -88,24 +115,234 @@ class RateLimiter {
 
 const limiter = new RateLimiter(RATE_LIMIT_PER_MIN, RATE_LIMIT_BURST)
 
-// ─── Anti-DDoS: IP blacklist for abusers ─────────────────────────────────────
-const blacklist = new Map()  // ip → { blockedAt, reason }
-const BLACKLIST_DURATION = 10 * 60_000  // 10 minutes
+// ─── Anti-DDoS Shield: Detection + Production Mode ────────────────────────────
+// 3-tier protection:
+//   NORMAL    → standard rate limits, basic blacklist
+//   SUSPICIOUS → lowered limits, faster blacklisting
+//   PRODUCTION → strictest limits, auto-auth required, aggressive blocking
 
-function isBlacklisted(ip) {
-    const entry = blacklist.get(ip)
-    if (!entry) return false
-    if (Date.now() - entry.blockedAt > BLACKLIST_DURATION) {
-        blacklist.delete(ip)
+const ddosShield = {
+    mode: "NORMAL",                    // NORMAL | SUSPICIOUS | PRODUCTION
+    modeHistory: [],                  // log mode transitions
+    trafficWindow: [],                // rolling 30-second windows: { timestamp, totalRequests, uniqueIPs }
+    lastModeChange: Date.now(),
+    blacklist: new Map(),             // ip → { blockedAt, reason, duration }
+    normalBaseline: null,             // learned average request rate
+    baselineSamples: [],              // for calculating baseline
+    cooldownStart: null,              // timestamp when recovery cooldown started
+    detectionInterval: null,          // setInterval for traffic analysis
+
+    // Blacklist durations per mode
+    getBlacklistDuration() {
+        switch (this.mode) {
+            case "PRODUCTION": return 30 * 60_000   // 30 minutes in production mode
+            case "SUSPICIOUS": return 15 * 60_000   // 15 minutes in suspicious mode
+            default: return 10 * 60_000              // 10 minutes normal
+        }
+    },
+
+    // How many rate-limit violations before blacklist (mode-dependent)
+    getViolationThreshold() {
+        switch (this.mode) {
+            case "PRODUCTION": return 1   // 1 violation = instant ban
+            case "SUSPICIOUS": return 2   // 2 violations = ban
+            default: return 3              // 3 violations = ban (lenient)
+        }
+    },
+
+    isBlacklisted(ip) {
+        const entry = this.blacklist.get(ip)
+        if (!entry) return false
+        const duration = entry.duration || this.getBlacklistDuration()
+        if (Date.now() - entry.blockedAt > duration) {
+            this.blacklist.delete(ip)
+            return false
+        }
+        return true
+    },
+
+    blacklistIP(ip, reason) {
+        const duration = this.getBlacklistDuration()
+        this.blacklist.set(ip, { blockedAt: Date.now(), reason, duration })
+        console.warn(`[ddos-${this.mode}] IP ${ip} blacklisted for ${duration / 60_000} min: ${reason}`)
+    },
+
+    // ── Traffic Monitoring ──
+    recordRequest(ip) {
+        const now = Date.now()
+        const windowStart = now - (now % 30_000)  // align to 30-second windows
+
+        // Find or create current window
+        let window = this.trafficWindow.find(w => w.timestamp === windowStart)
+        if (!window) {
+            window = { timestamp: windowStart, totalRequests: 0, uniqueIPs: new Set() }
+            this.trafficWindow.push(window)
+        }
+        window.totalRequests++
+        window.uniqueIPs.add(ip)
+
+        // Prune old windows (keep last 5 minutes = 10 windows)
+        this.trafficWindow = this.trafficWindow.filter(w => now - w.timestamp < 300_000)
+
+        // Learn baseline (first 5 minutes)
+        if (!this.normalBaseline && this.trafficWindow.length >= 10) {
+            const avgReq = this.trafficWindow.reduce((s, w) => s + w.totalRequests, 0) / this.trafficWindow.length
+            this.normalBaseline = avgReq
+            console.log(`[ddos-shield] Baseline learned: ~${avgReq.toFixed(1)} req per 30s window`)
+        }
+    },
+
+    // ── DDoS Detection Engine ──
+    detectDDoS() {
+        if (this.trafficWindow.length < 2) return false
+
+        const now = Date.now()
+        const recentWindows = this.trafficWindow.filter(w => now - w.timestamp < 60_000)  // last 2 windows (60s)
+        if (recentWindows.length === 0) return false
+
+        const currentRate = recentWindows.reduce((s, w) => s + w.totalRequests, 0)
+        const currentUniqueIPs = new Set()
+        for (const w of recentWindows) for (const ip of w.uniqueIPs) currentUniqueIPs.add(ip)
+
+        // Detection signals:
+        const signals = []
+
+        // Signal 1: Traffic spike (>3x baseline)
+        if (this.normalBaseline) {
+            const avgRecent = currentRate / recentWindows.length
+            if (avgRecent > this.normalBaseline * DDOS_SPIKE_THRESHOLD) {
+                signals.push(`Spike: ${avgRecent.toFixed(1)} req/30s vs baseline ${this.normalBaseline.toFixed(1)} (${(avgRecent / this.normalBaseline).toFixed(1)}x)`)
+            }
+        }
+
+        // Signal 2: Sudden influx of unique IPs (>50 in 60s)
+        if (currentUniqueIPs.size > DDOS_UNIQUE_IP_THRESHOLD) {
+            signals.push(`Unique IPs spike: ${currentUniqueIPs.size} in 60s`)
+        }
+
+        // Signal 3: Many IPs hitting rate limits simultaneously
+        let recentViolators = 0
+        for (const [ip, data] of limiter.clients) {
+            if ((data.violations || 0) > 0) recentViolators++
+        }
+        if (recentViolators > 10) {
+            signals.push(`Mass violations: ${recentViolators} IPs exceeding rate limit`)
+        }
+
+        // Signal 4: Blacklist growing rapidly
+        if (this.blacklist.size > 20) {
+            signals.push(`Blacklist size: ${this.blacklist.size} IPs`)
+        }
+
+        // Decision logic
+        if (signals.length >= 2) {
+            // 2+ signals = DDoS detected → PRODUCTION mode
+            this.switchMode("PRODUCTION", signals.join("; "))
+            return true
+        } else if (signals.length === 1) {
+            // 1 signal = suspicious → SUSPICIOUS mode
+            if (this.mode === "NORMAL") {
+                this.switchMode("SUSPICIOUS", signals[0])
+            }
+            return false
+        }
+
+        // No signals → check if we can recover from SUSPICIOUS/PRODUCTION
+        if (this.mode !== "NORMAL") {
+            if (!this.cooldownStart) {
+                this.cooldownStart = now
+            }
+            const cooldownElapsed = now - this.cooldownStart
+            if (cooldownElapsed >= DDOS_COOLDOWN_MINUTES * 60_000) {
+                this.switchMode("NORMAL", "Cooldown complete — traffic normal")
+                this.cooldownStart = null
+            }
+        }
+
         return false
-    }
-    return true
+    },
+
+    // ── Mode Switching ──
+    switchMode(newMode, reason) {
+        const oldMode = this.mode
+        if (oldMode === newMode) return
+
+        this.mode = newMode
+        this.lastModeChange = Date.now()
+        this.cooldownStart = null  // reset cooldown on mode change
+
+        const timestamp = new Date().toISOString()
+        this.modeHistory.push({ timestamp, from: oldMode, to: newMode, reason })
+
+        // Keep history manageable
+        if (this.modeHistory.length > 50) this.modeHistory = this.modeHistory.slice(-25)
+
+        console.warn(`[ddos-shield] Mode: ${oldMode} → ${newMode} | Reason: ${reason}`)
+
+        // Apply mode-specific rate limits
+        switch (newMode) {
+            case "NORMAL":
+                limiter.setLimits(RATE_LIMIT_PER_MIN, RATE_LIMIT_BURST)
+                break
+            case "SUSPICIOUS":
+                limiter.setLimits(Math.floor(RATE_LIMIT_PER_MIN / 2), Math.floor(RATE_LIMIT_BURST / 2))
+                break
+            case "PRODUCTION":
+                limiter.setLimits(DDOS_RATE_LIMIT, DDOS_BURST)
+                // Clear all client tokens to force re-check under new stricter limits
+                for (const [ip, data] of limiter.clients) {
+                    data.tokens = Math.min(data.tokens, DDOS_RATE_LIMIT + DDOS_BURST)
+                }
+                break
+        }
+    },
+
+    // ── Auto-analyze traffic every 30 seconds ──
+    startDetection() {
+        this.detectionInterval = setInterval(() => {
+            this.detectDDoS()
+        }, 30_000)
+        console.log("[ddos-shield] Detection engine started (30s interval)")
+    },
+
+    stopDetection() {
+        if (this.detectionInterval) clearInterval(this.detectionInterval)
+    },
+
+    // ── Status report for /admin/ddos-status ──
+    getStatus() {
+        const now = Date.now()
+        const recentWindows = this.trafficWindow.filter(w => now - w.timestamp < 120_000)
+        const currentRate = recentWindows.reduce((s, w) => s + w.totalRequests, 0)
+        const currentUniqueIPs = new Set()
+        for (const w of recentWindows) for (const ip of w.uniqueIPs) currentUniqueIPs.add(ip)
+
+        return {
+            mode: this.mode,
+            modeHistory: this.modeHistory.slice(-10),
+            currentTraffic: {
+                requestsLast2Min: currentRate,
+                uniqueIPsLast2Min: currentUniqueIPs.size,
+                baseline: this.normalBaseline,
+                activeClients: limiter.getTotalClients(),
+                blacklistSize: this.blacklist.size,
+            },
+            limits: {
+                normal: { rateLimit: RATE_LIMIT_PER_MIN, burst: RATE_LIMIT_BURST },
+                production: { rateLimit: DDOS_RATE_LIMIT, burst: DDOS_BURST },
+                current: { rateLimit: limiter.maxPerMin, burst: limiter.burst },
+            },
+            cooldownRemaining: this.cooldownStart
+                ? Math.max(0, DDOS_COOLDOWN_MINUTES * 60_000 - (now - this.cooldownStart)) / 1000
+                : null,
+            lastModeChange: this.lastModeChange,
+            violationThreshold: this.getViolationThreshold(),
+        }
+    },
 }
 
-function blacklistIP(ip, reason) {
-    blacklist.set(ip, { blockedAt: Date.now(), reason })
-    console.warn(`[ddos] IP ${ip} blacklisted: ${reason}`)
-}
+// Start detection engine
+ddosShield.startDetection()
 
 // ─── Walk fitur/ for .js files ───────────────────────────────────────────────
 function walkDir(dir, out = []) {
@@ -206,7 +443,7 @@ function adapt(feature) {
 // ─── Build the Elysia app ────────────────────────────────────────────────────
 const app = new Elysia()
 
-// ─── Rate Limit + Anti-DDoS middleware ───────────────────────────────────────
+// ─── Rate Limit + DDoS Shield middleware ───────────────────────────────────────
 app.onRequest(({ request, set }) => {
     set.headers["access-control-allow-origin"] = "*"
     set.headers["access-control-allow-methods"] = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
@@ -216,30 +453,51 @@ app.onRequest(({ request, set }) => {
         || request.headers.get("x-real-ip")
         || "unknown"
 
-    // Check blacklist first
-    if (isBlacklisted(ip)) {
+    // 1. Record traffic for DDoS detection
+    ddosShield.recordRequest(ip)
+
+    // 2. Check blacklist first (mode-aware)
+    if (ddosShield.isBlacklisted(ip)) {
         set.status = 403
+        set.headers["x-ddos-mode"] = ddosShield.mode
         return new Response(
-            JSON.stringify({ ok: false, error: "IP diblokir karena abuse. Coba lagi dalam 10 menit." }),
+            JSON.stringify({ ok: false, error: `IP diblokir karena abuse (mode: ${ddosShield.mode}). Coba lagi nanti.`, ddosMode: ddosShield.mode }),
             { status: 403, headers: { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*" } },
         )
     }
 
-    // Rate limit check
+    // 3. Rate limit check (limits auto-adjust based on DDoS mode)
     if (!limiter.check(ip)) {
-        // If they exceed rate limit 3 times in short period, blacklist them
-        blacklistIP(ip, "Rate limit exceeded repeatedly")
+        // Blacklist if they violate more than threshold (mode-dependent: 1 in PRODUCTION, 2 in SUSPICIOUS, 3 in NORMAL)
+        if (limiter.getViolations(ip) >= ddosShield.getViolationThreshold()) {
+            ddosShield.blacklistIP(ip, "Rate limit exceeded repeatedly")
+        }
         set.status = 429
         set.headers["retry-after"] = "60"
+        set.headers["x-ddos-mode"] = ddosShield.mode
         return new Response(
-            JSON.stringify({ ok: false, error: "Rate limit exceeded. Coba lagi dalam 1 menit.", retryAfter: 60 }),
+            JSON.stringify({ ok: false, error: "Rate limit exceeded. Coba lagi dalam 1 menit.", retryAfter: 60, ddosMode: ddosShield.mode }),
             { status: 429, headers: { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*", "retry-after": "60" } },
         )
     }
 
-    // Add rate limit info headers
-    set.headers["x-ratelimit-limit"] = String(RATE_LIMIT_PER_MIN)
+    // 4. In PRODUCTION mode: require auth for ALL endpoints temporarily
+    if (ddosShield.mode === "PRODUCTION" && ENABLE_AUTH && API_KEY) {
+        const apiKey = request.headers.get("x-api-key")
+        if (!apiKey || apiKey !== API_KEY) {
+            set.status = 401
+            set.headers["x-ddos-mode"] = "PRODUCTION"
+            return new Response(
+                JSON.stringify({ ok: false, error: "DDoS Production Mode aktif — semua request harus pakai API key (x-api-key header).", ddosMode: "PRODUCTION" }),
+                { status: 401, headers: { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*" } },
+            )
+        }
+    }
+
+    // 5. Add rate limit + DDoS mode info headers
+    set.headers["x-ratelimit-limit"] = String(limiter.maxPerMin)
     set.headers["x-ratelimit-remaining"] = String(limiter.getRemaining(ip))
+    set.headers["x-ddos-mode"] = ddosShield.mode
 })
 
 app.options("*", ({ set }) => {
@@ -586,6 +844,10 @@ body { background: #1a1a2e; color: #e0e0e0; font-family: system-ui, sans-serif; 
 .container { max-width: 600px; margin: auto }
 h1 { color: #9b59b6; font-size: 1.8em; margin-bottom: 8px; text-align: center }
 .sub { text-align: center; color: #888; margin-bottom: 20px }
+.shield { text-align: center; padding: 8px; border-radius: 8px; margin-bottom: 15px; font-weight: bold }
+.shield.normal { background: #1b5e20; color: #a5d6a7 }
+.shield.suspicious { background: #e65100; color: #ffcc80 }
+.shield.production { background: #b71c1c; color: #ef9a9a }
 .card { background: #16213e; border-radius: 10px; padding: 15px; margin-bottom: 12px; border: 1px solid #0f3460 }
 .card p { line-height: 1.5 }
 code { background: #0f3460; padding: 2px 6px; border-radius: 4px; color: #53d769 }
@@ -601,6 +863,8 @@ pre { background: #0f3460; padding: 12px; border-radius: 8px; overflow-x: auto; 
 <div class="container">
 <h1>Kangwifi APIs</h1>
 <p class="sub">${features.length} endpoint — gratis, tanpa API key</p>
+
+<div class="shield ${ddosShield.mode.toLowerCase()}">DDoS Shield: ${ddosShield.mode} — ${ddosShield.mode === "NORMAL" ? "Aman" : ddosShield.mode === "SUSPICIOUS" ? "Perhatian" : "Produksi (Strict)"}</div>
 
 <div class="card">
 <p>Support <code>GET</code> (query) dan <code>POST</code> (JSON body):</p>
@@ -631,7 +895,44 @@ pre { background: #0f3460; padding: 12px; border-radius: 8px; overflow-x: auto; 
     })
 })
 
-// ─── 404 / 500 ───────────────────────────────────────────────────────────────
+// ─── Admin: DDoS Shield Status ────────────────────────────────────────────────
+app.get("/admin/ddos-status", ({ request, set }) => {
+    const secret = request.headers.get("x-sync-secret")
+    if (secret !== SYNC_SECRET) {
+        set.status = 401
+        set.headers["access-control-allow-origin"] = "*"
+        return { ok: false, error: "Secret tidak valid (header: x-sync-secret)" }
+    }
+    set.headers["access-control-allow-origin"] = "*"
+    return ddosShield.getStatus()
+})
+
+// ─── Admin: Manual DDoS Mode Control ──────────────────────────────────────────
+app.post("/admin/ddos-mode", ({ request, body, set }) => {
+    const secret = request.headers.get("x-sync-secret")
+    if (secret !== SYNC_SECRET) {
+        set.status = 401
+        set.headers["access-control-allow-origin"] = "*"
+        return { ok: false, error: "Secret tidak valid (header: x-sync-secret)" }
+    }
+    const newMode = body?.mode
+    if (!newMode || !["NORMAL", "SUSPICIOUS", "PRODUCTION"].includes(newMode)) {
+        set.status = 400
+        set.headers["access-control-allow-origin"] = "*"
+        return { ok: false, error: "Mode harus NORMAL, SUSPICIOUS, atau PRODUCTION" }
+    }
+    ddosShield.switchMode(newMode, `Manual override by admin`)
+    set.headers["access-control-allow-origin"] = "*"
+    return { ok: true, mode: ddosShield.mode, message: `DDoS Shield switched to ${newMode}` }
+})
+
+// ─── Public: DDoS Shield mode (read-only, no secret needed) ───────────────────
+app.get("/ddos-mode", ({ set }) => {
+    set.headers["access-control-allow-origin"] = "*"
+    return { mode: ddosShield.mode, limits: { rateLimit: limiter.maxPerMin, burst: limiter.burst }, violationThreshold: ddosShield.getViolationThreshold() }
+})
+
+// ─── 404 / 500 ────────────────────────────────────────────────────────────────
 app.onError(({ code, error, path, set }) => {
     set.headers["access-control-allow-origin"] = "*"
     if (code === "NOT_FOUND") {
@@ -645,10 +946,11 @@ app.onError(({ code, error, path, set }) => {
 // ─── Boot ────────────────────────────────────────────────────────────────────
 app.listen(PORT, () => {
     console.log("")
-    console.log("  Kangwifi APIs  →  Elysia + Bun v3 (Rate Limit + Auto-update)")
+    console.log("  Kangwifi APIs  →  Elysia + Bun v3 (Rate Limit + DDoS Shield + Auto-update)")
     console.log(`  Listen         →  http://localhost:${PORT}`)
     console.log(`  Docs           →  http://localhost:${PORT}/docs`)
-    console.log(`  Rate Limit     →  ${RATE_LIMIT_PER_MIN} req/min per IP`)
+    console.log(`  Rate Limit     →  ${RATE_LIMIT_PER_MIN} req/min per IP (normal)`)
+    console.log(`  DDoS Shield    →  ${ddosShield.mode} mode`)
     console.log(`  Routes         →  ${features.length} endpoint`)
     console.log("")
 })
