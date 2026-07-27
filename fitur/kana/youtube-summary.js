@@ -87,7 +87,7 @@ export default {
         method: "get",
         path: "/kana/youtube-summary",
         auth: false,
-        tags: ["Kana · Downloader"],
+        tags: ["Downloader"],
         summary: "YouTube-Summary",
         description: "New code - YouTube-Summary.js",
         parameters: [

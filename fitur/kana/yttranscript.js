@@ -43,7 +43,7 @@ export default {
         method: "get",
         path: "/kana/yttranscript",
         auth: false,
-        tags: ["Kana · Downloader"],
+        tags: ["Downloader"],
         summary: "ytTranscript",
         description: "transcript",
         parameters: [

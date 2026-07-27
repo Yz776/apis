@@ -50,7 +50,7 @@ export default {
         method: "get",
         path: "/kana/wan22",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "wan2.2",
         description: "New code - wan2.2.js",
         parameters: [

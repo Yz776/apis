@@ -63,7 +63,7 @@ export default {
         method: "get",
         path: "/kana/claude3",
         auth: false,
-        tags: ["Kana · AI"],
+        tags: ["AI"],
         summary: "claude3",
         description: "chat assisten with claude3",
         parameters: [

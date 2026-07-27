@@ -111,7 +111,7 @@ export default {
         method: "get",
         path: "/kana/snaptik",
         auth: false,
-        tags: ["Kana · Downloader"],
+        tags: ["Downloader"],
         summary: "snaptik",
         description: "New code - snaptik.js",
         parameters: [

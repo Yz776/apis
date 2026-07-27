@@ -80,7 +80,7 @@ export default {
         method: "get",
         path: "/kana/komiku",
         auth: false,
-        tags: ["Kana · Search"],
+        tags: ["Search"],
         summary: "komiku",
         description: "-",
         parameters: [

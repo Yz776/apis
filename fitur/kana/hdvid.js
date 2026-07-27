@@ -198,7 +198,7 @@ export default {
         method: "get",
         path: "/kana/hdvid",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "hdvid",
         description: "Untung MengHd Kan Suatu Video",
         parameters: [

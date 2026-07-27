@@ -81,7 +81,7 @@ export default {
         method: "get",
         path: "/kana/igdl",
         auth: false,
-        tags: ["Kana · Downloader"],
+        tags: ["Downloader"],
         summary: "igdl",
         description: "New code - igdl.js",
         parameters: [

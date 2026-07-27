@@ -30,11 +30,20 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 // Bun auto-loads .env from the project root on boot.
+//
+// AUTH MODE: All endpoints are open by default — no API key required.
+// The `auth` flag on individual feature files is IGNORED, so even endpoints
+// originally marked `auth: true` are publicly accessible. If you later want
+// to enforce auth, set ENABLE_AUTH=true in .env and provide API_KEY.
+const ENABLE_AUTH = process.env.ENABLE_AUTH === "true"
 const API_KEY = process.env.API_KEY
 const PORT = Number(process.env.PORT) || 47291
 
-if (!API_KEY) {
-    console.warn("[auth] Peringatan: API_KEY belum di-set. Endpoint dengan auth: true akan menolak semua request.")
+if (ENABLE_AUTH && !API_KEY) {
+    console.warn("[auth] ENABLE_AUTH=true tapi API_KEY belum di-set. Endpoint auth: true akan menolak semua request.")
+}
+if (!ENABLE_AUTH) {
+    console.log("[auth] Auth dinonaktifkan — semua endpoint terbuka tanpa API key.")
 }
 
 // ─── Walk fitur/ for .js files ───────────────────────────────────────────────
@@ -156,16 +165,12 @@ app.use(
                 },
             },
             tags: [
-                { name: "AI", description: "Chat & text generation" },
-                { name: "Downloader", description: "Media downloaders" },
-                { name: "Search", description: "Search engines" },
-                { name: "Tools", description: "Utility tools" },
+                { name: "AI", description: "Chat & text generation (kaminoa + kana)" },
+                { name: "Downloader", description: "Media downloaders (kaminoa + kana)" },
+                { name: "Search", description: "Search engines (kaminoa + kana)" },
+                { name: "Tools", description: "Utility tools (kaminoa + kana)" },
                 { name: "Maker", description: "Image / text makers" },
                 { name: "Islamic", description: "Islamic utilities" },
-                { name: "Kana · AI", description: "AI scrapers ported from r2-kana" },
-                { name: "Kana · Downloader", description: "Downloaders ported from r2-kana" },
-                { name: "Kana · Search", description: "Search scrapers ported from r2-kana" },
-                { name: "Kana · Tools", description: "Utility tools ported from r2-kana" },
             ],
         },
     }),
@@ -189,6 +194,12 @@ for (const f of features) {
 
     // Map our route metadata into Elysia's `detail` (for swagger) and
     // `beforeHandle` (for auth check, inlined — no middleware indirection).
+    //
+    // AUTH: By default `ENABLE_AUTH=false` — the `auth` flag on each feature
+    // file is IGNORED and all endpoints are public. Set ENABLE_AUTH=true in
+    // .env to enforce `x-api-key` on endpoints marked `auth: true`.
+    const enforceAuth = ENABLE_AUTH && auth
+
     const routeConfig = {
         detail: {
             tags,
@@ -204,9 +215,9 @@ for (const f of features) {
                     ]),
                 ),
             }),
-            ...(auth && { security: [{ ApiKeyAuth: [] }] }),
+            ...(enforceAuth && { security: [{ ApiKeyAuth: [] }] }),
         },
-        ...(auth && {
+        ...(enforceAuth && {
             beforeHandle: (c) => {
                 const key = c.headers["x-api-key"]
                 if (!key || key !== API_KEY) {

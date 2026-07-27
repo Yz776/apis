@@ -124,7 +124,7 @@ export default {
         method: "get",
         path: "/kana/colorizer",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "colorizer",
         description: "New code - colorizer.js",
         parameters: [

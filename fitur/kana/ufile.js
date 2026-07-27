@@ -100,7 +100,7 @@ export default {
         method: "get",
         path: "/kana/ufile",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "ufile",
         description: "New code - ufile.js",
         parameters: [

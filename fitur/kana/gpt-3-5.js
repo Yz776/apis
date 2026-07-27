@@ -65,7 +65,7 @@ export default {
         method: "get",
         path: "/kana/gpt-35",
         auth: false,
-        tags: ["Kana · AI"],
+        tags: ["AI"],
         summary: "gpt-3.5",
         description: "chat assisten gpt3",
         parameters: [

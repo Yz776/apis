@@ -79,7 +79,7 @@ export default {
         method: "get",
         path: "/kana/uploader-postimagesorg",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "uploader postimages.org",
         description: "Uploader all media",
         parameters: [

@@ -53,7 +53,7 @@ export default {
         method: "get",
         path: "/kana/iq-search-drama",
         auth: false,
-        tags: ["Kana · Search"],
+        tags: ["Search"],
         summary: "iq-search-drama",
         description: "search drama with iq",
         parameters: [

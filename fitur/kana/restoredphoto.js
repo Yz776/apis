@@ -41,7 +41,7 @@ export default {
         method: "get",
         path: "/kana/restoredphoto",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "RestoredPhoto",
         description: "New code - RestoredPhoto.js",
         parameters: [

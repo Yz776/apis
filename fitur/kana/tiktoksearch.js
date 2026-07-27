@@ -28,7 +28,7 @@ export default {
         method: "get",
         path: "/kana/tiktoksearch",
         auth: false,
-        tags: ["Kana · Search"],
+        tags: ["Search"],
         summary: "TiktokSearch",
         description: "New code - TiktokSearch.js",
         parameters: [

@@ -31,7 +31,7 @@ export default {
         method: "get",
         path: "/kana/moviev2",
         auth: false,
-        tags: ["Kana · Search"],
+        tags: ["Search"],
         summary: "moviev2",
         description: "Search You favorite movie",
         parameters: [

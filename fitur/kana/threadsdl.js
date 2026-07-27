@@ -54,7 +54,7 @@ export default {
         method: "get",
         path: "/kana/threadsdl",
         auth: false,
-        tags: ["Kana · Downloader"],
+        tags: ["Downloader"],
         summary: "threadsdl",
         description: "New code - threadsdl.js",
         parameters: [

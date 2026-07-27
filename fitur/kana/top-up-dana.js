@@ -117,7 +117,7 @@ export default {
         method: "get",
         path: "/kana/topupdana",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "top_up_dana",
         description: "baca teks teks yang ada di kode nya supaya tidak salah \ud83d\ude20",
         parameters: [

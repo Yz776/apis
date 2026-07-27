@@ -13,7 +13,7 @@ export default {
         method: "get",
         path: "/kana/apkmodysearch",
         auth: false,
-        tags: ["Kana · Search"],
+        tags: ["Search"],
         summary: "apkmodySearch",
         description: "Search apk with apkmody",
         parameters: [

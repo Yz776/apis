@@ -79,7 +79,7 @@ export default {
         method: "get",
         path: "/kana/uploader",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "Uploader",
         description: "New code - Uploader.js",
         parameters: [

@@ -64,7 +64,7 @@ export default {
         method: "get",
         path: "/kana/spotifydl",
         auth: false,
-        tags: ["Kana · Downloader"],
+        tags: ["Downloader"],
         summary: "spotifydl",
         description: "Dowloader Spotify",
         parameters: [

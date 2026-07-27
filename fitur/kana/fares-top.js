@@ -134,7 +134,7 @@ export default {
         method: "get",
         path: "/kana/farestop",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "fares.top",
         description: "Search & detail game by id",
         parameters: [

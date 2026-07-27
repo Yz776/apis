@@ -160,7 +160,7 @@ export default {
         method: "get",
         path: "/kana/manhwalist02",
         auth: false,
-        tags: ["Kana · Search"],
+        tags: ["Search"],
         summary: "manhwalist02",
         description: "Scraper of https://manhwalist02.asia",
         parameters: [

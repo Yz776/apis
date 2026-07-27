@@ -61,7 +61,7 @@ export default {
         method: "get",
         path: "/kana/tempmail-cloud",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "tempmail cloud",
         description: "temp email",
         parameters: [],

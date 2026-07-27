@@ -78,7 +78,7 @@ export default {
         method: "get",
         path: "/kana/quillbotai",
         auth: false,
-        tags: ["Kana · AI"],
+        tags: ["AI"],
         summary: "quillbotAi",
         description: "quillbotAi Scraper",
         parameters: [

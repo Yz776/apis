@@ -32,7 +32,7 @@ export default {
         method: "get",
         path: "/kana/chatilm",
         auth: false,
-        tags: ["Kana · AI"],
+        tags: ["AI"],
         summary: "chatilm",
         description: "chatilm Islamic-ai",
         parameters: [

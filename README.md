@@ -15,8 +15,8 @@
 - 🚀 **Super cepat** — Bun HTTP server (Zig + JavaScriptCore) + Elysia compiled router. Latency sub-millisecond untuk endpoint statis, ~800 req/s throughput.
 - 📚 **Swagger UI otomatis** — Buka `/docs` di browser, langsung dapat dokumentasi interaktif Scalar-powered untuk semua 142 endpoint.
 - 🔌 **Auto-discovery** — Drop file `.js` di folder `fitur/`, restart, endpoint baru langsung live. Tidak perlu edit file lain.
-- 🧩 **41 scraper tambahan dari r2-kana** — Semua di-port otomatis ke endpoint `/kana/*` dengan format yang sama persis dengan endpoint asli.
-- 🔐 **API key opsional** — Setiap endpoint bisa di-set `auth: true` atau `auth: false`. Auth check di-inline via `beforeHandle` hook.
+- 🔓 **Tanpa API key** — Semua endpoint terbuka tanpa autentikasi (bisa diaktifkan via `ENABLE_AUTH=true` di `.env` kalau perlu).
+- 🧩 **41 scraper tambahan dari r2-kana** — Di-port otomatis ke endpoint `/kana/*`, **digabung ke kategori yang sama** dengan endpoint asli (AI, Downloader, Search, Tools) — tidak ada pemisahan "Kana ·".
 - 🛠️ **Express-compatible** — Semua 101 file fitur asli kaminoa tetap utuh tanpa perubahan. Adapter Express-style di `index.js` map ke Elysia context.
 
 ---
@@ -57,11 +57,15 @@ Server jalan di `http://localhost:47291`. Buka `http://localhost:47291/docs` unt
 Buat file `.env` (Bun auto-load):
 
 ```env
+# Auth (default: disabled — all endpoints open)
+ENABLE_AUTH=false
 API_KEY=your-secret-key-here
+
+# Server
 PORT=47291
 ```
 
-Jika `API_KEY` tidak di-set, endpoint dengan `auth: true` akan menolak semua request. Endpoint dengan `auth: false` selalu terbuka.
+Jika `ENABLE_AUTH=false` (default), semua endpoint terbuka tanpa API key. Set `ENABLE_AUTH=true` untuk mengaktifkan pengecekan `x-api-key` pada endpoint dengan `auth: true`.
 
 ---
 
@@ -108,18 +112,16 @@ Raw JSON spec di `http://localhost:47291/docs/json` — bisa di-import ke Postma
 
 ### Tags
 
-| Tag | Jumlah | Deskripsi |
-|---|---|---|
-| `AI` | 10 | Chat & text generation (Gemini, ChatGPT, Mistral, Qwen, dll.) |
-| `Downloader` | 36 | Media downloaders (TikTok, IG, YouTube, Spotify, dll.) |
-| `Search` | 15 | Search engines (Wikipedia, KBBI, Tokopedia, dll.) |
-| `Tools` | 30 | Utility tools (QR, TTS, weather, URL shortener, dll.) |
-| `Maker` | 4 | Image/text makers (brat, quote card, dll.) |
-| `Islamic` | 6 | Islamic utilities (Quran, jadwal sholat, asmaul husna, dll.) |
-| `Kana · AI` | 9 | AI scrapers dari r2-kana (GPT, Claude, DeepSeek, Quillbot, dll.) |
-| `Kana · Downloader` | 6 | Downloaders dari r2-kana (ytmp3, snaptik, igdl, aiodl, dll.) |
-| `Kana · Search` | 14 | Search scrapers dari r2-kana (lk21, otakudesu, apkmody, dll.) |
-| `Kana · Tools` | 12 | Utility tools dari r2-kana (shortlink, bmkg, yttranscript, dll.) |
+Endpoint kana **digabung** dengan endpoint kaminoa asli di kategori yang sama (tidak ada prefix "Kana · "). Semua endpoint AI (baik kaminoa maupun kana) muncul di bawah tag `AI`, semua endpoint downloader di bawah `Downloader`, dan seterusnya.
+
+| Tag | Total | Kaminoa | Kana | Deskripsi |
+|---|---|---|---|---|
+| `AI` | 17 | 10 | 7 | Chat & text generation (Gemini, ChatGPT, Mistral, Qwen, GPT-kana, Claude, DeepSeek, Quillbot, dll.) |
+| `Downloader` | 48 | 36 | 12 | Media downloaders (TikTok, IG, YouTube, Spotify, ytmp3, snaptik, aiodl, dll.) |
+| `Search` | 24 | 15 | 9 | Search engines (Wikipedia, KBBI, Tokopedia, lk21, otakudesu, apkmody, dll.) |
+| `Tools` | 43 | 30 | 13 | Utility tools (QR, TTS, weather, URL shortener, bmkg, yttranscript, dll.) |
+| `Maker` | 4 | 4 | 0 | Image/text makers (brat, quote card, dll.) |
+| `Islamic` | 6 | 6 | 0 | Islamic utilities (Quran, jadwal sholat, asmaul husna, dll.) |
 
 ---
 
@@ -165,7 +167,7 @@ export default {
     method: "get",
     path: "/kana/bmkg",
     auth: false,
-    tags: ["Kana · Tools"],
+    tags: ["Tools"],
     summary: "bmkg",
     parameters: [],
     responses: { 200: { description: "Berhasil" } },
@@ -275,25 +277,35 @@ Hasil tipikal di sistem routes:
 
 ---
 
-## 🔐 API Key
+## 🔐 Auth (Optional — Disabled by Default)
 
-Setiap endpoint bisa dikonfigurasi butuh API key via field `auth`:
+**Semua endpoint terbuka tanpa API key** secara default. Flag `auth: true` di feature file **diabaikan** kecuali Anda mengaktifkan auth secara eksplisit.
 
-```js
-route: {
-  auth: true,   // wajib pakai x-api-key header
-  // atau
-  auth: false,  // bebas tanpa key
-}
-```
+Untuk mengaktifkan auth:
 
-Request dengan auth:
+1. Edit `.env`:
+   ```env
+   ENABLE_AUTH=true
+   API_KEY=your-secret-key-here
+   ```
+2. Restart server.
+
+Sekarang endpoint dengan `auth: true` akan menolak request tanpa header `x-api-key`:
 
 ```bash
 curl "http://localhost:47291/endpoint" -H "x-api-key: your_key"
 ```
 
-Di Swagger UI, tombol "Authorize" muncul di kanan atas untuk input API key.
+Di Swagger UI, tombol "Authorize" muncul di kanan atas untuk input API key (hanya saat `ENABLE_AUTH=true`).
+
+### Default behavior (no auth)
+
+```bash
+# Langsung pakai — tanpa header
+http://localhost:47291/kana/bmkg
+http://localhost:47291/ai/gemini?prompt=halo
+http://localhost:47291/tools/gempa
+```
 
 ---
 

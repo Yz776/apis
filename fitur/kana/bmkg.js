@@ -110,7 +110,7 @@ export default {
         method: "get",
         path: "/kana/bmkg",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "bmkg",
         description: "biar tau suhu informasi cuaca di kotak kalian",
         parameters: [],

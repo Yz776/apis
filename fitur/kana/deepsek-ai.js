@@ -71,7 +71,7 @@ export default {
         method: "get",
         path: "/kana/deepsek-ai",
         auth: false,
-        tags: ["Kana · AI"],
+        tags: ["AI"],
         summary: "deepsek ai",
         description: "chat with ai deepsek",
         parameters: [

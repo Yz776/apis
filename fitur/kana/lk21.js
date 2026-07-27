@@ -24,7 +24,7 @@ export default {
         method: "get",
         path: "/kana/lk21",
         auth: false,
-        tags: ["Kana · Search"],
+        tags: ["Search"],
         summary: "lk21",
         description: "New code - lk21.js",
         parameters: [

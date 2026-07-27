@@ -114,7 +114,7 @@ export default {
         method: "get",
         path: "/kana/ainvest",
         auth: false,
-        tags: ["Kana · AI"],
+        tags: ["AI"],
         summary: "ainvest",
         description: "New code - ainvest.js",
         parameters: [

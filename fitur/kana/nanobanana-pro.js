@@ -107,7 +107,7 @@ export default {
         method: "get",
         path: "/kana/nanobanana-pro",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "nanobanana pro",
         description: "New code - nanobanana pro.js",
         parameters: [

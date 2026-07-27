@@ -64,7 +64,7 @@ export default {
         method: "get",
         path: "/kana/ik21",
         auth: false,
-        tags: ["Kana · Search"],
+        tags: ["Search"],
         summary: "ik21",
         description: "search video/flim yang ingin di tonton dam dapatkan data ya\ud83d\ude39",
         parameters: [

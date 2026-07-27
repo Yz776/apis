@@ -8,7 +8,7 @@ import os
 import re
 
 SRC_DIR = "/tmp/kana-all"
-DST_DIR = "/home/z/my-project/kaminoa-elysia/fitur/kana"
+DST_DIR = "/home/z/my-project/kangwifi-apis/fitur/kana"
 os.makedirs(DST_DIR, exist_ok=True)
 
 SKIP_PACKAGES = {
@@ -971,7 +971,7 @@ def main():
             f'        method: "{verb}",\n'
             f'        path: "{route_path}",\n'
             "        auth: false,\n"
-            f'        tags: ["Kana · {tag}"],\n'
+            f'        tags: ["{tag}"],\n'
             f"        summary: {json.dumps(title.replace('.js', ''))},\n"
             f"        description: {json.dumps(desc or f'Ported from r2-kana snippet {title}')},\n"
             f"        parameters: {parameters_block},\n"

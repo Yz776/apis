@@ -68,7 +68,7 @@ export default {
         method: "get",
         path: "/kana/ttsbrando",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "ttsBrando",
         description: "Ambil cookie nya pake extension Cookie-editor",
         parameters: [

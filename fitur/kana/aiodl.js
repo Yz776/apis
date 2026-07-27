@@ -68,7 +68,7 @@ export default {
         method: "get",
         path: "/kana/aiodl",
         auth: false,
-        tags: ["Kana · Downloader"],
+        tags: ["Downloader"],
         summary: "aiodl",
         description: "New code - aiodl.js",
         parameters: [

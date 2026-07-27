@@ -50,7 +50,7 @@ export default {
         method: "get",
         path: "/kana/wan-text-to-video",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "wan text to video",
         description: "generate video",
         parameters: [

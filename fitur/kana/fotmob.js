@@ -9,7 +9,7 @@ export default {
         method: "get",
         path: "/kana/fotmob",
         auth: false,
-        tags: ["Kana · Search"],
+        tags: ["Search"],
         summary: "fotmob",
         description: "ambil data pertandingan",
         parameters: [

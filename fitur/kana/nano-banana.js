@@ -14,7 +14,7 @@ export default {
         method: "get",
         path: "/kana/nano-banana",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "Nano banana",
         description: "New code - Nano banana.js",
         parameters: [

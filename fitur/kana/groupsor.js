@@ -17,7 +17,7 @@ export default {
         method: "get",
         path: "/kana/groupsor",
         auth: false,
-        tags: ["Kana · Search"],
+        tags: ["Search"],
         summary: "Groupsor",
         description: "New code - Groupsor.js",
         parameters: [

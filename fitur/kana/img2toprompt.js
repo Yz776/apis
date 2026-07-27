@@ -65,7 +65,7 @@ export default {
         method: "get",
         path: "/kana/img2toprompt",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "img2toPrompt",
         description: "convert image to prompt",
         parameters: [

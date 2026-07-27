@@ -43,7 +43,7 @@ export default {
         method: "get",
         path: "/kana/photoihancer",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "photoihancer",
         description: "Jangan lupa follow ch",
         parameters: [

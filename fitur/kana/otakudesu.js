@@ -41,7 +41,7 @@ export default {
         method: "get",
         path: "/kana/otakudesu",
         auth: false,
-        tags: ["Kana · Search"],
+        tags: ["Search"],
         summary: "otakudesu",
         description: "Search anime with otakudesu",
         parameters: [

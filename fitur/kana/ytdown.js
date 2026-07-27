@@ -58,7 +58,7 @@ export default {
         method: "get",
         path: "/kana/ytdown",
         auth: false,
-        tags: ["Kana · Downloader"],
+        tags: ["Downloader"],
         summary: "ytdown",
         description: "New code - ytdown.js",
         parameters: [

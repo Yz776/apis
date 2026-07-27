@@ -107,7 +107,7 @@ export default {
         method: "get",
         path: "/kana/nanobananapro",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "nanobananaPro",
         description: "Generate image with nano banana pro",
         parameters: [

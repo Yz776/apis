@@ -58,7 +58,7 @@ export default {
         method: "get",
         path: "/kana/search-anime-movie",
         auth: false,
-        tags: ["Kana · Search"],
+        tags: ["Search"],
         summary: "search anime movie",
         description: "Search Anime Favorit",
         parameters: [

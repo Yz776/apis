@@ -23,7 +23,7 @@ export default {
         method: "get",
         path: "/kana/shortlink",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "shortlink",
         description: "short link :v",
         parameters: [

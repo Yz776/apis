@@ -107,7 +107,7 @@ export default {
         method: "get",
         path: "/kana/idnapp",
         auth: false,
-        tags: ["Kana · Tools"],
+        tags: ["Tools"],
         summary: "idn_app",
         description: "Scraper idn app by ren",
         parameters: [

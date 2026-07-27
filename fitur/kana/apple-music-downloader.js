@@ -81,7 +81,7 @@ export default {
         method: "get",
         path: "/kana/apple-music-downloader",
         auth: false,
-        tags: ["Kana · Downloader"],
+        tags: ["Downloader"],
         summary: "Apple Music Downloader",
         description: "New code - Apple Music Downloader.js",
         parameters: [

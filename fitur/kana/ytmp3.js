@@ -41,7 +41,7 @@ export default {
         method: "get",
         path: "/kana/ytmp3",
         auth: false,
-        tags: ["Kana · Downloader"],
+        tags: ["Downloader"],
         summary: "ytmp3",
         description: "Downloader YouTube Mp3",
         parameters: [
