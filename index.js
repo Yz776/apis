@@ -250,44 +250,13 @@ app.use(
                 twitterTitle: "Kangwifi APIs",
                 twitterDescription: "REST API collection with 142 endpoints.",
             },
-            // Custom CSS — small touches that make the UI feel more polished
-            customCss: `
-                /* Larger, more readable fonts */
-                :root {
-                    --scalar-font-size-base: 15px;
-                    --scalar-font-size-small: 13px;
-                    --scalar-spacing: 12px;
-                }
-                /* Slightly wider sidebar so tag names don't truncate */
-                .t-doc__sidebar {
-                    min-width: 300px !important;
-                    max-width: 360px !important;
-                }
-                /* Make the tag headings more prominent */
-                .schema-card-title {
-                    font-weight: 600 !important;
-                }
-                /* Highlight the "Try it out" button */
-                .scalar-button.scalar-button--stretch {
-                    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%) !important;
-                    border: none !important;
-                    font-weight: 600 !important;
-                    transition: transform 0.15s ease;
-                }
-                .scalar-button.scalar-button--stretch:hover {
-                    transform: translateY(-1px);
-                    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4) !important;
-                }
-                /* Nicer code blocks */
-                pre {
-                    border-radius: 8px !important;
-                    font-size: 13px !important;
-                }
-                /* Better spacing for endpoint cards */
-                .endpoint-card {
-                    margin-bottom: 16px !important;
-                }
-            `,
+            // NOTE: customCss is intentionally omitted. The Scalar plugin
+            // renders the data-configuration attribute with single quotes,
+            // and any apostrophe in the CSS (e.g. "don't" in a comment)
+            // breaks the HTML attribute and truncates the JSON, causing a
+            // "Unterminated string in JSON" error in the browser console
+            // and a blank docs page. The "purple" theme already provides
+            // good styling without custom CSS.
         },
         documentation: {
             info: {
