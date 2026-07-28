@@ -1,8 +1,10 @@
 // School search & detail via Dapodik (Dapo Kemendikdasmen)
 // Adapted from HaidarMahiru/snippet-vault snippets/haidar/sdsekolah.js
 // Upstream: https://dapo.kemendikdasmen.go.id (auto-scraped VITE_API_TOKEN from env.js)
-
-import axios from "axios"
+//
+// IMPORTANT: Dapodik API rejects requests with default axios headers
+// (Accept-Encoding: gzip + Accept: application/json). Use fetch() with
+// explicit minimal headers instead.
 
 const BASE = "https://dapo.kemendikdasmen.go.id"
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
@@ -16,10 +18,12 @@ async function fetchConfig() {
     if (cachedToken && Date.now() < tokenExpiry) {
         return { token: cachedToken, apiUrl: cachedApiUrl }
     }
-    const { data } = await axios.get(`${BASE}/env.js`, {
+    const res = await fetch(`${BASE}/env.js`, {
         headers: { "User-Agent": UA },
-        timeout: 15000,
+        signal: AbortSignal.timeout(15000),
     })
+    if (!res.ok) throw new Error(`Gagal fetch env.js (HTTP ${res.status})`)
+    const data = await res.text()
     const urlMatch = data.match(/VITE_STRAPI_URL\s*:\s*"(.*?)"/)
     const tokenMatch = data.match(/VITE_API_TOKEN\s*:\s*"(.*?)"/)
     if (urlMatch) cachedApiUrl = urlMatch[1].replace(/\/$/, "")
@@ -35,22 +39,21 @@ async function fetchConfig() {
 
 async function fetchJson(path) {
     const { token, apiUrl } = await fetchConfig()
-    // NOTE: Dapodik API rejects requests with "Accept: application/json" header.
-    // Only Authorization + User-Agent should be sent.
-    const { data, status } = await axios.get(`${apiUrl}${path}`, {
+    // Minimal headers — Dapodik rejects Accept: application/json and Accept-Encoding: gzip
+    const res = await fetch(`${apiUrl}${path}`, {
         headers: {
             "Authorization": `Bearer ${token}`,
             "User-Agent": UA,
         },
-        timeout: 15000,
-        validateStatus: () => true,
+        signal: AbortSignal.timeout(15000),
     })
+    const status = res.status
     if (status === 400) throw new Error("Pencarian gagal: kata kunci minimal 4 karakter.")
     if (status === 429) throw new Error("Rate limit Dapodik. Coba lagi nanti.")
     if (status < 200 || status >= 300) {
         throw new Error(`Dapodik API gagal (HTTP ${status})`)
     }
-    return data
+    return await res.json()
 }
 
 async function searchSchools(query) {

@@ -11,6 +11,9 @@ const HEADERS = { "User-Agent": UA, "Accept-Language": "en-US,en;q=0.9" }
 async function searchSongs(query) {
     const url = `https://genius.com/api/search/multi?q=${encodeURIComponent(query)}`
     const { data, status } = await axios.get(url, { headers: HEADERS, timeout: 15000, validateStatus: () => true })
+    if (status === 403) {
+        throw new Error("Genius memblokir IP server ini (Cloudflare 403). Coba lagi nanti atau gunakan IP/proxy berbeda.")
+    }
     if (status !== 200) {
         throw new Error(`Genius search gagal (HTTP ${status})`)
     }
