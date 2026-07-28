@@ -10,7 +10,7 @@ function clean(text) {
         .replace(/\s+/g, " ").trim()
 }
 
-function parsePOS(el) {
+function parsePOS(el, $) {
     //Ambil label kata dari <span title="Verba: kata kerja">v</span> etc
     const span = $(el).find('span[title]').first()
     const title = span.attr("title") || ""
@@ -305,16 +305,24 @@ export default {
             if (source === "web") {
                 result = await trySource("web")
             } else {
-                // coba kemendikdasmen dulu, fallback ke web kalo gagal
+                // coba kemendikdasmen dulu, fallback ke web kalo gagal (termasuk timeout/network)
                 try {
                     result = await trySource("kemendikdasmen")
                 } catch (err) {
+                    // 404 = kata tidak ada; selain itu (timeout/network/5xx) coba web dulu
                     if (err.statusCode === 404) {
-                        // fallback ke kbbi.web.id
-                        const webResult = await trySource("web")
-                        result = webResult
+                        try {
+                            result = await trySource("web")
+                        } catch (e2) {
+                            throw err
+                        }
                     } else {
-                        throw err
+                        // network/timeout/5xx — coba fallback ke web
+                        try {
+                            result = await trySource("web")
+                        } catch (e2) {
+                            throw err
+                        }
                     }
                 }
             }

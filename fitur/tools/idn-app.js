@@ -138,13 +138,26 @@ export default {
     },
 
     handler: async (req, res) => {
-        const { input } = req.query
+        const { input, action } = req.query
         if (!input || !String(input).trim()) {
-            return res.status(400).json({ ok: false, error: `input wajib diisi` })
+            return res.status(400).json({ ok: false, error: `input wajib diisi`, hint: `Kirim kata kunci pencarian artikel, contoh: ?input=naruto` })
         }
         try {
-            const result = await _scrape(String(input).trim())
-            return res.json({ ok: true, result })
+            // Default: cari artikel di idntimes.com berdasarkan query input.
+            // Jika action=streams, kembalikan daftar livestream IDN Live.
+            // Jika action=cats, kembalikan kategori livestream.
+            let result
+            const act = (action || 'search').trim().toLowerCase()
+            if (act === 'streams') {
+                result = await get_streams()
+            } else if (act === 'cats') {
+                result = await get_live_cats()
+            } else if (act === 'article') {
+                result = await read_article(String(input).trim())
+            } else {
+                result = await search_it(String(input).trim())
+            }
+            return res.json({ ok: true, action: act, result })
         } catch (e) {
             return res.status(500).json({ ok: false, error: e.message })
         }

@@ -1,6 +1,7 @@
 // Auto-generated from r2-kana.vercel.app snippet "snaptik.js" (bcOdtAx)
 // Source: https://r2-kana.vercel.app/#/snippet/bcOdtAx
 // Description: New code - snaptik.js
+// PATCHED: main() now accepts a url argument and returns the result.
 
 /**
  * [ ✨ Scrape Snaptik Downloader Tiktok]
@@ -10,7 +11,6 @@
 
 import * as cheerio from "cheerio";
 
-const tiktokUrl = "https://vt.tiktok.com/ZSHegaGC7/";
 const base = "https://snaptik.net";
 
 let sessionCookies = "";
@@ -68,7 +68,7 @@ async function searchVideo(url, tokens) {
   saveCookies(res);
 
   const json = await res.json();
-  if (json.status !== "ok") return;
+  if (json.status !== "ok") throw new Error(json.msg || "snaptik gagal memproses URL");
 
   const $ = cheerio.load(json.data);
 
@@ -96,14 +96,9 @@ async function searchVideo(url, tokens) {
   return { videoId, links };
 }
 
-async function main() {
-  try {
-    const tokens = await getTokens();
-    const result = await searchVideo(tiktokUrl, tokens);
-    console.log(JSON.stringify(result, null, 2));
-  } catch (error) {
-    console.log(JSON.stringify({ error: error.message }, null, 2));
-  }
+async function main(url) {
+  const tokens = await getTokens();
+  return await searchVideo(url, tokens);
 }
 
 export default {

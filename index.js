@@ -387,6 +387,7 @@ function adapt(feature) {
     return async (c) => {
         let status = 200
         let response = null
+        const extraHeaders = {}
 
         const body = (c.body && typeof c.body === "object" && !Buffer.isBuffer(c.body)) ? c.body : {}
         const mergedQuery = { ...c.query, ...body }
@@ -400,28 +401,35 @@ function adapt(feature) {
 
         const res = {
             status(code) { status = code; return this },
+            // Express-compatible header setters
+            set(name, value) {
+                if (typeof name === 'object') Object.assign(extraHeaders, name)
+                else extraHeaders[String(name).toLowerCase()] = value
+                return this
+            },
+            header(name, value) { return this.set(name, value) },
+            type(value) { extraHeaders['content-type'] = value; return this },
             json(obj) {
                 response = new Response(JSON.stringify(obj), {
                     status,
-                    headers: { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*" },
+                    headers: { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*", ...extraHeaders },
                 })
                 return response
             },
             send(body) {
                 const isBuf = Buffer.isBuffer(body)
-                response = new Response(body, {
-                    status,
-                    headers: {
-                        ...(isBuf ? { "content-type": "application/octet-stream" } : { "content-type": "text/html; charset=utf-8" }),
-                        "access-control-allow-origin": "*",
-                    },
-                })
+                const headers = {
+                    ...(isBuf ? { "content-type": "application/octet-stream" } : { "content-type": "text/html; charset=utf-8" }),
+                    "access-control-allow-origin": "*",
+                    ...extraHeaders,
+                }
+                response = new Response(body, { status, headers })
                 return response
             },
             end(body) {
                 response = new Response(body ?? null, {
                     status,
-                    headers: { "access-control-allow-origin": "*" },
+                    headers: { "access-control-allow-origin": "*", ...extraHeaders },
                 })
                 return response
             },
@@ -430,7 +438,7 @@ function adapt(feature) {
         try {
             await run(req, res)
             if (response) return response
-            return new Response(null, { status, headers: { "access-control-allow-origin": "*" } })
+            return new Response(null, { status, headers: { "access-control-allow-origin": "*", ...extraHeaders } })
         } catch (e) {
             return new Response(
                 JSON.stringify({ ok: false, error: e?.message || String(e) }),

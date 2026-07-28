@@ -193,13 +193,27 @@ export default {
     },
 
     handler: async (req, res) => {
-        const { query } = req.query
+        const { query, action } = req.query
         if (!query || !String(query).trim()) {
             return res.status(400).json({ ok: false, error: `query wajib diisi` })
         }
         try {
-            const result = await run_execute(String(query).trim())
-            return res.json({ ok: true, result })
+            // Default: search by query. Other actions: latest/popular/today/detail.
+            // For 'latest'/'popular', query is the page number; for 'detail', query is the slug.
+            let result
+            const act = (action || 'search').trim().toLowerCase()
+            if (act === 'latest') {
+                result = await get_latest(parseInt(String(query).trim()) || 1)
+            } else if (act === 'popular') {
+                result = await get_popular(parseInt(String(query).trim()) || 1)
+            } else if (act === 'today') {
+                result = await get_today()
+            } else if (act === 'detail') {
+                result = await get_detail(String(query).trim())
+            } else {
+                result = await search(String(query).trim())
+            }
+            return res.json({ ok: true, action: act, result })
         } catch (e) {
             return res.status(500).json({ ok: false, error: e.message })
         }

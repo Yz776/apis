@@ -11,7 +11,6 @@
 
 import axios from 'axios'
 import FormData from 'form-data'
-import fs from 'fs'
 import path from 'path'
 
 async function getCsrf() {
@@ -30,11 +29,25 @@ async function getCsrf() {
   return { csrf, cookie, sessionId }
 }
 
-async function upload(filePath) {
-  const fileName = path.basename(filePath)
-  const fileBuffer = fs.readFileSync(filePath)
-  const fileSize = fs.statSync(filePath).size
-  const fileExt = path.extname(filePath).replace('.', '')
+async function upload(sourceUrl) {
+  if (!/^https?:\/\//i.test(sourceUrl)) {
+    throw new Error('URL tidak valid — harus diawali http:// atau https://')
+  }
+  // Download the file from the URL into memory
+  const dlRes = await axios.get(sourceUrl, {
+    responseType: 'arraybuffer',
+    timeout: 60000,
+    maxContentLength: 200 * 1024 * 1024,  // 200 MB cap
+    headers: { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36' }
+  })
+  if (dlRes.status >= 400) throw new Error(`Gagal download file (HTTP ${dlRes.status})`)
+  const fileBuffer = Buffer.from(dlRes.data)
+  const fileSize = fileBuffer.length
+  // Derive filename & extension from URL path or content-type
+  let fileName = 'file'
+  try { fileName = decodeURIComponent(new URL(sourceUrl).pathname.split('/').filter(Boolean).pop() || 'file') } catch {}
+  if (!fileName || fileName === 'file') fileName = `file.${(dlRes.headers['content-type'] || '').split('/')[1]?.split(';')[0] || 'bin'}`
+  const fileExt = (path.extname(fileName).replace('.', '') || 'bin').toLowerCase()
 
   const { csrf, cookie, sessionId } = await getCsrf()
 

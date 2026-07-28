@@ -9,12 +9,28 @@ Base: https://www.photorestore[DOT]io
 Note: lumayan fast result nya
 */
 
-import fs from 'fs'
+// Note: handler now expects a URL (http/https) and fetches the image bytes.
 
-async function restorePhoto(imagePath, scale = 2) {
-  const base64 = fs.readFileSync(imagePath).toString('base64')
-  const ext = imagePath.split('.').pop().toLowerCase()
-  const dataUrl = `data:image/${ext === 'jpg' ? 'jpeg' : ext};base64,${base64}`
+async function restorePhoto(imageUrl, scale = 2) {
+  if (!/^https?:\/\//i.test(imageUrl)) {
+    throw new Error('URL tidak valid — harus diawali http:// atau https://')
+  }
+  const imgRes = await fetch(imageUrl, {
+    headers: { 'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36' }
+  })
+  if (!imgRes.ok) throw new Error(`Gagal download gambar (HTTP ${imgRes.status})`)
+  const buf = Buffer.from(await imgRes.arrayBuffer())
+  const ctype = (imgRes.headers.get('content-type') || 'image/jpeg').toLowerCase()
+  let ext = 'jpeg'
+  if (ctype.includes('png')) ext = 'png'
+  else if (ctype.includes('webp')) ext = 'webp'
+  else if (ctype.includes('gif')) ext = 'gif'
+  else {
+    const urlExt = imageUrl.split('?')[0].split('.').pop().toLowerCase()
+    if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(urlExt)) ext = urlExt === 'jpg' ? 'jpeg' : urlExt
+  }
+  const base64 = buf.toString('base64')
+  const dataUrl = `data:image/${ext};base64,${base64}`
 
   const res = await fetch('https://us-central1-ai-apps-prod.cloudfunctions.net/restorePhoto', {
     method: 'POST',

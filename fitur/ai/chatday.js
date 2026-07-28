@@ -15,6 +15,29 @@ async function createAnonymousSession() {
     return { cookie: cookieStr, user: res.data }
 }
 
+// Parse the SSE stream returned by chatday.ai and extract the assistant's reply text.
+// Format: lines like `data: {"type":"text-delta","delta":"..."}` interleaved with
+// `text-start` / `text-end` / `data-conversation` events. We concatenate all `delta`s.
+function parseSSE(sseText) {
+    let text = ""
+    let conversationId = null
+    for (const line of String(sseText || "").split("\n")) {
+        const trimmed = line.trim()
+        if (!trimmed.startsWith("data:")) continue
+        const raw = trimmed.slice(5).trim()
+        if (!raw || raw === "[DONE]") continue
+        try {
+            const ev = JSON.parse(raw)
+            if (ev.type === "data-conversation" && ev.data?.conversationId) {
+                conversationId = ev.data.conversationId
+            } else if (ev.type === "text-delta" && typeof ev.delta === "string") {
+                text += ev.delta
+            }
+        } catch {}
+    }
+    return { text, conversationId }
+}
+
 async function chat(prompt, model = "openai/gpt-4o-mini") {
     const session = await createAnonymousSession()
     const cookie = session.cookie
@@ -32,9 +55,12 @@ async function chat(prompt, model = "openai/gpt-4o-mini") {
             "User-Agent": UA, "Content-Type": "application/json", "Accept": "application/json",
             "Cookie": cookie, "Origin": BASE_URL.replace(/$/, ""), "Referer": BASE_URL
         },
-        timeout: 30000
+        timeout: 30000,
+        responseType: "text",  // chatday returns SSE text, not JSON
+        transformResponse: [(data) => data],  // prevent axios from trying to parse
     })
-    return { response: res.data, cookie, conversationId }
+    const parsed = parseSSE(res.data)
+    return { response: parsed.text, conversationId: parsed.conversationId || conversationId, model }
 }
 
 export default {

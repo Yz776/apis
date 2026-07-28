@@ -1,13 +1,13 @@
 // Auto-generated from r2-kana.vercel.app snippet "aiodl.js" (qItzAl)
 // Source: https://r2-kana.vercel.app/#/snippet/qItzAl
 // Description: New code - aiodl.js
+// PATCHED: returns result instead of writing to disk; removed top-level call.
 
-import fs from "node:fs";
 import * as cheerio from "cheerio";
 
 async function aiodl(link) {
   const url = "https://savefbs.com/api/v1/aio/html";
-  
+
   const config = {
     method: "POST",
     headers: {
@@ -24,44 +24,28 @@ async function aiodl(link) {
     })
   };
 
-  try {
-    const response = await fetch(url, config);
-    const html = await response.text();
-    const $ = cheerio.load(html);
+  const response = await fetch(url, config);
+  const html = await response.text();
+  const $ = cheerio.load(html);
 
-    const title = $("h3.text-sm").text().trim();
-    const thumb = $("img.aio-thumbnail").attr("src");
-    const token = $(".aio-format-btn").first().attr("data-loader-id");
-    
-    const formats = [];
-    $(".aio-format-btn").each((_, el) => {
-      const onclick = $(el).attr("onclick");
-      const match = onclick?.match(/'([^']+)'/);
-      if (match) formats.push(match[1]);
-    });
+  const title = $("h3.text-sm").text().trim();
+  const thumb = $("img.aio-thumbnail").attr("src");
+  const token = $(".aio-format-btn").first().attr("data-loader-id");
 
-    const result = {
-      title,
-      thumb,
-      token,
-      formats: [...new Set(formats)]
-    };
+  const formats = [];
+  $(".aio-format-btn").each((_, el) => {
+    const onclick = $(el).attr("onclick");
+    const match = onclick?.match(/'([^']+)'/);
+    if (match) formats.push(match[1]);
+  });
 
-    fs.writeFileSync("result.json", JSON.stringify(result, null, 2));
-
-    if (thumb) {
-      const imgRes = await fetch(thumb);
-      const buffer = Buffer.from(await imgRes.arrayBuffer());
-      fs.writeFileSync("thumbnail.jpg", buffer);
-    }
-
-    console.log(result);
-  } catch (error) {
-    console.error(error);
-  }
+  return {
+    title,
+    thumb,
+    token,
+    formats: [...new Set(formats)]
+  };
 }
-
-aiodl("https://youtu.be/zFo8syQRvUY?si=15yw3g27_iDJo4pw");
 
 export default {
     route: {

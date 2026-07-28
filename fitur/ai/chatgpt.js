@@ -49,6 +49,8 @@ async function getSession() {
 }
 
 async function chatgpt(prompt, auth = null, chatId = null) {
+  // Validate auth is a proper object — otherwise getSession()
+  if (auth && typeof auth !== 'object') auth = null
   auth = auth || await getSession()
   if (!auth.deviceId) auth.deviceId = crypto.randomUUID()
   if (!auth.parentMessageId) auth.parentMessageId = crypto.randomUUID()
