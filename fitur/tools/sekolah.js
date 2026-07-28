@@ -35,11 +35,12 @@ async function fetchConfig() {
 
 async function fetchJson(path) {
     const { token, apiUrl } = await fetchConfig()
+    // NOTE: Dapodik API rejects requests with "Accept: application/json" header.
+    // Only Authorization + User-Agent should be sent.
     const { data, status } = await axios.get(`${apiUrl}${path}`, {
         headers: {
             "Authorization": `Bearer ${token}`,
             "User-Agent": UA,
-            "Accept": "application/json",
         },
         timeout: 15000,
         validateStatus: () => true,
