@@ -36,11 +36,12 @@ async function getTranscript(videoId) {
   return { videoInfo, transcriptText }
 }
 
-// Ringkasan dibuat via Pollinations AI (gratis, no login, OpenAI-compatible).
+// Ringkasan dibuat via Pollinations AI (gratis, no login).
+// Pakai endpoint GET text.pollinations.ai/{prompt} yang masih anonymous-friendly.
 // Fallback: kalau Pollinations gagal, kembalikan transcript saja tanpa summary.
 async function summarizeWithAI(transcriptText, lang = 'id-ID') {
-  // Batasi transcript agar tidak kelewatan context window
-  const maxChars = 12000
+  // Batasi transcript agar tidak kelewatan URL length limit (~8000 chars total)
+  const maxChars = 4000
   const truncated = transcriptText.length > maxChars
     ? transcriptText.slice(0, maxChars) + '\n\n[...transcript dipotong...]'
     : transcriptText
@@ -60,27 +61,18 @@ Format your response as Markdown with these sections:
 Transcript:
 ${truncated}`
 
-  const body = JSON.stringify({
-    model: 'openai',
-    messages: [{ role: 'user', content: prompt }],
-    private: true,
-    referrer: 'kaminoa'
-  })
-
-  const res = await fetch('https://text.pollinations.ai/openai', {
-    method: 'POST',
+  // Pollinations GET endpoint — anonymous-friendly, no API key needed
+  const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai`
+  const res = await fetch(url, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body,
+      'Accept': 'text/plain'
+    }
   })
 
   if (!res.ok) throw new Error(`AI summarize gagal (HTTP ${res.status})`)
-  const data = await res.json()
-  const answer = data?.choices?.[0]?.message?.content
-  if (!answer) throw new Error('AI mengembalikan respons kosong')
+  const answer = await res.text()
+  if (!answer || !answer.trim()) throw new Error('AI mengembalikan respons kosong')
   return answer.trim()
 }
 
