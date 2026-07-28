@@ -178,7 +178,7 @@ export default {
                 in: "query",
                 required: false,
                 description: "URL track/playlist SoundCloud. Bila diisi, parameter `query` diabaikan.",
-                schema: { type: "string", example: "https://soundcloud.com/rick-astley-official/never-gonna-give-you-up-4" },
+                schema: { type: "string", example: "https://soundcloud.com/eminemofficial/lose-yourself" },
             },
             {
                 name: "query",

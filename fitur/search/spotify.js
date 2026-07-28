@@ -29,14 +29,23 @@ async function getAuth(force) {
     const params = new URLSearchParams({ reason: "init", productType: "web-player", totp: totp(now), totpServer: totp(now), totpVer: String(TOTP_VERSION) })
     const token = await (await fetch(`https://open.spotify.com/api/token?${params}`, { headers: baseHeaders })).json()
     if (!token?.accessToken) throw new Error("token request failed")
-    const client = await (await fetch("https://clienttoken.spotify.com/v1/clienttoken", {
-        method: "POST",
-        headers: { ...baseHeaders, "content-type": "application/json", accept: "application/json" },
-        body: JSON.stringify({ client_data: { client_version: APP_VERSION, client_id: token.clientId, js_sdk_data: { device_brand: "unknown", device_model: "unknown", os: "windows", os_version: "NT 10.0", device_id: crypto.randomUUID(), device_type: "computer" } } })
-    })).json()
-    if (!client?.granted_token?.token) throw new Error("client token request failed")
+
+    // Client-token kini opsional: endpoint /v1/clienttoken sering ditolak (403) dari IP server.
+    // Spotify search API tetap berfungsi dengan bearer token saja.
+    let clientToken = null
+    try {
+        const client = await (await fetch("https://clienttoken.spotify.com/v1/clienttoken", {
+            method: "POST",
+            headers: { ...baseHeaders, "content-type": "application/json", accept: "application/json" },
+            body: JSON.stringify({ client_data: { client_version: APP_VERSION, client_id: token.clientId, js_sdk_data: { device_brand: "unknown", device_model: "unknown", os: "windows", os_version: "NT 10.0", device_id: crypto.randomUUID(), device_type: "computer" } } })
+        })).json()
+        clientToken = client?.granted_token?.token || null
+    } catch {
+        clientToken = null
+    }
+
     session.token = token.accessToken
-    session.clientToken = client.granted_token.token
+    session.clientToken = clientToken
     session.expires = token.accessTokenExpirationTimestampMs || (now + 3000000)
     return session
 }
@@ -99,9 +108,10 @@ async function runQuery(term, hash, limit, auth) {
         variables: JSON.stringify({ searchTerm: term, offset: 0, limit, numberOfTopResults: 1, includeAudiobooks: false }),
         extensions: JSON.stringify({ persistedQuery: { version: 1, sha256Hash: hash } })
     })
-    return fetch(`https://api-partner.spotify.com/pathfinder/v1/query?${params}`, {
-        headers: { ...baseHeaders, accept: "application/json", "app-platform": "WebPlayer", authorization: `Bearer ${auth.token}`, "client-token": auth.clientToken, "spotify-app-version": APP_VERSION }
-    })
+    const headers = { ...baseHeaders, accept: "application/json", "app-platform": "WebPlayer", authorization: `Bearer ${auth.token}`, "spotify-app-version": APP_VERSION }
+    // Sertakan client-token hanya bila tersedia (sekarang opsional)
+    if (auth.clientToken) headers["client-token"] = auth.clientToken
+    return fetch(`https://api-partner.spotify.com/pathfinder/v1/query?${params}`, { headers })
 }
 
 async function searchData(term, limit) {

@@ -60,8 +60,8 @@ export default {
                 name: "url",
                 in: "query",
                 required: true,
-                description: "URL media yang akan diunduh",
-                schema: { type: "string" },
+                description: "URL media (TikTok, Instagram, Facebook, dll.)",
+                schema: { type: "string", example: "https://www.tiktok.com/@scout2015/video/6718335390845095173" },
             },
         ],
         responses: {

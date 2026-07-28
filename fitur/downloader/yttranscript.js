@@ -51,8 +51,8 @@ export default {
                 name: "url",
                 in: "query",
                 required: true,
-                description: "URL media yang akan diunduh",
-                schema: { type: "string" },
+                description: "URL video YouTube (youtube.com/watch?v=... atau youtu.be/...)",
+                schema: { type: "string", example: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
             },
         ],
         responses: {

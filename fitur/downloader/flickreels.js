@@ -180,7 +180,7 @@ export default {
                 in: "query",
                 required: true,
                 description: "URL FlickReels (drama/episode) atau kata kunci pencarian",
-                schema: { type: "string", example: "https://www.flickreels.net/drama/12345" }
+                schema: { type: "string", example: "https://www.flickreels.net/drama/420" }
             }
         ],
         responses: {
