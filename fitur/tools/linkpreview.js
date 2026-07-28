@@ -1,26 +1,57 @@
-import { unfurl } from "unfurl.js"
+import * as cheerio from "cheerio"
 
 // Banyak situs (TikTok, FB) hanya menyajikan og-tags untuk UA crawler/bot.
 const CRAWLER_UA = "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"
 
-async function linkPreview(url) {
-    const data = await unfurl(url, { headers: { "user-agent": CRAWLER_UA } })
-    const og = data.open_graph ?? {}
-    const tw = data.twitter_card ?? {}
+// Parse og:image, og:title, etc. + twitter card + <title> + favicon manually.
+// Replaces unfurl.js yang crash karena node-fetch v3 ESM vs unfurl.js CommonJS.
+function resolveUrl(maybeUrl, base) {
+    if (!maybeUrl) return null
+    try { return new URL(maybeUrl, base).toString() } catch { return null }
+}
 
-    const image =
-        og.images?.[0]?.url ??
-        tw.images?.[0]?.url ??
-        null
+async function linkPreview(url) {
+    const res = await fetch(url, {
+        headers: {
+            "user-agent": CRAWLER_UA,
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
+        },
+        redirect: "follow",
+        signal: AbortSignal.timeout(20_000),
+    })
+    if (!res.ok) throw new Error(`Gagal fetch URL (HTTP ${res.status})`)
+    const html = await res.text()
+    const finalUrl = res.url || url
+    const $ = cheerio.load(html)
+
+    const metaProp = (name) => $(`meta[property="${name}"]`).attr("content") || $(`meta[name="${name}"]`).attr("content") || null
+
+    const ogTitle = metaProp("og:title")
+    const ogDescription = metaProp("og:description")
+    const ogImage = resolveUrl(metaProp("og:image") || metaProp("og:image:url"), finalUrl)
+    const ogSiteName = metaProp("og:site_name")
+    const ogType = metaProp("og:type")
+
+    const twTitle = metaProp("twitter:title")
+    const twDescription = metaProp("twitter:description")
+    const twImage = resolveUrl(metaProp("twitter:image"), finalUrl)
+    const twCard = metaProp("twitter:card")
+
+    const docTitle = $("title").first().text().trim() || null
+    const metaDesc = $('meta[name="description"]').attr("content") || null
+    const faviconRel = $('link[rel="icon"]').attr("href") || $('link[rel="shortcut icon"]').attr("href") || $('link[rel="apple-touch-icon"]').attr("href")
+    const favicon = resolveUrl(faviconRel, finalUrl)
 
     return {
-        url,
-        title: data.title ?? og.title ?? tw.title ?? null,
-        description: data.description ?? og.description ?? tw.description ?? null,
-        image,
-        siteName: og.site_name ?? null,
-        type: og.type ?? null,
-        favicon: data.favicon ?? null,
+        url: finalUrl,
+        title: ogTitle || twTitle || docTitle || null,
+        description: ogDescription || twDescription || metaDesc || null,
+        image: ogImage || twImage || null,
+        siteName: ogSiteName || null,
+        type: ogType || null,
+        twitterCard: twCard || null,
+        favicon,
     }
 }
 
