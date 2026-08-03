@@ -1,39 +1,51 @@
-// /utils/fraction — Decimal to fraction and fraction to decimal
-function gcd(a, b) { return b === 0n ? a : gcd(b, a % b) }
+// /utils/fraction — Decimal to fraction and fraction to decimal (fixed algorithm)
+function gcd(a, b) {
+    a = Math.abs(a); b = Math.abs(b)
+    while (b) { [a, b] = [b, a % b] }
+    return a || 1
+}
 
 function decimalToFraction(decimal, maxDenom = 1000000) {
-    const sign = decimal < 0 ? -1n : 1n
-    let num = Math.abs(decimal)
-    let intPart = Math.floor(num)
-    let frac = num - intPart
-    if (frac === 0) return { numerator: sign * BigInt(intPart), denominator: 1n, mixed: { whole: sign * BigInt(intPart), numerator: 0n, denominator: 1n } }
-    // continued fraction algorithm
-    let h1 = 1n, h0 = 0n
-    let k1 = 0n, k0 = 1n
-    let b = frac
-    let iterations = 0
-    while (iterations < 50) {
-        const a = Math.floor(1 / b)
-        const h2 = BigInt(a) * h1 + h0
-        const k2 = BigInt(a) * k1 + k0
-        if (k2 > BigInt(maxDenom)) break
-        h1 = h2; h0 = h1
-        k1 = k2; k0 = k1
-        const newB = 1 / b - a
-        if (!isFinite(newB) || newB < 1e-15) {
-            h1 = h2; k1 = k2
-            break
+    if (!isFinite(decimal)) throw new Error("input tidak finite")
+    const sign = decimal < 0 ? -1 : 1
+    decimal = Math.abs(decimal)
+    const intPart = Math.floor(decimal)
+    let frac = decimal - intPart
+    if (frac < 1e-15) {
+        return {
+            numerator: sign * intPart,
+            denominator: 1,
+            mixed: { whole: sign * intPart, numerator: 0, denominator: 1 },
         }
-        b = newB
-        iterations++
     }
-    const numerator = sign * (BigInt(intPart) * k1 + h1)
-    const denominator = k1
-    const g = gcd(numerator < 0n ? -numerator : numerator, denominator)
+    // Stern-Brocot / Farey-style search — find best fraction with denom <= maxDenom
+    // Use Stern-Brocot tree
+    let loN = 0, loD = 1   // 0/1
+    let hiN = 1, hiD = 1   // 1/1
+    let bestN = 0, bestD = 1, bestErr = frac
+    for (let i = 0; i < 100; i++) {
+        const midN = loN + hiN
+        const midD = loD + hiD
+        if (midD > maxDenom) break
+        const mid = midN / midD
+        const err = Math.abs(mid - frac)
+        if (err < bestErr) {
+            bestErr = err
+            bestN = midN
+            bestD = midD
+            if (err < 1e-15) break
+        }
+        if (mid < frac) { loN = midN; loD = midD }
+        else { hiN = midN; hiD = midD }
+    }
+    const g = gcd(bestN, bestD)
+    const num = bestN / g
+    const den = bestD / g
+    const numerator = sign * (intPart * den + num)
     return {
-        numerator: numerator / g,
-        denominator: denominator / g,
-        mixed: { whole: sign * BigInt(intPart), numerator: h1 / g, denominator: k1 / g },
+        numerator,
+        denominator: den,
+        mixed: { whole: sign * intPart, numerator: num, denominator: den },
     }
 }
 
@@ -44,7 +56,7 @@ export default {
         auth: false,
         tags: ["Utils"],
         summary: "Decimal <-> Fraction converter",
-        description: "Konversi desimal ke pecahan (fraction) atau pecahan ke desimal.",
+        description: "Konversi desimal ke pecahan (fraction) atau pecahan ke desimal. Menggunakan Stern-Brocot tree untuk akurasi tinggi.",
         parameters: [
             { name: "decimal", in: "query", required: false, description: "Desimal yang akan dikonversi, cth: 0.75", schema: { type: "number", example: 0.75 } },
             { name: "fraction", in: "query", required: false, description: "Pecahan a/b, cth: 3/4", schema: { type: "string", example: "3/4" } },
@@ -80,7 +92,7 @@ export default {
                 fraction: `${result.numerator}/${result.denominator}`,
                 numerator: result.numerator.toString(),
                 denominator: result.denominator.toString(),
-                mixed: result.mixed.whole === 0n
+                mixed: result.mixed.whole === 0
                     ? `${result.mixed.numerator}/${result.mixed.denominator}`
                     : `${result.mixed.whole} ${result.mixed.numerator}/${result.mixed.denominator}`,
                 mixed_obj: {
