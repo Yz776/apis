@@ -1,4 +1,4 @@
-// /info/bored — random activity to do when bored
+// /info/bored — random activity to do when bored (uses bored-api.appbrewery.com)
 export default {
     route: {
         method: "get",
@@ -6,7 +6,7 @@ export default {
         auth: false,
         tags: ["Info"],
         summary: "Random activity when bored",
-        description: "Aktivitas acak dari Bored API. Bisa filter berdasarkan type atau participants.",
+        description: "Aktivitas acak dari Bored API (appbrewery mirror). Bisa filter berdasarkan type atau participants.",
         parameters: [
             { name: "type", in: "query", required: false, description: "Jenis aktivitas: education/recreational/social/diy/charity/cooking/relaxation/music/busywork", schema: { type: "string", example: "recreational" } },
             { name: "participants", in: "query", required: false, description: "Jumlah peserta (1-5)", schema: { type: "integer", example: 2 } },
@@ -18,8 +18,8 @@ export default {
             const params = new URLSearchParams()
             if (req.query.type) params.set("type", String(req.query.type))
             if (req.query.participants) params.set("participants", parseInt(req.query.participants, 10))
-            const url = "https://www.boredapi.com/api/activity" + (params.toString() ? "?" + params.toString() : "")
-            const r = await fetch(url, { headers: { "Accept": "application/json" } })
+            const url = "https://bored-api.appbrewery.com/random" + (params.toString() ? "?" + params.toString() : "")
+            const r = await fetch(url, { headers: { "Accept": "application/json", "User-Agent": "Mozilla/5.0" } })
             if (!r.ok) return res.status(502).json({ ok: false, error: "Bored API error: " + r.status })
             const data = await r.json()
             if (data.error) return res.status(404).json({ ok: false, error: data.error })

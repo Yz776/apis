@@ -1,4 +1,4 @@
-// /info/swapi — Star Wars API
+// /info/swapi — Star Wars API (uses https://swapi.tech — more reliable mirror)
 import axios from "axios"
 export default {
     route: {
@@ -7,7 +7,7 @@ export default {
         auth: false,
         tags: ["Info"],
         summary: "Star Wars API (people, planets, starships)",
-        description: "Cari entitas Star Wars via SWAPI. Tipe: people, planets, films, species, vehicles, starships.",
+        description: "Cari entitas Star Wars via SWAPI (swapi.tech). Tipe: people, planets, films, species, vehicles, starships.",
         parameters: [
             { name: "type", in: "query", required: false, description: "Tipe resource", schema: { type: "string", enum: ["people", "planets", "films", "species", "vehicles", "starships"], default: "people" } },
             { name: "id", in: "query", required: false, description: "ID resource (1-based). Kosongkan untuk list.", schema: { type: "integer" } },
@@ -20,17 +20,19 @@ export default {
             const type = String(req.query.type || "people").toLowerCase()
             const allowed = ["people", "planets", "films", "species", "vehicles", "starships"]
             if (!allowed.includes(type)) return res.status(400).json({ ok: false, error: `type harus salah satu: ${allowed.join(", ")}` })
-            let url = `https://swapi.dev/api/${type}/`
+            let url = `https://swapi.tech/api/${type}/`
             if (req.query.id) url += `${parseInt(req.query.id)}/`
             else if (req.query.search) url += `?search=${encodeURIComponent(req.query.search)}`
-            const { data } = await axios.get(url, { timeout: 15000 })
+            const { data } = await axios.get(url, { timeout: 15000, headers: { "Accept": "application/json" } })
             if (req.query.id) {
-                return res.json({ ok: true, type, id: parseInt(req.query.id), data })
+                // swapi.tech wraps result in { result: {..., properties: {...}} }
+                const props = data.result?.properties || data.result || data
+                return res.json({ ok: true, type, id: parseInt(req.query.id), data: props })
             }
             res.json({
                 ok: true,
                 type,
-                count: data.count,
+                count: data.total_records || data.count || (data.results?.length || 0),
                 next: data.next,
                 previous: data.previous,
                 results: data.results,

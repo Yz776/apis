@@ -62,7 +62,14 @@ export default {
                 if (isNaN(num) || isNaN(denom) || denom === 0) return res.status(400).json({ ok: false, error: "format: a/b dengan a,b angka dan b!=0" })
                 const result = num / denom
                 const simplified = decimalToFraction(result, parseInt(req.query.maxDenom) || 1000000)
-                return res.json({ ok: true, input: `${num}/${denom}`, decimal: result, simplified: `${simplified.numerator}/${simplified.denominator}` })
+                return res.json({
+                    ok: true,
+                    input: `${num}/${denom}`,
+                    decimal: result,
+                    simplified: `${simplified.numerator}/${simplified.denominator}`,
+                    numerator: simplified.numerator.toString(),
+                    denominator: simplified.denominator.toString(),
+                })
             }
             const decimal = parseFloat(req.query.decimal)
             if (isNaN(decimal)) return res.status(400).json({ ok: false, error: "decimal atau fraction wajib diisi" })
@@ -71,10 +78,16 @@ export default {
                 ok: true,
                 input: decimal,
                 fraction: `${result.numerator}/${result.denominator}`,
+                numerator: result.numerator.toString(),
+                denominator: result.denominator.toString(),
                 mixed: result.mixed.whole === 0n
                     ? `${result.mixed.numerator}/${result.mixed.denominator}`
                     : `${result.mixed.whole} ${result.mixed.numerator}/${result.mixed.denominator}`,
-                ...result,
+                mixed_obj: {
+                    whole: result.mixed.whole.toString(),
+                    numerator: result.mixed.numerator.toString(),
+                    denominator: result.mixed.denominator.toString(),
+                },
             })
         } catch (e) { res.status(500).json({ ok: false, error: e.message }) }
     },
