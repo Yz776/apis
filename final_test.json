@@ -1,0 +1,408 @@
+[
+  {
+    "path": "/info/country",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/ip",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/books",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/space-people",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/dog-ceo",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/quotable",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/ai/pollinations",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/utils/base-converter",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/utils/base-converter",
+    "code": 400,
+    "expected": 400,
+    "passed": true,
+    "err": "to harus berupa integer antara 2-36 (diterima: \"IDR\")"
+  },
+  {
+    "path": "/tools/shorturl",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/tools/shorturl",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/tools/shorturl",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/downloader/jj-capcut",
+    "code": 400,
+    "expected": 400,
+    "passed": true,
+    "err": "url wajib diisi"
+  },
+  {
+    "path": "/downloader/jj-capcut",
+    "code": 400,
+    "expected": 400,
+    "passed": true,
+    "err": "URL tidak valid. Harus URL CapCut (capcut.com/t/<id> atau capcut.com/share/<id>)"
+  },
+  {
+    "path": "/downloader/jj-capcut",
+    "code": 404,
+    "expected": 404,
+    "passed": true,
+    "err": "Template tidak ditemukan atau telah dihapus. Periksa kembali URL CapCut Anda."
+  },
+  {
+    "path": "/info/joke",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/dog-facts",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/cat-facts",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/bored",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/advice",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/affirmation",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/quote",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/fact",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/zodiac",
+    "code": 400,
+    "expected": 200,
+    "passed": false,
+    "err": "month (1-12) dan day (1-31) wajib diisi"
+  },
+  {
+    "path": "/info/moon-phase",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/iss-location",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/utils/uuid",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/utils/nanoid",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/utils/password",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/utils/lorem-ipsum",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/utils/timestamp",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/utils/prime",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/utils/factorial",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/utils/fibonacci",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/utils/roman",
+    "code": 400,
+    "expected": 200,
+    "passed": false,
+    "err": "value wajib diisi"
+  },
+  {
+    "path": "/utils/bmi",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/text/reverse",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/text/case",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/text/count",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/text/palindrome",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/text/rot13",
+    "code": 404,
+    "expected": 200,
+    "passed": false,
+    "err": "Endpoint tidak ditemukan"
+  },
+  {
+    "path": "/text/rot47",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/github-user",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/npm",
+    "code": 400,
+    "expected": 200,
+    "passed": false,
+    "err": "name wajib diisi"
+  },
+  {
+    "path": "/info/useless-fact",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/xkcd",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/cocktail",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/meal",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/university",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/tv-maze",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/breaking-bad",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/arxiv",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/swapi",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/pokemon-list",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/info/qr-api",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/islamic/hadits",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/islamic/jadwal-sholat",
+    "code": 200,
+    "expected": 200,
+    "passed": true,
+    "err": ""
+  },
+  {
+    "path": "/islamic/quran-surah",
+    "code": 400,
+    "expected": 200,
+    "passed": false,
+    "err": "parameter id wajib angka 1-114"
+  }
+]
