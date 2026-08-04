@@ -6,7 +6,7 @@ const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 // Tier gratis Pollinations efektif cuma expose GPT-OSS 20B; "openai" adalah alias yang masih jalan.
 const MODELS = ["openai", "openai-fast"]
 
-async function pollinations(prompt, { model = "openai", system } = {}) {
+async function callPollinations(prompt, { model = "openai", system, longTimeout = false } = {}) {
     const messages = []
     if (system) messages.push({ role: "system", content: system })
     messages.push({ role: "user", content: prompt })
@@ -22,9 +22,36 @@ async function pollinations(prompt, { model = "openai", system } = {}) {
             "Content-Type": "application/json",
             "Accept": "application/json"
         },
-        timeout: 60000,
+        timeout: longTimeout ? 90000 : 45000,
         validateStatus: () => true
     })
+
+    return { data, status }
+}
+
+async function pollinations(prompt, { model = "openai", system } = {}) {
+    // First attempt: with system prompt if provided
+    let { data, status } = await callPollinations(prompt, { model, system })
+
+    // Handle 402 (free tier exhausted) — retry without system prompt (saves tokens)
+    if (status === 402 && system) {
+        const retry = await callPollinations(prompt, { model, system: undefined, longTimeout: true })
+        data = retry.data
+        status = retry.status
+    }
+
+    // Handle 429/500 — retry once with longer timeout
+    if ((status === 429 || status >= 500) && status !== 501) {
+        await new Promise(r => setTimeout(r, 1500))
+        const retry = await callPollinations(prompt, { model, system, longTimeout: true })
+        data = retry.data
+        status = retry.status
+    }
+
+    if (status === 402) {
+        const msg = data?.error?.message || data?.error || "Tier gratis habis untuk prompt ini. Coba prompt yang lebih pendek atau tanpa system prompt."
+        throw new Error(`Pollinations free tier limit: ${msg}`)
+    }
 
     if (status !== 200) {
         const msg = data?.error || (typeof data === "string" ? data.slice(0, 200) : `HTTP ${status}`)

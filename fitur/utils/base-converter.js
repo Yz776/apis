@@ -42,11 +42,18 @@ export default {
             const sign = big < 0n ? "-" : ""
             const abs = big < 0n ? -big : big
             const result = {}
-            const targets = req.query.to
-                ? [parseInt(req.query.to)]
-                : [2, 8, 10, 16, 32, 36]
+            let targets
+            if (req.query.to !== undefined && req.query.to !== "") {
+                const toNum = Number(req.query.to)
+                if (!Number.isInteger(toNum) || toNum < 2 || toNum > 36) {
+                    return res.status(400).json({ ok: false, error: `to harus berupa integer antara 2-36 (diterima: "${req.query.to}")` })
+                }
+                targets = [toNum]
+            } else {
+                targets = [2, 8, 10, 16, 32, 36]
+            }
             for (const t of targets) {
-                if (t < 2 || t > 36) continue
+                if (!Number.isInteger(t) || t < 2 || t > 36) continue
                 result[`base${t}`] = sign + abs.toString(t)
             }
             res.json({
