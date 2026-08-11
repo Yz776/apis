@@ -2593,23 +2593,32 @@
         "description": "User ID akun Free Fire",
         "schema": {
           "type": "string",
-          "example": "5425742577"
+          "example": "1000695760"
         }
       },
       {
         "name": "source",
         "in": "query",
         "required": false,
-        "description": "Sumber verifikasi: all (default), gopay, unlockff, isan",
+        "description": "Sumber verifikasi: all, gopay, unlockff",
         "schema": {
           "type": "string",
           "enum": [
             "all",
             "gopay",
-            "unlockff",
-            "isan"
+            "unlockff"
           ],
           "example": "all"
+        }
+      },
+      {
+        "name": "proxy",
+        "in": "query",
+        "required": false,
+        "description": "HTTP proxy untuk unlockffbeta.com",
+        "schema": {
+          "type": "string",
+          "example": "http://176.100.37.91:30379"
         }
       }
     ]
