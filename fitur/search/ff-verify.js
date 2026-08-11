@@ -3,6 +3,7 @@ import axios from "axios"
 const UA = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Mobile Safari/537.36"
 const GOPAY = "https://gopay.co.id/games/v1/order/prepare"
 const UNLOCKFF_URL = "https://unlockffbeta.com"
+const NHENTAI_PROXY = "https://nhentai-proxy-v2.teknikisi255.workers.dev"
 
 // ── Gopay method: cek nickname FF via Gopay prepare-order ──
 async function verifyGopay(id) {
@@ -27,31 +28,27 @@ async function verifyGopay(id) {
 // Jika Cloudflare block, return status "cloudflare_blocked" agar caller tahu.
 async function verifyUnlockFF(id) {
     try {
-        // Coba akses halaman utama dulu untuk dapat cookie/session
         const session = axios.create({
             headers: {
                 "User-Agent": UA,
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept": "application/json, text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                 "Accept-Language": "en-US,en;q=0.5",
-                "Referer": UNLOCKFF_URL,
-                "Origin": UNLOCKFF_URL
             },
             timeout: 15000,
             validateStatus: () => true,
             maxRedirects: 5
         })
 
-        // Step 1: GET homepage untuk init session
-        await session.get(UNLOCKFF_URL)
-
-        // Step 2: POST verify request
-        // unlockffbeta.com menerima Account ID lalu verifikasi ke server FF
-        // Coba beberapa kemungkinan endpoint internal
+        // Coba beberapa kemungkinan endpoint (unlockffbeta & nhentai proxy)
         const endpoints = [
+            // UnlockFF Beta langsung
             { url: `${UNLOCKFF_URL}/api/verify`, method: "post", payload: { id, userId: id, accountId: id } },
             { url: `${UNLOCKFF_URL}/api/v1/verify`, method: "post", payload: { id, userId: id } },
             { url: `${UNLOCKFF_URL}/api/check`, method: "post", payload: { accountId: id } },
             { url: `${UNLOCKFF_URL}/verify`, method: "post", payload: { id, userId: id } },
+            // Via nhentai-proxy-v2.teknikisi255.workers.dev sebagai proxy
+            { url: `${NHENTAI_PROXY}/api/verify`, method: "post", payload: { id, userId: id, accountId: id } },
+            { url: `${NHENTAI_PROXY}/verify`, method: "post", payload: { id, userId: id } },
         ]
 
         for (const ep of endpoints) {
@@ -63,12 +60,12 @@ async function verifyUnlockFF(id) {
                     headers: { "Content-Type": "application/json" }
                 })
 
-                // Cloudflare challenge / block
+                // Cloudflare challenge / block / bad url
                 if (resp.status === 403 || resp.status === 503) continue
-                if (typeof resp.data === "string" && resp.data.includes("cf-challenge")) continue
+                if (typeof resp.data === "string" && (resp.data.includes("cf-challenge") || resp.data === "bad url")) continue
 
                 // Sukses dapat response
-                if (resp.status === 200 && resp.data) {
+                if (resp.status === 200 && resp.data && typeof resp.data === "object") {
                     return {
                         status: "success",
                         endpoint: ep.url,
@@ -79,7 +76,7 @@ async function verifyUnlockFF(id) {
         }
 
         // Semua endpoint blocked/gagal
-        return { status: "cloudflare_blocked", message: "unlockffbeta.com dilindungi Cloudflare (geo-block/challenge). Tidak bisa diakses dari server ini." }
+        return { status: "cloudflare_blocked", message: "unlockffbeta.com & proxy dilindungi Cloudflare. Tidak bisa diakses dari server ini." }
 
     } catch (e) {
         return { status: "error", message: e.message }
@@ -122,7 +119,7 @@ export default {
         auth: false,
         tags: ["Search"],
         summary: "Verifikasi ID akun Free Fire (multi-sumber: Gopay, UnlockFF Beta, isan)",
-        description: "Verifikasi akun Free Fire berdasarkan User ID. Mengecek nickname dan status akun dari beberapa sumber: (1) Gopay (utama), (2) unlockffbeta.com (Astutech Beta Server — untuk verifikasi tambahan), (3) isan.eu.org (fallback). Source unlockffbeta.com mungkin blocked oleh Cloudflare dari beberapa region.",
+        description: "Verifikasi akun Free Fire berdasarkan User ID. Mengecek nickname dan status akun dari beberapa sumber: (1) Gopay (utama), (2) unlockffbeta.com + nhentai-proxy-v2.teknikisi255.workers.dev (via Cloudflare Worker proxy), (3) isan.eu.org (fallback). Source unlockffbeta.com mungkin blocked oleh Cloudflare dari beberapa region.",
         parameters: [
             {
                 name: "id",
@@ -135,7 +132,7 @@ export default {
                 name: "source",
                 in: "query",
                 required: false,
-                description: "Sumber verifikasi: all (default, cek semua), gopay (hanya Gopay), unlockff (hanya unlockffbeta.com), isan (hanya isan fallback)",
+                description: "Sumber verifikasi: all (default, cek semua), gopay (hanya Gopay), unlockff (unlockffbeta.com + nhentai proxy), isan (hanya isan fallback)",
                 schema: { type: "string", enum: ["all", "gopay", "unlockff", "isan"], example: "all" }
             }
         ],
