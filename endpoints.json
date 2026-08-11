@@ -2584,6 +2584,43 @@
   },
   {
     "method": "get",
+    "path": "/search/ff-verify",
+    "required": [
+      {
+        "name": "id",
+        "in": "query",
+        "required": true,
+        "description": "User ID akun Free Fire",
+        "schema": {
+          "type": "string",
+          "example": "5425742577"
+        }
+      },
+      {
+        "name": "source",
+        "in": "query",
+        "required": false,
+        "description": "Sumber verifikasi: all (default), gopay, unlockff, isan",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "all",
+            "gopay",
+            "unlockff",
+            "isan"
+          ],
+          "example": "all"
+        }
+      }
+    ]
+  },
+  {
+    "method": "post",
+    "path": "/search/ff-verify",
+    "required": []
+  },
+  {
+    "method": "get",
     "path": "/search/tokopedia",
     "required": [
       {
@@ -4595,7 +4632,7 @@
         "description": "Emoji yang akan diperiksa",
         "schema": {
           "type": "string",
-          "example": "\ud83d\ude00"
+          "example": "😀"
         }
       }
     ]
@@ -5462,7 +5499,7 @@
         "description": "Teks input (label domain tanpa dot)",
         "schema": {
           "type": "string",
-          "example": "m\u00fcnchen"
+          "example": "münchen"
         }
       }
     ]
