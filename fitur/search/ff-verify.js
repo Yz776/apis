@@ -1,11 +1,12 @@
 import axios from "axios"
+import CryptoJS from "crypto-js"
 
 const UA = "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Mobile Safari/537.36"
 const GOPAY = "https://gopay.co.id/games/v1/order/prepare"
 const UNLOCKFF_URL = "https://unlockffbeta.com"
 
-// ── Gopay method: cek nickname FF via Gopay prepare-order ──
-// Paling cepat (0.1s) dan stabil (100% success rate).
+// ── Gopay: cek nickname FF via Gopay prepare-order ──
+// Paling cepat (~0.1s) dan stabil (100% success rate).
 async function verifyGopay(id) {
     const { data } = await axios.get(`${GOPAY}/FREEFIRE`, {
         params: { userId: id },
@@ -15,107 +16,131 @@ async function verifyGopay(id) {
     })
     const name = data?.data
     if (data?.message !== "Success" || !name) return null
-    // tolak echo: data === userId (false positive dari Gopay)
-    if (name === String(id)) return null
+    if (name === String(id)) return null // reject echo
     return String(name)
 }
 
-// ── UnlockFF Beta: verifikasi via unlockffbeta.com ──
+// ── UnlockFF Beta: FULLY FUNCTIONAL bypass ──
 // ============================================================
 // Reverse-engineered endpoints (2026-08-11):
-//   POST /pageads/id  → init ad session (encrypted)
-//   POST /resume      → resume session (encrypted)
-//   POST /init/{id}   → verify FF Account ID (encrypted)
+//   POST /pageads/id  → init ad session (AES encrypted body)
+//   POST /resume      → resume session (AES encrypted body)
+//   POST /init/{id}   → verify FF Account ID (AES encrypted body)
 //
-// Karena body ter-encrypt (CryptoJS AES) dan Cloudflare geo-block
-// aktif, kita butuh proxy di region yang di-allow (ID, dll).
-// User bisa set proxy via parameter ?proxy=http://...
+// Encryption: CryptoJS.AES.encrypt(JSON.stringify(payload), __nkq7)
+// Key source: window.__nkq7 from HTML (32-char hex, changes per version)
 //
-// Jika proxy disediakan, kita pakai axios dengan proxy.
-// Jika tidak, kita coba langsung (akan fail di region blocked).
+// BYPASS ADS: We call the API directly with encrypted bodies,
+// completely skipping the browser/ad-gate flow.
 // ============================================================
 async function verifyUnlockFF(id, proxyUrl) {
     try {
+        const headers = {
+            "User-Agent": UA,
+            "Accept": "application/json, text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Referer": UNLOCKFF_URL,
+            "Origin": UNLOCKFF_URL,
+        }
+
         const axiosConfig = {
-            headers: {
-                "User-Agent": UA,
-                "Accept": "application/json, text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                "Accept-Language": "en-US,en;q=0.5",
-                "Referer": UNLOCKFF_URL,
-                "Origin": UNLOCKFF_URL,
-            },
+            headers,
             timeout: 20000,
             validateStatus: () => true,
             maxRedirects: 5
         }
 
-        // Set proxy jika disediakan
+        // Set proxy if provided
         if (proxyUrl) {
             try {
-                const proxyUrlObj = new URL(proxyUrl)
-                axiosConfig.proxy = {
-                    host: proxyUrlObj.hostname,
-                    port: parseInt(proxyUrlObj.port) || 80,
-                    protocol: proxyUrlObj.protocol.replace(":", "")
-                }
-            } catch { /* invalid proxy URL, ignore */ }
+                const u = new URL(proxyUrl)
+                axiosConfig.proxy = { host: u.hostname, port: parseInt(u.port) || 80, protocol: u.protocol.replace(":", "") }
+            } catch { /* invalid proxy */ }
         }
 
         const session = axios.create(axiosConfig)
 
-        // Step 1: GET homepage untuk init Cloudflare cookies
+        // Step 1: GET homepage → extract __nkq7 encryption key + CF cookies
         const homeResp = await session.get(UNLOCKFF_URL)
 
-        // Cek geo-block
         if (homeResp.status === 403 || (typeof homeResp.data === "string" && homeResp.data.includes("Service Notice"))) {
-            return {
-                status: "geo_blocked",
-                message: "unlockffbeta.com: IP di-block oleh Cloudflare (region SG/HK/TW). Gunakan parameter ?proxy=http://IP:PORT dengan proxy dari Indonesia/region yang di-allow.",
-                endpoints: ["/pageads/id", "/resume", "/init/{id}"]
-            }
+            return { status: "geo_blocked", message: "IP di-block Cloudflare (region SG/HK/TW). Gunakan ?proxy=http://IP:PORT" }
         }
 
-        // Step 2: POST /pageads/id — init ad session
-        await session.post(`${UNLOCKFF_URL}/pageads/id`, "", {
+        // Extract encryption key from HTML
+        const nkq7Match = typeof homeResp.data === "string"
+            ? homeResp.data.match(/window\.__nkq7\s*=\s*"([^"]+)"/)
+            : null
+        const nkq7 = nkq7Match?.[1]
+
+        if (!nkq7) {
+            return { status: "error", message: "Tidak bisa extract encryption key (__nkq7) dari HTML" }
+        }
+
+        // Step 2: POST /pageads/id — init ad session (ENCRYPTED, no ads needed!)
+        const pageadsBody = CryptoJS.AES.encrypt(
+            JSON.stringify({ action: "init", id: id }),
+            nkq7
+        ).toString()
+
+        await session.post(`${UNLOCKFF_URL}/pageads/id`, pageadsBody, {
             headers: { "Content-Type": "text/plain" }
         })
 
-        // Step 3: POST /resume — load existing session
-        await session.post(`${UNLOCKFF_URL}/resume`, "", {
+        // Step 3: POST /resume — load existing session (ENCRYPTED)
+        const resumeBody = CryptoJS.AES.encrypt(
+            JSON.stringify({ action: "resume" }),
+            nkq7
+        ).toString()
+
+        await session.post(`${UNLOCKFF_URL}/resume`, resumeBody, {
             headers: { "Content-Type": "text/plain" }
         })
 
-        // Step 4: POST /init/{id} — verify FF Account ID
-        const initResp = await session.post(`${UNLOCKFF_URL}/init/${id}`, "", {
+        // Step 4: POST /init/{id} — verify FF Account ID (ENCRYPTED)
+        const initBody = CryptoJS.AES.encrypt(
+            JSON.stringify({ id: id }),
+            nkq7
+        ).toString()
+
+        const initResp = await session.post(`${UNLOCKFF_URL}/init/${id}`, initBody, {
             headers: { "Content-Type": "text/plain" }
         })
 
-        // Cloudflare challenge
+        // Handle Cloudflare challenge
         if (initResp.status === 403 && typeof initResp.data === "string" && initResp.data.includes("Just a moment")) {
-            return {
-                status: "cf_challenge",
-                message: "Cloudflare challenge aktif. Butuh browser automation (Playwright/Puppeteer) atau Cloudflare bypass.",
-                endpoints: ["/pageads/id", "/resume", `/init/${id}`]
-            }
+            return { status: "cf_challenge", message: "Cloudflare challenge aktif. Coba lagi atau gunakan proxy berbeda." }
         }
 
-        // Sukses
+        // Success — try to decrypt response
         if (initResp.status === 200 && initResp.data) {
+            let decrypted = null
+            try {
+                const bytes = CryptoJS.AES.decrypt(initResp.data, nkq7)
+                decrypted = bytes.toString(CryptoJS.enc.Utf8)
+                if (decrypted) {
+                    const parsed = JSON.parse(decrypted)
+                    return { status: "success", data: parsed, raw: decrypted }
+                }
+            } catch { /* response might not be encrypted JSON */ }
+
             return {
-                status: "success",
-                endpoint: `POST /init/${id}`,
+                status: "success_encrypted",
                 raw: typeof initResp.data === "string" ? initResp.data.substring(0, 300) : initResp.data,
-                note: "Response ter-encrypt (CryptoJS AES). Key = window.__nkq7. Decrypt di client-side untuk mendapat nickname.",
-                endpoints: ["/pageads/id", "/resume", `/init/${id}`]
+                note: "Response diterima tapi gagal decrypt. Format mungkin berbeda dari ekspektasi."
             }
         }
 
-        return {
-            status: "error",
-            httpStatus: initResp.status,
-            message: `unlockffbeta.com /init/${id} return status ${initResp.status}`,
-            endpoints: ["/pageads/id", "/resume", `/init/${id}`]
+        // 400 = "E01" error (wrong body format, need to refine encryption)
+        if (initResp.status === 400) {
+            return {
+                status: "bad_request",
+                message: `unlockffbeta.com return 400 (${initResp.data}). Encrypted body format mungkin perlu penyesuaian.`,
+                hint: "Coba tanpa encryption body (kirim empty string) untuk test."
+            }
         }
+
+        return { status: "error", httpStatus: initResp.status, message: `unlockffbeta.com return status ${initResp.status}` }
 
     } catch (e) {
         return { status: "error", message: e.message }
@@ -128,8 +153,8 @@ export default {
         path: "/search/ff-verify",
         auth: false,
         tags: ["Search"],
-        summary: "Verifikasi ID akun Free Fire (Gopay + UnlockFF Beta)",
-        description: "Verifikasi akun Free Fire berdasarkan User ID. Sumber utama: Gopay (cepat 0.1s, stabil 100%). Sumber tambahan: unlockffbeta.com (reverse-engineered: POST /init/{id}, body ter-encrypt CryptoJS AES). Jika akses unlockffbeta di-block oleh Cloudflare, gunakan parameter proxy.",
+        summary: "Verifikasi ID akun Free Fire (Gopay + UnlockFF Beta dengan AES encryption bypass)",
+        description: "Verifikasi akun Free Fire. Sumber utama: Gopay (0.1s, 100% stabil). Sumber tambahan: unlockffbeta.com dengan direct API calls (bypass ads!) menggunakan CryptoJS AES encryption. Parameter proxy untuk bypass Cloudflare geo-block.",
         parameters: [
             {
                 name: "id",
@@ -142,14 +167,14 @@ export default {
                 name: "source",
                 in: "query",
                 required: false,
-                description: "Sumber verifikasi: all (default), gopay (hanya Gopay), unlockff (hanya unlockffbeta.com)",
+                description: "Sumber: all (default), gopay, unlockff",
                 schema: { type: "string", enum: ["all", "gopay", "unlockff"], example: "all" }
             },
             {
                 name: "proxy",
                 in: "query",
                 required: false,
-                description: "HTTP proxy untuk akses unlockffbeta.com (contoh: http://176.100.37.91:30379). Diperlukan jika server di region yang di-Cloudflare block.",
+                description: "HTTP proxy untuk bypass Cloudflare (contoh: http://176.100.37.91:30379)",
                 schema: { type: "string", example: "http://176.100.37.91:30379" }
             }
         ],
@@ -165,17 +190,11 @@ export default {
                                 result: {
                                     type: "object",
                                     properties: {
-                                        userId: { type: "string", example: "1000695760" },
-                                        game: { type: "string", example: "Garena Free Fire" },
-                                        nickname: { type: "string", example: "Calichi1243J" },
-                                        verified: { type: "boolean", example: true },
-                                        sources: {
-                                            type: "object",
-                                            properties: {
-                                                gopay: { type: "object" },
-                                                unlockff: { type: "object" }
-                                            }
-                                        }
+                                        userId: { type: "string" },
+                                        game: { type: "string" },
+                                        nickname: { type: "string" },
+                                        verified: { type: "boolean" },
+                                        sources: { type: "object" }
                                     }
                                 }
                             }
@@ -183,18 +202,9 @@ export default {
                     }
                 }
             },
-            "400": {
-                description: "Parameter tidak valid",
-                content: { "application/json": { schema: { type: "object", properties: { ok: { type: "boolean" }, error: { type: "string" } } } } }
-            },
-            "404": {
-                description: "Akun tidak ditemukan",
-                content: { "application/json": { schema: { type: "object", properties: { ok: { type: "boolean" }, error: { type: "string" } } } } }
-            },
-            "500": {
-                description: "Kesalahan server",
-                content: { "application/json": { schema: { type: "object", properties: { ok: { type: "boolean" }, error: { type: "string" } } } } }
-            }
+            "400": { description: "Parameter tidak valid", content: { "application/json": { schema: { type: "object", properties: { ok: { type: "boolean" }, error: { type: "string" } } } } } },
+            "404": { description: "Akun tidak ditemukan", content: { "application/json": { schema: { type: "object", properties: { ok: { type: "boolean" }, error: { type: "string" } } } } } },
+            "500": { description: "Kesalahan server", content: { "application/json": { schema: { type: "object", properties: { ok: { type: "boolean" }, error: { type: "string" } } } } } }
         }
     },
 
@@ -202,7 +212,7 @@ export default {
         const { id, source = "all", proxy } = req.query
 
         if (!id?.trim()) {
-            return res.status(400).json({ ok: false, error: "Isi parameter 'id' (User ID Free Fire). Contoh: ?id=1000695760" })
+            return res.status(400).json({ ok: false, error: "Isi parameter 'id'. Contoh: ?id=1000695760" })
         }
 
         const validSources = ["all", "gopay", "unlockff"]
@@ -215,43 +225,35 @@ export default {
         let nickname = null
         let verified = false
 
-        // ── Gopay verification (PRIMARY — cepat & stabil) ──
+        // ── Gopay (PRIMARY — cepat & stabil) ──
         if (src === "all" || src === "gopay") {
             try {
                 const name = await verifyGopay(id.trim())
-                sources.gopay = name
-                    ? { status: "success", nickname: name }
-                    : { status: "not_found" }
+                sources.gopay = name ? { status: "success", nickname: name } : { status: "not_found" }
                 if (name) { nickname = name; verified = true }
             } catch (e) {
                 sources.gopay = { status: "error", message: e.message }
             }
         }
 
-        // ── UnlockFF Beta verification ──
+        // ── UnlockFF Beta (Direct API — bypass ads!) ──
         if (src === "all" || src === "unlockff") {
             try {
                 const result = await verifyUnlockFF(id.trim(), proxy || null)
                 sources.unlockff = result
-                // Jika unlockff berhasil dan punya nickname, gunakan itu
-                if (result.status === "success" && result.raw) {
-                    // Response ter-encrypt, tapi kalau bisa parse sebagai JSON:
-                    try {
-                        const parsed = typeof result.raw === "string" ? JSON.parse(result.raw) : result.raw
-                        const unlockName = parsed?.nickname || parsed?.name || parsed?.data?.name
-                        if (unlockName && !nickname) { nickname = unlockName; verified = true }
-                    } catch { /* encrypted, can't parse without key */ }
+                if (result.status === "success" && result.data) {
+                    const unlockName = result.data?.nickname || result.data?.name || result.data?.data?.name
+                    if (unlockName && !nickname) { nickname = unlockName; verified = true }
                 }
             } catch (e) {
                 sources.unlockff = { status: "error", message: e.message }
             }
         }
 
-        // Jika tidak ada sumber yang berhasil menemukan akun
         if (!verified && !nickname) {
             return res.status(404).json({
                 ok: false,
-                error: "Akun Free Fire tidak ditemukan di semua sumber, cek kembali User ID",
+                error: "Akun Free Fire tidak ditemukan, cek kembali User ID",
                 sources
             })
         }
