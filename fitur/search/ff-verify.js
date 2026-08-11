@@ -21,11 +21,26 @@ async function verifyGopay(id) {
 }
 
 // ── UnlockFF Beta method: verifikasi via unlockffbeta.com ──
-// unlockffbeta.com adalah layanan verifikasi akun FF (Astutech Beta Server).
-// Flow: user submit Account ID → server verify → return status + info.
-// Karena unlockffbeta.com dilindungi Cloudflare (geo-block & challenge),
-// kita coba akses via POST ke endpoint internal-nya.
-// Jika Cloudflare block, return status "cloudflare_blocked" agar caller tahu.
+// ============================================================
+// Reverse-engineered endpoints (2026-08-11 via Playwright + proxy):
+//
+//   POST /pageads/id    → inisialisasi sesi iklan (encrypted body)
+//   POST /resume        → resume/load sesi existing (encrypted body)
+//   POST /init/{id}     → verifikasi FF Account ID (encrypted body)
+//
+// Flow lengkap:
+//   1. GET /               → load halaman + Cloudflare cookies
+//   2. POST /pageads/id    → init ad session → response: encrypted session token
+//   3. POST /resume        → load existing session → response: encrypted session data
+//   4. POST /init/{id}     → verify account → response: encrypted verification result
+//
+// Catatan:
+//   - Semua POST body ter-encrypt (CryptoJS AES) — key berasal dari
+//     window.__nkq7 (berubah per versi/page load).
+//   - Cloudflare geo-block: SG/HK/TW di-block (403 + "Service Notice").
+//   - Butuh proxy di region yang di-allow (Indonesia, dll) untuk bypass.
+//   - Cloudflare challenge platform juga aktif di /init/ endpoint.
+// ============================================================
 async function verifyUnlockFF(id) {
     try {
         const session = axios.create({
@@ -33,50 +48,76 @@ async function verifyUnlockFF(id) {
                 "User-Agent": UA,
                 "Accept": "application/json, text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
                 "Accept-Language": "en-US,en;q=0.5",
+                "Referer": UNLOCKFF_URL,
+                "Origin": UNLOCKFF_URL,
             },
-            timeout: 15000,
+            timeout: 20000,
             validateStatus: () => true,
             maxRedirects: 5
         })
 
-        // Coba beberapa kemungkinan endpoint (unlockffbeta & nhentai proxy)
-        const endpoints = [
-            // UnlockFF Beta langsung
-            { url: `${UNLOCKFF_URL}/api/verify`, method: "post", payload: { id, userId: id, accountId: id } },
-            { url: `${UNLOCKFF_URL}/api/v1/verify`, method: "post", payload: { id, userId: id } },
-            { url: `${UNLOCKFF_URL}/api/check`, method: "post", payload: { accountId: id } },
-            { url: `${UNLOCKFF_URL}/verify`, method: "post", payload: { id, userId: id } },
-            // Via nhentai-proxy-v2.teknikisi255.workers.dev sebagai proxy
-            { url: `${NHENTAI_PROXY}/api/verify`, method: "post", payload: { id, userId: id, accountId: id } },
-            { url: `${NHENTAI_PROXY}/verify`, method: "post", payload: { id, userId: id } },
-        ]
-
-        for (const ep of endpoints) {
-            try {
-                const resp = await session({
-                    method: ep.method,
-                    url: ep.url,
-                    data: ep.payload,
-                    headers: { "Content-Type": "application/json" }
-                })
-
-                // Cloudflare challenge / block / bad url
-                if (resp.status === 403 || resp.status === 503) continue
-                if (typeof resp.data === "string" && (resp.data.includes("cf-challenge") || resp.data === "bad url")) continue
-
-                // Sukses dapat response
-                if (resp.status === 200 && resp.data && typeof resp.data === "object") {
-                    return {
-                        status: "success",
-                        endpoint: ep.url,
-                        data: resp.data
-                    }
-                }
-            } catch { /* try next endpoint */ }
+        // Step 1: GET homepage untuk init Cloudflare cookies
+        const homeResp = await session.get(UNLOCKFF_URL)
+        if (homeResp.status === 403 || (typeof homeResp.data === "string" && homeResp.data.includes("Service Notice"))) {
+            return { status: "geo_blocked", message: "unlockffbeta.com: IP di region yang di-block (SG/HK/TW). Butuh proxy dari region lain." }
         }
 
-        // Semua endpoint blocked/gagal
-        return { status: "cloudflare_blocked", message: "unlockffbeta.com & proxy dilindungi Cloudflare. Tidak bisa diakses dari server ini." }
+        // Step 2: POST /pageads/id — init ad session
+        const pageadsResp = await session.post(`${UNLOCKFF_URL}/pageads/id`, "", {
+            headers: { "Content-Type": "text/plain" }
+        })
+
+        // Step 3: POST /resume — load existing session
+        const resumeResp = await session.post(`${UNLOCKFF_URL}/resume`, "", {
+            headers: { "Content-Type": "text/plain" }
+        })
+
+        // Step 4: POST /init/{id} — verify FF Account ID
+        // Body ter-encrypt, tapi kita kirim kosong dulu untuk test response format
+        const initResp = await session.post(`${UNLOCKFF_URL}/init/${id}`, "", {
+            headers: { "Content-Type": "text/plain" }
+        })
+
+        // Cloudflare challenge (403 with "Just a moment...")
+        if (initResp.status === 403 && typeof initResp.data === "string" && initResp.data.includes("Just a moment")) {
+            return {
+                status: "cf_challenge",
+                message: "unlockffbeta.com: Cloudflare challenge aktif di /init/ endpoint. Butuh browser automation (Playwright/Puppeteer) untuk solve challenge.",
+                endpoints_discovered: {
+                    init: `POST /init/${id}`,
+                    pageads: "POST /pageads/id",
+                    resume: "POST /resume"
+                }
+            }
+        }
+
+        // Sukses response
+        if (initResp.status === 200 && initResp.data) {
+            // Response ter-encrypt, tapi kita return raw-nya
+            return {
+                status: "success",
+                endpoint: `POST /init/${id}`,
+                raw: typeof initResp.data === "string" ? initResp.data.substring(0, 200) : initResp.data,
+                note: "Response ter-encrypt (CryptoJS AES). Key dari window.__nkq7 di client-side JS.",
+                endpoints_discovered: {
+                    init: `POST /init/${id}`,
+                    pageads: "POST /pageads/id",
+                    resume: "POST /resume"
+                }
+            }
+        }
+
+        // Status lain
+        return {
+            status: "unexpected",
+            httpStatus: initResp.status,
+            message: `unlockffbeta.com /init/${id} return status ${initResp.status}`,
+            endpoints_discovered: {
+                init: `POST /init/${id}`,
+                pageads: "POST /pageads/id",
+                resume: "POST /resume"
+            }
+        }
 
     } catch (e) {
         return { status: "error", message: e.message }
@@ -119,7 +160,7 @@ export default {
         auth: false,
         tags: ["Search"],
         summary: "Verifikasi ID akun Free Fire (multi-sumber: Gopay, UnlockFF Beta, isan)",
-        description: "Verifikasi akun Free Fire berdasarkan User ID. Mengecek nickname dan status akun dari beberapa sumber: (1) Gopay (utama), (2) unlockffbeta.com + nhentai-proxy-v2.teknikisi255.workers.dev (via Cloudflare Worker proxy), (3) isan.eu.org (fallback). Source unlockffbeta.com mungkin blocked oleh Cloudflare dari beberapa region.",
+        description: "Verifikasi akun Free Fire berdasarkan User ID. Multi-source: (1) Gopay (utama, paling stabil), (2) unlockffbeta.com (Astutech Beta Server — reverse-engineered endpoints: POST /pageads/id, POST /resume, POST /init/{id}. Body ter-encrypt CryptoJS AES, key dari window.__nkq7. Cloudflare geo-block + challenge aktif), (3) isan.eu.org (fallback).",
         parameters: [
             {
                 name: "id",
