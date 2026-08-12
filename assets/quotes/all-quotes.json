@@ -1,0 +1,2348 @@
+[
+  {
+    "id": 1,
+    "text": "Kesuksesan bukanlah kunci kebahagiaan. Kebahagiaan adalah kunci kesuksesan.",
+    "author": "Albert Schweitzer",
+    "category": "motivasi"
+  },
+  {
+    "id": 2,
+    "text": "Jangan biarkan kemarin mengambil terlalu banyak hari ini.",
+    "author": "Will Rogers",
+    "category": "motivasi"
+  },
+  {
+    "id": 3,
+    "text": "Segala sesuatu yang pernah Anda inginkan ada di sisi lain dari rasa takut.",
+    "author": "George Addair",
+    "category": "motivasi"
+  },
+  {
+    "id": 4,
+    "text": "Satu-satunya cara untuk melakukan pekerjaan hebat adalah mencintai apa yang Anda lakukan.",
+    "author": "Steve Jobs",
+    "category": "motivasi"
+  },
+  {
+    "id": 5,
+    "text": "Masa depan milik mereka yang percaya pada keindahan mimpi mereka.",
+    "author": "Eleanor Roosevelt",
+    "category": "motivasi"
+  },
+  {
+    "id": 6,
+    "text": "Perjuangan Anda hari ini mengembangkan kekuatan Anda untuk besok.",
+    "author": "Robert Kiyosaki",
+    "category": "motivasi"
+  },
+  {
+    "id": 7,
+    "text": "Jangan menunggu. Waktunya tidak akan pernah tepat.",
+    "author": "Napoleon Hill",
+    "category": "motivasi"
+  },
+  {
+    "id": 8,
+    "text": "Rahasia maju adalah memulai.",
+    "author": "Mark Twain",
+    "category": "motivasi"
+  },
+  {
+    "id": 9,
+    "text": "Orang yang berani gagal besar dapat mencapai hal besar.",
+    "author": "John F. Kennedy",
+    "category": "motivasi"
+  },
+  {
+    "id": 10,
+    "text": "Semua impian kita bisa terwujud jika kita punya keberanian untuk mengejarnya.",
+    "author": "Walt Disney",
+    "category": "motivasi"
+  },
+  {
+    "id": 11,
+    "text": "Percaya dirilah bahwa Anda punya potensi besar.",
+    "author": "Soichiro Honda",
+    "category": "motivasi"
+  },
+  {
+    "id": 12,
+    "text": "Hidup ini 10% apa yang terjadi pada Anda dan 90% bagaimana Anda meresponsnya.",
+    "author": "Charles Swindoll",
+    "category": "motivasi"
+  },
+  {
+    "id": 13,
+    "text": "Apapun pikiran Anda, itulah yang akan Anda jadi.",
+    "author": "Buddha",
+    "category": "motivasi"
+  },
+  {
+    "id": 14,
+    "text": "Orang paling kuat bukan yang tak0gagal, tapi yang bangkit setiap kali jatuh.",
+    "author": "Khalil Gibran",
+    "category": "motivasi"
+  },
+  {
+    "id": 15,
+    "text": "Keberanian bukan berarti tidak takut, tapi berarti bertindak meski takut.",
+    "author": "Nelson Mandela",
+    "category": "motivasi"
+  },
+  {
+    "id": 16,
+    "text": "Jangan batasi tantangan Anda, tantangilah limitasi Anda.",
+    "author": "G. B. Shaw",
+    "category": "motivasi"
+  },
+  {
+    "id": 17,
+    "text": "Tidak ada lift menuju sukses. Anda harus naik tangga.",
+    "author": "Joe Girard",
+    "category": "motivasi"
+  },
+  {
+    "id": 18,
+    "text": "Apa yang tidak membunuh Anda membuat Anda lebih kuat.",
+    "author": "Friedrich Nietzsche",
+    "category": "motivasi"
+  },
+  {
+    "id": 19,
+    "text": "Mulailah dari mana Anda saja, gunakan apa yang Anda saja, lakukan apa yang Anda bisa.",
+    "author": "Arthur Ashe",
+    "category": "motivasi"
+  },
+  {
+    "id": 20,
+    "text": "Keberhasilan adalah jumlah dari usaha kecil yang diulang hari demi hari.",
+    "author": "Robert Collier",
+    "category": "motivasi"
+  },
+  {
+    "id": 21,
+    "text": "Jangan takut berjalan lambat, takutlah berd1am saja.",
+    "author": "Peribahasa Tiongkok",
+    "category": "motivasi"
+  },
+  {
+    "id": 22,
+    "text": "Hari ini adalah hari pertama sisa hidup Anda.",
+    "author": "Abraham Lincoln",
+    "category": "motivasi"
+  },
+  {
+    "id": 23,
+    "text": "Sulit bukan berarti mustahil, hanya butuh lebih banyak usaha.",
+    "author": "Anonim",
+    "category": "motivasi"
+  },
+  {
+    "id": 24,
+    "text": "Jika Anda bisa memimpikannya, Anda bisa melakukannya.",
+    "author": "Walt Disney",
+    "category": "motivasi"
+  },
+  {
+    "id": 25,
+    "text": "Kegagalan adalah fondasi kesuksesan.",
+    "author": "Lao Tzu",
+    "category": "motivasi"
+  },
+  {
+    "id": 26,
+    "text": "Orang sukses selalu mencari peluang, bukan alasan.",
+    "author": "Zig Ziglar",
+    "category": "motivasi"
+  },
+  {
+    "id": 27,
+    "text": "Menang atau kalu, itu bukan akhir. Yang penting adalah terus berjuang.",
+    "author": "Nelson Mandela",
+    "category": "motivasi"
+  },
+  {
+    "id": 28,
+    "text": "Hidup bukan soal menemukan diri Anda, tapi menciptakan diri Anda.",
+    "author": "George Bernard Shaw",
+    "category": "motivasi"
+  },
+  {
+    "id": 29,
+    "text": "Perubahan nyata membutuhkan keberanian nyata.",
+    "author": "Anonim",
+    "category": "motivasi"
+  },
+  {
+    "id": 30,
+    "text": "Jangan berhenti saat lelah, berhentilah saat selesai.",
+    "author": "Bill Phillips",
+    "category": "motivasi"
+  },
+  {
+    "id": 31,
+    "text": "Keajaiban terjadi di luar zona nyaman Anda.",
+    "author": "Anonim",
+    "category": "motivasi"
+  },
+  {
+    "id": 32,
+    "text": "Setiap pencapaian besar dimulai dari keputusan untuk mencoba.",
+    "author": "John F. Kennedy",
+    "category": "motivasi"
+  },
+  {
+    "id": 33,
+    "text": "Berpikirlah besar, bertindaklah kecil.",
+    "author": "Peter Drucker",
+    "category": "motivasi"
+  },
+  {
+    "id": 34,
+    "text": "Penderitaan adalah guru terbaik.",
+    "author": "Malcolm X",
+    "category": "motivasi"
+  },
+  {
+    "id": 35,
+    "text": "Waktu terbaik untuk menanam pohon adalah 20 tahun lalu. Waktu terbaik kedua adalah sekarang.",
+    "author": "Peribahasa Tiongkok",
+    "category": "motivasi"
+  },
+  {
+    "id": 36,
+    "text": "Kerja keras mengalahkan bakat saat bakat tidak bekerja keras.",
+    "author": "Tim Notke",
+    "category": "motivasi"
+  },
+  {
+    "id": 37,
+    "text": "Semua orang hebat pernah pemula.",
+    "author": "Anonim",
+    "category": "motivasi"
+  },
+  {
+    "id": 38,
+    "text": "Tetaplah lapar, tetaplah bodoh.",
+    "author": "Steve Jobs",
+    "category": "motivasi"
+  },
+  {
+    "id": 39,
+    "text": "Mimpi bukanlah sesuatu yang Anda lihat saat tidur, tapi sesuatu yang membuat Anda tidak bisa tidur.",
+    "author": "Walter Reisch",
+    "category": "motivasi"
+  },
+  {
+    "id": 40,
+    "text": "Satu langkah pada satu waktu sudah cukup untuk maju.",
+    "author": "Anonim",
+    "category": "motivasi"
+  },
+  {
+    "id": 41,
+    "text": "Jangan pernah menyerah pada impian Anda.",
+    "author": "Walt Disney",
+    "category": "motivasi"
+  },
+  {
+    "id": 42,
+    "text": "Jika rencana A gagal, ingat ada 25 huruf lainnya.",
+    "author": "Chris Guillebeau",
+    "category": "motivasi"
+  },
+  {
+    "id": 43,
+    "text": "Kesuksesan dimulai dari luar dan berakhir di dalam.",
+    "author": "Anonim",
+    "category": "motivasi"
+  },
+  {
+    "id": 44,
+    "text": "Lakukan sesuatu setiap hari yang membuat Anda takut.",
+    "author": "Eleanor Roosevelt",
+    "category": "motivasi"
+  },
+  {
+    "id": 45,
+    "text": "Tidak ada jalan pintas menuju tempat yang sepadan dituju.",
+    "author": "Beverly Sills",
+    "category": "motivasi"
+  },
+  {
+    "id": 46,
+    "text": "Ambisi adalah langkah pertama, tapi langkah nyata adalah tindakan.",
+    "author": "Anonim",
+    "category": "motivasi"
+  },
+  {
+    "id": 47,
+    "text": "Ketekunan adalah jalan menuju keberhasilan.",
+    "author": "Charles Dickens",
+    "category": "motivasi"
+  },
+  {
+    "id": 48,
+    "text": "Jangan biarkan dunia mengubah senyum Anda, ubahlah dunia dengan senyum Anda.",
+    "author": "Anonim",
+    "category": "motivasi"
+  },
+  {
+    "id": 49,
+    "text": "Lebih baik gagal dalam orisinalitas daripada sukses dalam imitasi.",
+    "author": "Herman Melville",
+    "category": "motivasi"
+  },
+  {
+    "id": 50,
+    "text": "Hidup ini singkat, jadikan ia manis.",
+    "author": "Anonim",
+    "category": "motivasi"
+  },
+  {
+    "id": 51,
+    "text": "Cinta bukan soal saling menatap, tapi saling melihat ke arah yang sama.",
+    "author": "Antoine de Saint-Exupery",
+    "category": "cinta"
+  },
+  {
+    "id": 52,
+    "text": "Di mana ada cinta, di situ ada kehidupan.",
+    "author": "Mahatma Gandhi",
+    "category": "cinta"
+  },
+  {
+    "id": 53,
+    "text": "Cinta sejati tidak pernah berjalan mulus.",
+    "author": "William Shakespeare",
+    "category": "cinta"
+  },
+  {
+    "id": 54,
+    "text": "Cinta adalah kekuatan paling kuat di alam semesta.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 55,
+    "text": "Satu kata membebaskan kita dari beban dan penderitaan hidup: cinta.",
+    "author": "Sophocles",
+    "category": "cinta"
+  },
+  {
+    "id": 56,
+    "text": "Cinta bukan hanya perasaan, tapi tindakan.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 57,
+    "text": "Orang yang paling berani adalah yang paling kuat cintanya.",
+    "author": "Johann Wolfgang von Goethe",
+    "category": "cinta"
+  },
+  {
+    "id": 58,
+    "text": "Cinta terdiri dari jiwa tunggal yang menghuni dua tubuh.",
+    "author": "Aristoteles",
+    "category": "cinta"
+  },
+  {
+    "id": 59,
+    "text": "Hanya cinta yang bisa menyembuhkan luka cinta.",
+    "author": "Rumi",
+    "category": "cinta"
+  },
+  {
+    "id": 60,
+    "text": "Cinta adalah sabar, cinta adalah baik.",
+    "author": "1 Korintus 13:4",
+    "category": "cinta"
+  },
+  {
+    "id": 61,
+    "text": "Kita jatuh cinta karena kita butuh seseorang untuk mengenal kita sepenuhnya.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 62,
+    "text": "Cinta itu seperti angin, Anda tidak bisa melihatnya tapi bisa merasakannya.",
+    "author": "Nicole Y. Dana",
+    "category": "cinta"
+  },
+  {
+    "id": 63,
+    "text": "Lebih baik telah mencintai dan kalah, daripada tidak pernah mencintai sama sekali.",
+    "author": "Alfred Tennyson",
+    "category": "cinta"
+  },
+  {
+    "id": 64,
+    "text": "Cinta tidak memiliki batas.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 65,
+    "text": "Cinta bukan soal memiliki, tapi soal menghargai.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 66,
+    "text": "Kehilangan cinta lebih baik daripada tidak pernah mencintai.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 67,
+    "text": "Cinta yang sejati melampaui waktu dan jarak.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 68,
+    "text": "Cinta bukan mata yang buta, tapi hati yang melihat.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 69,
+    "text": "Tidak ada yang sempurna sampai Anda jatuh cinta padanya.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 70,
+    "text": "Cinta tumbuh dengan memberikan, bukan dengan menerima.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 71,
+    "text": "Cinta adalah satu-satunya emosi yang melampaui nalar.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 72,
+    "text": "Cinta terbaik adalah cinta yang cukup kuat untuk melepaskan.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 73,
+    "text": "Jika Anda hidup 100 hari, saya ingin hidup 99 hari supaya tidak pernah hidup tanpa Anda.",
+    "author": "A.A. Milne",
+    "category": "cinta"
+  },
+  {
+    "id": 74,
+    "text": "Cinta bukan soal berapa lama, tapi berapa dalam.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 75,
+    "text": "Cinta adalah ketika jiwa menemukan jiwanya yang lain.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 76,
+    "text": "Tanpa cinta, dunia hanyalah batu kering.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 77,
+    "text": "Cinta sejati datang diam-diam, tanpa pemberitahuan.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 78,
+    "text": "Sebaik apapun Anda, cintailah orang lain.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 79,
+    "text": "Cinta yang tersembunyi tetap menyala seperti api di bawah abu.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 80,
+    "text": "Cinta tidak membutuhkan kata-kata, ia berbicara melalui tindakan.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 81,
+    "text": "Mencintai seseorang berarti melihat keajaiban di dalam diri mereka.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 82,
+    "text": "Cinta bukan emosi, cinta adalah janji.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 83,
+    "text": "Hati yang mencintai selalu menemukan jalan.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 84,
+    "text": "Cinta adalah anugerah terindah yang Tuhan berikan.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 85,
+    "text": "Satu jam cinta bernilai lebih dari seratus tahun persahabatan tanpa cinta.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 86,
+    "text": "Cinta bukan soal seberapa banyak Anda bilang saya cinta Anda, tapi seberapa Anda membuktikannya.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 87,
+    "text": "Ketika hati bicara, akal tidak punya pilihan selain diam.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 88,
+    "text": "Cinta adalah penghubung antara dunia fana dan keabadian.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 89,
+    "text": "Cinta itu sederhana, yang rumit adalah manusianya.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 90,
+    "text": "Di balik setiap cinta besar ada cerita pengorbanan.",
+    "author": "Anonim",
+    "category": "cinta"
+  },
+  {
+    "id": 91,
+    "text": "Hidup ini apa yang terjadi saat Anda sibuk membuat rencana lain.",
+    "author": "John Lennon",
+    "category": "kehidupan"
+  },
+  {
+    "id": 92,
+    "text": "Dalam tiga kata saya bisa meringkas semua yang saya pelajari tentang hidup: hidup terus.",
+    "author": "Robert Frost",
+    "category": "kehidupan"
+  },
+  {
+    "id": 93,
+    "text": "Hidup ini 10% apa yang terjadi dan 90% bagaimana Anda meresponsnya.",
+    "author": "Charles Swindoll",
+    "category": "kehidupan"
+  },
+  {
+    "id": 94,
+    "text": "Hidup bukan soal panjangnya, tapi kedalaman.",
+    "author": "Seneca",
+    "category": "kehidupan"
+  },
+  {
+    "id": 95,
+    "text": "Tujuan hidup bukanlah bahagia, tapi berguna.",
+    "author": "Ralph Waldo Emerson",
+    "category": "kehidupan"
+  },
+  {
+    "id": 96,
+    "text": "Hidup terlalu singkat untuk dihabiskan dengan kesedihan.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 97,
+    "text": "Hidup dimulai di ujung zona nyaman Anda.",
+    "author": "Neale Donald Walsch",
+    "category": "kehidupan"
+  },
+  {
+    "id": 98,
+    "text": "Setiap hari adalah hari baru untuk memulai lagi.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 99,
+    "text": "Hidup adalah perjalanan, bukan tujuan.",
+    "author": "Ralph Waldo Emerson",
+    "category": "kehidupan"
+  },
+  {
+    "id": 100,
+    "text": "Anda hanya hidup sekali, tapi jika Anda melakukannya dengan benar, sekali sudah cukup.",
+    "author": "Mae West",
+    "category": "kehidupan"
+  },
+  {
+    "id": 101,
+    "text": "Hidup tanpa gairah seperti tubuh tanpa jiwa.",
+    "author": "Marcus Tullius Cicero",
+    "category": "kehidupan"
+  },
+  {
+    "id": 102,
+    "text": "Hidup ini seperti bermain kartu, mainkan kartu yang Anda terima.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 103,
+    "text": "Kunci kebahagiaan adalah menerima apa yang tidak bisa diubah.",
+    "author": "Reinhold Niebuhr",
+    "category": "kehidupan"
+  },
+  {
+    "id": 104,
+    "text": "Jangan menilai hidup dari napas Anda, tapi dari momen yang membuat Anda terengah.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 105,
+    "text": "Hidup bukan soal menunggu badai berlalu, tapi belajar menari di tengah hujan.",
+    "author": "Vivian Greene",
+    "category": "kehidupan"
+  },
+  {
+    "id": 106,
+    "text": "Semua orang akan mati, tapi tidak semua orang benar-benar hidup.",
+    "author": "William Wallace",
+    "category": "kehidupan"
+  },
+  {
+    "id": 107,
+    "text": "Hidup yang baik adalah hidup yang diinspirasi oleh impian dan dipandu oleh pengetahuan.",
+    "author": "Bertrand Russell",
+    "category": "kehidupan"
+  },
+  {
+    "id": 108,
+    "text": "Hal terbaik dalam hidup adalah menjadi diri sendiri.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 109,
+    "text": "Setiap detik dalam hidup Anda berharga.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 110,
+    "text": "Hidup ini teka-teki, nikmati proses merangkainya.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 111,
+    "text": "Hidup memberi pada mereka yang berani mengambil.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 112,
+    "text": "Kesederhanaan adalah keindahan tertinggi dalam hidup.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 113,
+    "text": "Hidup bukan kompetisi, tapi kolaborasi.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 114,
+    "text": "Setiap orang punya cerita, dengarkan sebelum menghakimi.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 115,
+    "text": "Kebahagiaan bukan sesuatu yang siap pakai, ia datang dari tindakan Anda sendiri.",
+    "author": "Dalai Lama",
+    "category": "kehidupan"
+  },
+  {
+    "id": 116,
+    "text": "Hidup adalah cermin, senyum pada cermin dan ia akan senyum kembali.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 117,
+    "text": "Jangan menunggu besok, mulailah hari ini.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 118,
+    "text": "Hidup tanpa rasa syukur adalah hidup tanpa makna.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 119,
+    "text": "Pelajaran terbesar dalam hidup: orang lain tidak berpikir tentang Anda sebanyak yang Anda kira.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 120,
+    "text": "Hidup ini bukan soal menjadi sempurna, tapi menjadi autentik.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 121,
+    "text": "Ketika satu pintu tertutup, pintu lain terbuka.",
+    "author": "Alexander Graham Bell",
+    "category": "kehidupan"
+  },
+  {
+    "id": 122,
+    "text": "Hidup adalah kesempatan membangun sesuatu yang abadi.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 123,
+    "text": "Senyum adalah bahasa universal kebaikan.",
+    "author": "William Arthur Ward",
+    "category": "kehidupan"
+  },
+  {
+    "id": 124,
+    "text": "Kebijakan dimulai dari keingintahuan.",
+    "author": "Socrates",
+    "category": "kehidupan"
+  },
+  {
+    "id": 125,
+    "text": "Kesabaran adalah kunci kebahagiaan.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 126,
+    "text": "Hidup bukan soal menang atau kalah, tapi soal bertumbuh.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 127,
+    "text": "Keajaiban hidup terletak pada ketidakpastiannya.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 128,
+    "text": "Menerima diri sendiri adalah awal dari kebahagiaan sejati.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 129,
+    "text": "Hidup adalah buku, dan mereka yang tidak bepergian hanya membaca satu halaman.",
+    "author": "Augustinus",
+    "category": "kehidupan"
+  },
+  {
+    "id": 130,
+    "text": "Hidup tanpa tujuan seperti kapal tanpa kemudi.",
+    "author": "Thomas Carlyle",
+    "category": "kehidupan"
+  },
+  {
+    "id": 131,
+    "text": "Setiap hari adalah kesempatan baru untuk menjadi lebih baik.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 132,
+    "text": "Kebahagiaan sejati datang dari dalam.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 133,
+    "text": "Hidup ini seperti roda, kadang di atas kadang di bawah.",
+    "author": "Peribahasa",
+    "category": "kehidupan"
+  },
+  {
+    "id": 134,
+    "text": "Jadilah perubahan yang Anda ingin lihat di dunia.",
+    "author": "Mahatma Gandhi",
+    "category": "kehidupan"
+  },
+  {
+    "id": 135,
+    "text": "Hidup penuh warna bukan hitam putih.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 136,
+    "text": "Bersyukurlah atas apa yang Anda miliki, bukan mengeluh atas apa yang tidak Anda punya.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 137,
+    "text": "Kedewasaan bukan soal umur, tapi soal cara berpikir.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 138,
+    "text": "Hidup ini indah bagi mereka yang tahu menghargai.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 139,
+    "text": "Setiap masalah adalah peluang berpakaian berbeda.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 140,
+    "text": "Hidup bukan soal menghindari badai, tapi belajar berlayar di tengahnya.",
+    "author": "Anonim",
+    "category": "kehidupan"
+  },
+  {
+    "id": 141,
+    "text": "Kebaikan adalah bahasa yang didengar oleh orang tuli dan dilihat oleh orang buta.",
+    "author": "Mark Twain",
+    "category": "kehidupan"
+  },
+  {
+    "id": 142,
+    "text": "Satu-satunya hal yang saya tahu adalah saya tidak tahu apa-apa.",
+    "author": "Socrates",
+    "category": "filsafat"
+  },
+  {
+    "id": 143,
+    "text": "Hidup yang tidak teruji tidak layak dihidupi.",
+    "author": "Socrates",
+    "category": "filsafat"
+  },
+  {
+    "id": 144,
+    "text": "Man adalah makhluk yang selalu mencari makna.",
+    "author": "Viktor Frankl",
+    "category": "filsafat"
+  },
+  {
+    "id": 145,
+    "text": "Pikiran Anda adalah penjara Anda atau istana Anda.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 146,
+    "text": "Kenyataan hanyalah ilusi, meskipun sangat persisten.",
+    "author": "Albert Einstein",
+    "category": "filsafat"
+  },
+  {
+    "id": 147,
+    "text": "Kebebasan sejati adalah kebebasan dari pikiran.",
+    "author": "Eckhart Tolle",
+    "category": "filsafat"
+  },
+  {
+    "id": 148,
+    "text": "Doubt is the origin of wisdom.",
+    "author": "Rene Descartes",
+    "category": "filsafat"
+  },
+  {
+    "id": 149,
+    "text": "Manusia adalah hewan yang membuat konsep.",
+    "author": "Friedrich Nietzsche",
+    "category": "filsafat"
+  },
+  {
+    "id": 150,
+    "text": "Bahagia dan sedih adalah dua sisi mata uang yang sama.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 151,
+    "text": "Waktu adalah uang paling berharga karena tidak bisa dibeli kembali.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 152,
+    "text": "Cinta pengetahuan adalah awal dari semua kebijaksanaan.",
+    "author": "Aristoteles",
+    "category": "filsafat"
+  },
+  {
+    "id": 153,
+    "text": "Dunia adalah panggung, dan semua orang adalah aktor.",
+    "author": "William Shakespeare",
+    "category": "filsafat"
+  },
+  {
+    "id": 154,
+    "text": "Tidak ada yang abadi kecuali perubahan.",
+    "author": "Heraclitus",
+    "category": "filsafat"
+  },
+  {
+    "id": 155,
+    "text": "Kesadaran adalah titik temu antara ilmu dan spiritualitas.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 156,
+    "text": "Makna hidup ditemukan, bukan diberikan.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 157,
+    "text": "Logika membawa Anda dari A ke B, imajinasi membawa Anda ke mana saja.",
+    "author": "Albert Einstein",
+    "category": "filsafat"
+  },
+  {
+    "id": 158,
+    "text": "Pertanyaan yang benar lebih penting daripada jawaban yang benar.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 159,
+    "text": "Saya berpikir, maka saya ada.",
+    "author": "Rene Descartes",
+    "category": "filsafat"
+  },
+  {
+    "id": 160,
+    "text": "Kebenaran adalah apa yang bertahan saat semua argumen habis.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 161,
+    "text": "Realitas subjektif lebih kuat daripada realitas objektif.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 162,
+    "text": "Kita adalah apa yang kita pikirkan berulang-ulang.",
+    "author": "Aristoteles",
+    "category": "filsafat"
+  },
+  {
+    "id": 163,
+    "text": "Pemahaman dimulai dari ketidaktahuan.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 164,
+    "text": "Tidak ada yang benar-benar gratis, semua ada harganya.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 165,
+    "text": "Paradoks adalah sumber kreativitas.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 166,
+    "text": "Antara stimulus dan respons ada ruang kebebasan memilih.",
+    "author": "Viktor Frankl",
+    "category": "filsafat"
+  },
+  {
+    "id": 167,
+    "text": "Segala sesuatu relatif, termasuk kebenaran.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 168,
+    "text": "Kesunyian adalah tempat di mana kita menemukan diri kita sendiri.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 169,
+    "text": "Tuhan tidak bermain dadu dengan alam semesta.",
+    "author": "Albert Einstein",
+    "category": "filsafat"
+  },
+  {
+    "id": 170,
+    "text": "Kebijaksanaan adalah mengenali apa yang tidak Anda ketahui.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 171,
+    "text": "Semua kategori adalah konstruksi mental.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 172,
+    "text": "Yang terlihat bukan selalu yang sebenarnya.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 173,
+    "text": "Kebenaran sering tidak populer.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 174,
+    "text": "Kita hidup di dunia narasi, bukan fakta.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 175,
+    "text": "Hakikat manusia adalah keingintahuan.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 176,
+    "text": "Segala sesuatu saling terhubung.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 177,
+    "text": "Keindahan ada di mata yang melihat.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 178,
+    "text": "Batasan hanya ada di pikiran.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 179,
+    "text": "Masa lalu adalah kenangan, masa depan adalah harapan, hanya sekarang yang nyata.",
+    "author": "Anonim",
+    "category": "filsafat"
+  },
+  {
+    "id": 180,
+    "text": "Kesederhanaan adalah sofistikasi tertinggi.",
+    "author": "Leonardo da Vinci",
+    "category": "filsafat"
+  },
+  {
+    "id": 181,
+    "text": "Mengetahui orang lain adalah kebijaksanaan, mengetahui diri sendiri adalah pencerahan.",
+    "author": "Lao Tzu",
+    "category": "filsafat"
+  },
+  {
+    "id": 182,
+    "text": "Saya menulis lambat karena saya menulis cepat.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 183,
+    "text": "Jika Anda berpikir petualangan berbahaya, coba rutinitas — itu mematikan.",
+    "author": "Paulo Coelho",
+    "category": "humor"
+  },
+  {
+    "id": 184,
+    "text": "Rumah adalah tempat di mana WiFi terhubung otomatis.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 185,
+    "text": "Saya bukan malas, saya sedang mode hemat energi.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 186,
+    "text": "Diet dimulai besok, selalu.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 187,
+    "text": "Kesabaran saya sedang loading...",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 188,
+    "text": "Saya tidak tua, saya adalah edisi klasik.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 189,
+    "text": "Kopi pertama, dunia kemudian.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 190,
+    "text": "Saya berolahraga secara mental — saya berlari dari masalah.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 191,
+    "text": "Alarm pagi dan saya memiliki hubungan yang rumit.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 192,
+    "text": "Jangan bicara soal dedikasi, saya sudah mengubah TV channel 10 kali dalam 5 menit.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 193,
+    "text": "Saya bukan perfect, tapi limited edition.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 194,
+    "text": "Kesuksesan saya bisa diukur dari jumlah pizza yang bisa saya makan.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 195,
+    "text": "Saya mengikuti diet — saya melihat makanan dan saya makan.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 196,
+    "text": "Pengalaman adalah sesuatu yang Anda tidak dapat sampai tepat setelah Anda membutuhkannya.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 197,
+    "text": "Setiap orang adalah jenius. Tapi jika Anda menghakimi ikan dari kemampuan memanjat pohon, ia akan merasa bodoh seumur hidup.",
+    "author": "Albert Einstein",
+    "category": "humor"
+  },
+  {
+    "id": 198,
+    "text": "Saya punya teori bahwa semua horoscope ditulis oleh orang yang sama.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 199,
+    "text": "Procrastination adalah seni mengikuti garis waktu yang berbeda.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 200,
+    "text": "Saya bukan takut mati, saya takut tidak hidup cukup.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 201,
+    "text": "Kebahagiaan adalah saldo rekening yang positif.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 202,
+    "text": "Hidup terlalu singkat untuk memakai kalkun bosen.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 203,
+    "text": "Jika Anda tidak bisa meyakinkan mereka, bingungkan mereka.",
+    "author": "Harry Truman",
+    "category": "humor"
+  },
+  {
+    "id": 204,
+    "text": "Saya berumur 0% di pagi hari dan 100% di malam hari.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 205,
+    "text": "Otak saya punya mind of its own.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 206,
+    "text": "WiFi + kopi + tempat tidur = kebahagiaan absolut.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 207,
+    "text": "Saya tidak suka pagi, pagi tidak suka saya, kita saling memahami.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 208,
+    "text": "Tidur adalah hobi terbaik saya.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 209,
+    "text": "Saya multitasking: saya bisa mendengarkan, mengabaikan, dan melupakannya sekaligus.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 210,
+    "text": "Kerja keras tidak pernah membunuh siapapun, tapi kenapa ambil risiko?",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 211,
+    "text": "Saya berdiet, tapi perut saya tidak setuju.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 212,
+    "text": "Common sense begitu langka sehingga harus disebut super power.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 213,
+    "text": "Saya bukan berdebat, saya hanya menjelaskan kenapa saya benar.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 214,
+    "text": "Jika plan A adalah pizza dan plan B juga pizza, hidup ini indah.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 215,
+    "text": "Saya punya PHD: Permanent Head Damage dari terlalu banyak belajar.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 216,
+    "text": "Mengapa kita tekan tombol remote lebih keras saat baterai hampir habis?",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 217,
+    "text": "Saya berolahraga: lari dari masalah, angkat beban hati, stretch kesabaran.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 218,
+    "text": "Saya hidup seperti tidak ada besok, karena besok saya akan tetap malas.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 219,
+    "text": "Kehidupan dewasa: secara manual mencari semua yang dulu ibu saya sediakan.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 220,
+    "text": "Saya tidak membuang waktu, saya menggunakannya untuk istirahat strategis.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 221,
+    "text": "Jika Anda tidak bisa ikhlas, pura-pura ikhlas dulu.",
+    "author": "Anonim",
+    "category": "humor"
+  },
+  {
+    "id": 222,
+    "text": "Kesuksesan bukan akhir, kegagalan bukan fatal, yang penting adalah keberanian untuk melanjutkan.",
+    "author": "Winston Churchill",
+    "category": "sukses"
+  },
+  {
+    "id": 223,
+    "text": "Kesuksesan adalah kemampuan berpindah dari kegagalan ke kegagalan tanpa kehilangan semangat.",
+    "author": "Winston Churchill",
+    "category": "sukses"
+  },
+  {
+    "id": 224,
+    "text": "Jangan takut akan kegagalan, takutlah tidak mencoba.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 225,
+    "text": "Perjalanan seribu mil dimulai dengan satu langkah.",
+    "author": "Lao Tzu",
+    "category": "sukses"
+  },
+  {
+    "id": 226,
+    "text": "Kesuksesan datang dari usaha yang tidak pernah berhenti.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 227,
+    "text": "Hanya mereka yang berani gagal besar yang bisa mencapai sukses besar.",
+    "author": "Robert Kennedy",
+    "category": "sukses"
+  },
+  {
+    "id": 228,
+    "text": "Orang sukses melakukan apa yang orang gagal tidak mau lakukan.",
+    "author": "Jim Rohn",
+    "category": "sukses"
+  },
+  {
+    "id": 229,
+    "text": "Kesuksesan adalah hasil dari persiapan, kerja keras, dan belajar dari kegagalan.",
+    "author": "Colin Powell",
+    "category": "sukses"
+  },
+  {
+    "id": 230,
+    "text": "Mimpi besar, mulai kecil, bertindak sekarang.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 231,
+    "text": "Jangan berhenti saat capai, capai saat berhenti.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 232,
+    "text": "Kesuksesan adalah perjalanan, bukan tujuan.",
+    "author": "Ben Sweetland",
+    "category": "sukses"
+  },
+  {
+    "id": 233,
+    "text": "Orang yang paling sukses adalah orang yang pernah paling banyak gagal.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 234,
+    "text": "Disiplin adalah jembatan antara tujuan dan pencapaian.",
+    "author": "Jim Rohn",
+    "category": "sukses"
+  },
+  {
+    "id": 235,
+    "text": "Kerja cerdas mengalahkan kerja keras.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 236,
+    "text": "Fokus adalah kunci kesuksesan.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 237,
+    "text": "Kesuksesan meninggalkan jejak, ikutilah.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 238,
+    "text": "Jangan minta beban lebih ringan, minta pundak lebih kuat.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 239,
+    "text": "Kegagalan adalah kesuksesan yang tertunda.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 240,
+    "text": "Sebelum sukses, semua orang adalah tidak dikenal.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 241,
+    "text": "Konsistensi mengalahkan intensitas.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 242,
+    "text": "Kesuksesan bukan soal uang, tapi soal dampak.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 243,
+    "text": "Setiap orang hebat pernah orang biasa yang tidak menyerah.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 244,
+    "text": "Kesuksesan adalah pilihan, bukan kebetulan.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 245,
+    "text": "Jangan menunggu kesempatan, ciptakanlah.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 246,
+    "text": "Kesuksesan dimulai dari mindset yang tepat.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 247,
+    "text": "Kualitas lebih penting daripada kuantitas.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 248,
+    "text": "Investasi terbaik adalah investasi pada diri sendiri.",
+    "author": "Warren Buffett",
+    "category": "sukses"
+  },
+  {
+    "id": 249,
+    "text": "Orang sukses tidak pernah berhenti belajar.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 250,
+    "text": "Kompetensi adalah fondasi kesuksesan.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 251,
+    "text": "Kesuksesan tanpa kebahagiaan adalah kegagalan.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 252,
+    "text": "Ambisilah, tapi tetap rendah hati.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 253,
+    "text": "Kesuksesan adalah ketika persiapan bertemu peluang.",
+    "author": "Seneca",
+    "category": "sukses"
+  },
+  {
+    "id": 254,
+    "text": "Jangan hanya bermimpi, bertindaklah.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 255,
+    "text": "Keunggulan bukan perbuatan, tapi kebiasaan.",
+    "author": "Aristoteles",
+    "category": "sukses"
+  },
+  {
+    "id": 256,
+    "text": "Kesuksesan membutuhkan waktu, bersabarlah.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 257,
+    "text": "Kesuksesan bukan milik orang malas.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 258,
+    "text": "Jangan bandingkan diri Anda dengan orang lain, bandingkan dengan diri Anda kemarin.",
+    "author": "Jordan Peterson",
+    "category": "sukses"
+  },
+  {
+    "id": 259,
+    "text": "Jaringan adalah net worth Anda.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 260,
+    "text": "Orang sukses berpikir jangka panjang.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 261,
+    "text": "Inovasi adalah kunci bertahan di dunia yang berubah.",
+    "author": "Anonim",
+    "category": "sukses"
+  },
+  {
+    "id": 262,
+    "text": "Pendidikan adalah senjata paling ampuh untuk mengubah dunia.",
+    "author": "Nelson Mandela",
+    "category": "pendidikan"
+  },
+  {
+    "id": 263,
+    "text": "Investasi dalam pengetahuan membayar bunga terbaik.",
+    "author": "Benjamin Franklin",
+    "category": "pendidikan"
+  },
+  {
+    "id": 264,
+    "text": "Pendidikan bukan persiapan untuk hidup, pendidikan adalah hidup itu sendiri.",
+    "author": "John Dewey",
+    "category": "pendidikan"
+  },
+  {
+    "id": 265,
+    "text": "Mengajar adalah seni mengubah pikiran.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 266,
+    "text": "Belajar bukan soal nilai, tapi soal pemahaman.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 267,
+    "text": "Orang berpengetahuan adalah orang berkuasa.",
+    "author": "Francis Bacon",
+    "category": "pendidikan"
+  },
+  {
+    "id": 268,
+    "text": "Buku adalah jendela dunia.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 269,
+    "text": "Membaca adalah makanan otak.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 270,
+    "text": "Curiosity adalah engine of education.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 271,
+    "text": "Guru yang baik menginspirasi, bukan hanya mengajar.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 272,
+    "text": "Pendidikan adalah lampu yang menerangi jalan masa depan.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 273,
+    "text": "Belajar seumur hidup, berhenti berarti mati.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 274,
+    "text": "Kesalahan adalah guru terbaik jika Anda mau belajar darinya.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 275,
+    "text": "Pendidikan karakter sama pentingnya dengan pendidikan akademik.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 276,
+    "text": "Setiap orang adalah guru, setiap tempat adalah sekolah.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 277,
+    "text": "Pikiran terbuka adalah ruang kelas terbaik.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 278,
+    "text": "Saya belum pernah biarkan sekolah mengganggu pendidikan saya.",
+    "author": "Mark Twain",
+    "category": "pendidikan"
+  },
+  {
+    "id": 279,
+    "text": "Pendidikan mahal, tapi ketidaktahuan lebih mahal.",
+    "author": "Derek Bok",
+    "category": "pendidikan"
+  },
+  {
+    "id": 280,
+    "text": "Ilmu tanpa amal seperti pohon tanpa buah.",
+    "author": "Peribahasa Arab",
+    "category": "pendidikan"
+  },
+  {
+    "id": 281,
+    "text": "Belajar dari kemarin, hidup untuk hari ini, berharap untuk besok.",
+    "author": "Albert Einstein",
+    "category": "pendidikan"
+  },
+  {
+    "id": 282,
+    "text": "Kreativitas adalah kecerdasan yang bersenang-senang.",
+    "author": "Albert Einstein",
+    "category": "pendidikan"
+  },
+  {
+    "id": 283,
+    "text": "Pendidikan bukan mengisi ember, tapi menyalakan api.",
+    "author": "William Butler Yeats",
+    "category": "pendidikan"
+  },
+  {
+    "id": 284,
+    "text": "Carilah ilmu sampai ke Negeri China.",
+    "author": "Hadits",
+    "category": "pendidikan"
+  },
+  {
+    "id": 285,
+    "text": "Perpustakaan adalah rumah bagi jiwa yang haus pengetahuan.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 286,
+    "text": "Pengetahuan bertambah saat dibagikan.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 287,
+    "text": "Otak tidak seperti kapal yang perlu diisi, tapi seperti kayu yang perlu dinyalakan.",
+    "author": "Plutarch",
+    "category": "pendidikan"
+  },
+  {
+    "id": 288,
+    "text": "Saya belajar lebih banyak dari kegagalan saya daripada kesuksesan saya.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 289,
+    "text": "Pendidikan adalah progres menemukan ketidaktahuan kita.",
+    "author": "Will Durant",
+    "category": "pendidikan"
+  },
+  {
+    "id": 290,
+    "text": "Siapa yang mengajar, juga belajar.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 291,
+    "text": "Membaca baik adalah langkah pertama menuju menulis baik.",
+    "author": "Stephen King",
+    "category": "pendidikan"
+  },
+  {
+    "id": 292,
+    "text": "Kritis berpikir adalah keterampilan terpenting abad 21.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 293,
+    "text": "Pendidikan bukan soal sertifikat, tapi soal transformasi.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 294,
+    "text": "Kolaborasi menghasilkan pembelajaran lebih dalam.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 295,
+    "text": "Mengajukan pertanyaan adalah tanda kecerdasan.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 296,
+    "text": "Pendidikan formal memberi Anda perahu, pengalaman memberi Anda lautan.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 297,
+    "text": "Teknologi tidak menggantikan guru yang baik.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 298,
+    "text": "Belajar dari berbagai perspektif memperkaya pemahaman.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 299,
+    "text": "Kebijaksanaan bukan produk sekolah, tapi seumur hidup mencarinya.",
+    "author": "Albert Einstein",
+    "category": "pendidikan"
+  },
+  {
+    "id": 300,
+    "text": "Keingintahuan adalah awal dari penemuan.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 301,
+    "text": "Pendidikan terbaik adalah yang membuat Anda berpikir sendiri.",
+    "author": "Anonim",
+    "category": "pendidikan"
+  },
+  {
+    "id": 302,
+    "text": "Sahabat sejati adalah yang datang saat yang lain pergi.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 303,
+    "text": "Teman adalah seseorang yang tahu lagu di hati Anda dan bisa menyanyikannya saat Anda lupa.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 304,
+    "text": "Lebih baik memiliki satu sahabat daripada seratus kenalan.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 305,
+    "text": "Sahabat bukan soal siapa paling lama kenal, tapi siapa paling setia menemani.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 306,
+    "text": "Persahabatan lahir saat dua orang menemukan kesamaan dalam jiwa mereka.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 307,
+    "text": "Sahabat adalah keluarga yang Anda pilih.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 308,
+    "text": "Kehilangan sahabat lebih berat daripada kehilangan cinta.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 309,
+    "text": "Teman sejati bukan yang paling banyak bicara, tapi yang paling banyak mendengarkan.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 310,
+    "text": "Kita berteman bukan karena kesamaan, tapi karena saling melengkapi.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 311,
+    "text": "Sahabat adalah cermin yang memperlihatkan diri Anda yang terbaik.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 312,
+    "text": "Berjalan bersama sahabat membuat perjalanan terasa singkat.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 313,
+    "text": "Sahabat sejati tidak perlu setiap hari bertemu, tapi selalu ada saat dibutuhkan.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 314,
+    "text": "Persahabatan yang sejati tidak kenal waktu dan jarak.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 315,
+    "text": "Seorang sahabat adalah hadiah yang Anda berikan pada diri sendiri.",
+    "author": "Robert Louis Stevenson",
+    "category": "sahabat"
+  },
+  {
+    "id": 316,
+    "text": "Sahabat yang baik lebih berharga dari emas.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 317,
+    "text": "Kejujuran adalah fondasi persahabatan.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 318,
+    "text": "Teman yang membantu di saat sulit adalah teman sejati.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 319,
+    "text": "Sahabat bukan soal kuantitas, tapi kualitas.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 320,
+    "text": "Saling mengerti membuat persahabatan langgeng.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 321,
+    "text": "Sahabat membuat tawa lebih kerasas dan air mata lebih ringan.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 322,
+    "text": "Bersama sahabat, hidup terasa lebih bermakna.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 323,
+    "text": "Sahabat bukan yang paling banyak memberi, tapi yang paling tulus.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 324,
+    "text": "Berbagi cerita dengan sahabat adalah terapi terbaik.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 325,
+    "text": "Sahabat sejati mengenal Anda dari dalam.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 326,
+    "text": "Bertambah usia, bertambah sedikit teman, tapi bertambah dalam sahabat.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 327,
+    "text": "Sahabat adalah obat hati yang paling manjur.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 328,
+    "text": "Ketulusan membangun persahabatan, kepalsuan menghancurkannya.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 329,
+    "text": "Sahabat adalah penyejuk di tengah hiruk-pikuk kehidupan.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 330,
+    "text": "Tidak ada yang lebih indah dari sahabat yang saling mendukung.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 331,
+    "text": "Sahabat sejati tetap setia meski semua orang pergi.",
+    "author": "Anonim",
+    "category": "sahabat"
+  },
+  {
+    "id": 332,
+    "text": "Imajinasi lebih penting daripada pengetahuan.",
+    "author": "Albert Einstein",
+    "category": "sains"
+  },
+  {
+    "id": 333,
+    "text": "Kita hanya memahami kecil dari alam semesta yang tak terhingga ini.",
+    "author": "Carl Sagan",
+    "category": "sains"
+  },
+  {
+    "id": 334,
+    "text": "Pengetahuan adalah cahaya, ketidaktahuan adalah kegelapan.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 335,
+    "text": "Sains tanpa agama lumpuh, agama tanpa sains buta.",
+    "author": "Albert Einstein",
+    "category": "sains"
+  },
+  {
+    "id": 336,
+    "text": "Kita semua terbuat dari debu bintang.",
+    "author": "Carl Sagan",
+    "category": "sains"
+  },
+  {
+    "id": 337,
+    "text": "Keajaiban alam semesta ada di dalam diri Anda.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 338,
+    "text": "Gravitasi bukan kesalahan jatuh cinta.",
+    "author": "Albert Einstein",
+    "category": "sains"
+  },
+  {
+    "id": 339,
+    "text": "Kuantitas kegilaan dalam dunia menunjukkan bahwa Tuhan punya selera humor.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 340,
+    "text": "Jika Anda ingin membangun kapal, jangan bagi tugas, tapi tanamkan kerinduan akan lautan.",
+    "author": "Antoine de Saint-Exupery",
+    "category": "sains"
+  },
+  {
+    "id": 341,
+    "text": "Bumi adalah satu-satunya rumah yang kita kenal, jaga baik-baik.",
+    "author": "Carl Sagan",
+    "category": "sains"
+  },
+  {
+    "id": 342,
+    "text": "Kesederhanaan adalah kemurnian.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 343,
+    "text": "Setiap penemuan dimulai dari pertanyaan 'bagaimana jika'.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 344,
+    "text": "Hukum alam adalah puisi Tuhan.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 345,
+    "text": "Teknologi adalah kacamata yang memperjelas masa depan.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 346,
+    "text": "Kreativitas sains melampaui batas imajinasi.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 347,
+    "text": "Segala sesuatu yang luar biasa dimulai dari yang sederhana.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 348,
+    "text": "Pengamatan adalah awal dari semua penemuan ilmiah.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 349,
+    "text": "Data bukan informasi, informasi bukan pengetahuan, pengetahuan bukan kebijaksanaan.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 350,
+    "text": "Kita hidup di era di mana pengetahuan dua kali lipat setiap beberapa tahun.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 351,
+    "text": "Sains adalah seni pengamatan yang disiplin.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 352,
+    "text": "Matematika adalah bahasa alam semesta.",
+    "author": "Galileo Galilei",
+    "category": "sains"
+  },
+  {
+    "id": 353,
+    "text": "Setiap problem yang terpecahkan membuka sepuluh problem baru.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 354,
+    "text": "Alam semesta bukan hanya lebih aneh dari yang kita bayangkan, tapi lebih aneh dari yang bisa kita bayangkan.",
+    "author": "J.B.S. Haldane",
+    "category": "sains"
+  },
+  {
+    "id": 355,
+    "text": "Kode genetik adalah puisi kehidupan.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 356,
+    "text": "Kecerdasan buatan bukan pengganti kecerdasan manusia, tapi perpanjangan.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 357,
+    "text": "Kita sedang berada di revolusi informasi.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 358,
+    "text": "Kosmologi mengajarkan kerendahan hati.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 359,
+    "text": "Kerumitan adalah sifat dasar alam semesta.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 360,
+    "text": "Penelitian adalah seni mencari apa yang belum ditemukan.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 361,
+    "text": "Kuantum mengajarkan bahwa realitas lebih aneh dari yang kita kira.",
+    "author": "Anonim",
+    "category": "sains"
+  },
+  {
+    "id": 362,
+    "text": "Tuhan tidak mengubah keadaan seseorang jika ia tidak mengubah dirinya sendiri.",
+    "author": "QS 13:11",
+    "category": "spiritual"
+  },
+  {
+    "id": 363,
+    "text": "Sabar adalah separuh iman.",
+    "author": "Hadits",
+    "category": "spiritual"
+  },
+  {
+    "id": 364,
+    "text": "Bersyukur atas nikmat Allah maka nikmat itu akan bertambah.",
+    "author": "QS 14:7",
+    "category": "spiritual"
+  },
+  {
+    "id": 365,
+    "text": "Doa adalah senjata mukmin.",
+    "author": "Hadits",
+    "category": "spiritual"
+  },
+  {
+    "id": 366,
+    "text": "Sesungguhnya bersama kesulitan ada kemudahan.",
+    "author": "QS 94:6",
+    "category": "spiritual"
+  },
+  {
+    "id": 367,
+    "text": "Janganlah kamu berputus asa dari rahmat Allah.",
+    "author": "QS 39:53",
+    "category": "spiritual"
+  },
+  {
+    "id": 368,
+    "text": "Sebaik-baik manusia adalah yang paling bermanfaat bagi orang lain.",
+    "author": "Hadits",
+    "category": "spiritual"
+  },
+  {
+    "id": 369,
+    "text": "Ilmu tanpa agama lumpuh, agama tanpa ilmu buta.",
+    "author": "Albert Einstein",
+    "category": "spiritual"
+  },
+  {
+    "id": 370,
+    "text": "Ketentraman hati ada dalam mengingat Allah.",
+    "author": "QS 13:28",
+    "category": "spiritual"
+  },
+  {
+    "id": 371,
+    "text": "Beramallah sebelum datangnya halangan.",
+    "author": "Hadits",
+    "category": "spiritual"
+  },
+  {
+    "id": 372,
+    "text": "Sesungguhnya Allah tidak melihat rupa, tapi melihat hati.",
+    "author": "Hadits",
+    "category": "spiritual"
+  },
+  {
+    "id": 373,
+    "text": "Sedekah tidak mengurangi harta.",
+    "author": "Hadits",
+    "category": "spiritual"
+  },
+  {
+    "id": 374,
+    "text": "Perbanyaklah dzikir kepada Allah sampai orang menganggap kamu gila.",
+    "author": "Hadits",
+    "category": "spiritual"
+  },
+  {
+    "id": 375,
+    "text": "Jadilah manusia yang tawadhu, rendah hati di bumi.",
+    "author": "QS 25:63",
+    "category": "spiritual"
+  },
+  {
+    "id": 376,
+    "text": "Keikhlasan adalah kunci diterimanya amal.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 377,
+    "text": "Hati yang bersih adalah hati yang damai.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 378,
+    "text": "Setiap ujian adalah angkat derajat.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 379,
+    "text": "Kebaikan yang tampak dan yang tersembunyi, semuanya dari Allah.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 380,
+    "text": "Ridha Allah adalah tujuan tertinggi.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 381,
+    "text": "Dunia adalah jembatan, bukan tempat tinggal.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 382,
+    "text": "Keberkahan ada dalam kejujuran.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 383,
+    "text": "Minta kepada Allah, Allah pasti menjawab.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 384,
+    "text": "Pagi dan petang, berdzikirlah.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 385,
+    "text": "Hidup ini ujian, mati adalah kembali.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 386,
+    "text": "Jangan sedih, Allah bersama kita.",
+    "author": "QS 9:40",
+    "category": "spiritual"
+  },
+  {
+    "id": 387,
+    "text": "Orang beriman adalah cermin orang beriman.",
+    "author": "Hadits",
+    "category": "spiritual"
+  },
+  {
+    "id": 388,
+    "text": "Amal saleh adalah investasi akhirat.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 389,
+    "text": "Surga adalah tujuan, amal adalah kendaraan.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 390,
+    "text": "Hati yang sakit disembuhkan dengan dzikir.",
+    "author": "Anonim",
+    "category": "spiritual"
+  },
+  {
+    "id": 391,
+    "text": "Tawakkal bukan pasrah, tapi berusaha lalu menyerahkan hasilnya.",
+    "author": "Anonim",
+    "category": "spiritual"
+  }
+]
