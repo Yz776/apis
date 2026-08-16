@@ -100,9 +100,9 @@ export default {
         path: "/info/random-quotes",
         auth: false,
         tags: ["Info"],
-        summary: "Random quotes (1005 quotes, 15 categories, per-user unique)",
+        summary: "Random quotes (1333 quotes, 15 categories, per-user unique)",
         description:
-            "1005 kutipan dalam 15 kategori (motivasi, cinta, kehidupan, filsafat, humor, sukses, pendidikan, sahabat, sains, spiritual, presiden, kepemimpinan, kreativitas, keberanian, ketekunan). " +
+            "1333 kutipan dalam 15 kategori (motivasi, cinta, kehidupan, filsafat, humor, sukses, pendidikan, sahabat, sains, spiritual, presiden, kepemimpinan, kreativitas, keberanian, ketekunan). " +
             "Setiap user mendapat quote berbeda — tidak ada repetisi sampai semua quote habis! " +
             "Params: userId (opsional, auto dari IP+UA), category (opsional), count (1-10, default 1), reset (true untuk reset seen).",
         parameters: [
