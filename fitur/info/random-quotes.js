@@ -1,5 +1,5 @@
 // /info/random-quotes — Random Quotes API by KangWifi
-// 391 quotes in 10 categories, per-user uniqueness, Fisher-Yates shuffle
+// 1005 quotes in 15 categories, per-user uniqueness, Fisher-Yates shuffle
 // Setiap orang mendapat quote berbeda-beda!
 
 import { readFileSync } from "fs"
@@ -16,13 +16,15 @@ const quotesData = JSON.parse(
 const VALID_CATEGORIES = [
     "motivasi", "cinta", "kehidupan", "filsafat",
     "humor", "sukses", "pendidikan", "sahabat",
-    "sains", "spiritual",
+    "sains", "spiritual", "presiden", "kepemimpinan",
+    "kreativitas", "keberanian", "ketekunan",
 ]
 
 const CATEGORY_ICONS = {
     motivasi: "🔥", cinta: "❤️", kehidupan: "🌟", filsafat: "🤔",
     humor: "😂", sukses: "🏆", pendidikan: "📚", sahabat: "🤝",
-    sains: "🔬", spiritual: "🙏",
+    sains: "🔬", spiritual: "🙏", presiden: "🇮🇩", kepemimpinan: "👑",
+    kreativitas: "🎨", keberanian: "⚔️", ketekunan: "💪",
 }
 
 const CATEGORY_DESCRIPTIONS = {
@@ -36,6 +38,11 @@ const CATEGORY_DESCRIPTIONS = {
     sahabat: "Kutipan tentang persahabatan",
     sains: "Kutipan dari ilmuwan dan dunia sains",
     spiritual: "Kutipan spiritual dan kebijaksanaan",
+    presiden: "Kutipan dari presiden & tokoh bangsa Indonesia",
+    kepemimpinan: "Kutipan tentang kepemimpinan dan memimpin",
+    kreativitas: "Kutipan tentang kreativitas dan inovasi",
+    keberanian: "Kutipan tentang keberanian dan keteguhan hati",
+    ketekunan: "Kutipan tentang ketekunan dan konsistensi",
 }
 
 // ─── In-memory per-user seen tracking ────────────────────────────────────────
@@ -93,14 +100,14 @@ export default {
         path: "/info/random-quotes",
         auth: false,
         tags: ["Info"],
-        summary: "Random quotes (391 quotes, per-user unique)",
+        summary: "Random quotes (1005 quotes, 15 categories, per-user unique)",
         description:
-            "391 kutipan dalam 10 kategori (motivasi, cinta, kehidupan, filsafat, humor, sukses, pendidikan, sahabat, sains, spiritual). " +
+            "1005 kutipan dalam 15 kategori (motivasi, cinta, kehidupan, filsafat, humor, sukses, pendidikan, sahabat, sains, spiritual, presiden, kepemimpinan, kreativitas, keberanian, ketekunan). " +
             "Setiap user mendapat quote berbeda — tidak ada repetisi sampai semua quote habis! " +
             "Params: userId (opsional, auto dari IP+UA), category (opsional), count (1-10, default 1), reset (true untuk reset seen).",
         parameters: [
             { name: "userId", in: "query", schema: { type: "string" }, description: "User ID unik. Auto-generated dari IP+UA jika tidak diisi." },
-            { name: "category", in: "query", schema: { type: "string", enum: VALID_CATEGORIES }, description: "Filter kategori: motivasi, cinta, kehidupan, filsafat, humor, sukses, pendidikan, sahabat, sains, spiritual" },
+            { name: "category", in: "query", schema: { type: "string", enum: VALID_CATEGORIES }, description: "Filter kategori: motivasi, cinta, kehidupan, filsafat, humor, sukses, pendidikan, sahabat, sains, spiritual, presiden, kepemimpinan, kreativitas, keberanian, ketekunan" },
             { name: "count", in: "query", schema: { type: "integer", minimum: 1, maximum: 10 }, description: "Jumlah quote yang diinginkan (1-10, default 1)" },
             { name: "reset", in: "query", schema: { type: "string", enum: ["true"] }, description: "Reset seen quotes untuk user ini" },
         ],

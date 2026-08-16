@@ -14,13 +14,15 @@ const quotesData = JSON.parse(
 const VALID_CATEGORIES = [
     "motivasi", "cinta", "kehidupan", "filsafat",
     "humor", "sukses", "pendidikan", "sahabat",
-    "sains", "spiritual",
+    "sains", "spiritual", "presiden", "kepemimpinan",
+    "kreativitas", "keberanian", "ketekunan",
 ]
 
 const CATEGORY_ICONS = {
     motivasi: "🔥", cinta: "❤️", kehidupan: "🌟", filsafat: "🤔",
     humor: "😂", sukses: "🏆", pendidikan: "📚", sahabat: "🤝",
-    sains: "🔬", spiritual: "🙏",
+    sains: "🔬", spiritual: "🙏", presiden: "🇮🇩", kepemimpinan: "👑",
+    kreativitas: "🎨", keberanian: "⚔️", ketekunan: "💪",
 }
 
 const CATEGORY_DESCRIPTIONS = {
@@ -34,6 +36,11 @@ const CATEGORY_DESCRIPTIONS = {
     sahabat: "Kutipan tentang persahabatan",
     sains: "Kutipan dari ilmuwan dan dunia sains",
     spiritual: "Kutipan spiritual dan kebijaksanaan",
+    presiden: "Kutipan dari presiden & tokoh bangsa Indonesia",
+    kepemimpinan: "Kutipan tentang kepemimpinan dan memimpin",
+    kreativitas: "Kutipan tentang kreativitas dan inovasi",
+    keberanian: "Kutipan tentang keberanian dan keteguhan hati",
+    ketekunan: "Kutipan tentang ketekunan dan konsistensi",
 }
 
 const categoryStats = VALID_CATEGORIES.map(cat => {
