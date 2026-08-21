@@ -5,34 +5,51 @@ const PAGE_URL = "https://chat-deep.ai/deepseek-chat/"
 const CHAT_URL = "https://chat-deep.ai/wp-json/dsc/v1/chat"
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
-// Ambil WP-Nonce fresh tiap request (aman buat konkurensi)
-async function getNonce() {
-    const { data: html, status } = await axios.get(PAGE_URL, {
+// Ambil WP-Nonce fresh tiap request + cookies session WP (nonce + cookie saling terverifikasi)
+async function getSession() {
+    const jar = { cookies: {} }
+    const { data: html, status, headers } = await axios.get(PAGE_URL, {
         headers: {
             "User-Agent": UA,
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             "Accept-Language": "en-US,en;q=0.9,id;q=0.8"
         },
-        validateStatus: () => true
+        validateStatus: () => true,
+        maxRedirects: 5
     })
     if (status !== 200) throw new Error(`Gagal nembus halaman utama (HTTP ${status})`)
 
+    // Parse Set-Cookie headers → simple name=value map
+    const setCookies = headers["set-cookie"] || []
+    for (const sc of setCookies) {
+        const parts = sc.split(";")[0].split("=")
+        if (parts.length >= 2) {
+            jar.cookies[parts[0].trim()] = parts.slice(1).join("=").trim()
+        }
+    }
+
+    // Extract nonce from JSON config inside <script class="dsc-config">
+    let nonce = null
     const $ = cheerio.load(html)
     const configStr = $("script.dsc-config").html()
     if (configStr) {
         try {
-            const nonce = JSON.parse(configStr).nonce
-            if (nonce) return nonce
+            nonce = JSON.parse(configStr).nonce
         } catch {}
     }
-    const m = String(html).match(/"nonce"\s*:\s*"([a-zA-Z0-9]+)""/i)
-    if (m) return m[1]
+    if (!nonce) {
+        const m = String(html).match(/"nonce"\s*:\s*"([a-zA-Z0-9]+)"/i)
+        if (m) nonce = m[1]
+    }
+    if (!nonce) throw new Error("Gagal mengambil WP-Nonce (anti-bot atau struktur halaman berubah)")
 
-    throw new Error("Gagal mengambil WP-Nonce (anti-bot atau struktur halaman berubah)")
+    // Build Cookie header
+    const cookieHeader = Object.entries(jar.cookies).map(([k, v]) => `${k}=${v}`).join("; ")
+    return { nonce, cookieHeader }
 }
 
 async function chatDeep(prompt, { thinking = false } = {}) {
-    const nonce = await getNonce()
+    const { nonce, cookieHeader } = await getSession()
 
     const { data, status } = await axios.post(CHAT_URL, {
         messages: [
@@ -45,12 +62,16 @@ async function chatDeep(prompt, { thinking = false } = {}) {
         headers: {
             "User-Agent": UA,
             "X-WP-Nonce": nonce,
+            "Cookie": cookieHeader,
             "Origin": "https://chat-deep.ai",
             "Referer": PAGE_URL,
             "Content-Type": "application/json",
-            "Accept": "text/event-stream"
+            "Accept": "text/event-stream",
+            "Accept-Language": "en-US,en;q=0.9,id;q=0.8"
         },
-        validateStatus: () => true
+        validateStatus: () => true,
+        responseType: "text",
+        maxRedirects: 0
     })
     if (status !== 200) throw new Error(`Gagal menghubungi AI (HTTP ${status})`)
 

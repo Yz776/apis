@@ -272,7 +272,16 @@ export default {
                 auth: result.auth
             })
         } catch (e) {
-            res.status(500).json({ ok: false, error: e.message })
+            const msg = e.message || ''
+            // Detect geo-block / region-unsupported errors from OpenAI
+            if (msg.includes('403') || msg.toLowerCase().includes('unsupported_country') || msg.toLowerCase().includes('country, region')) {
+                return res.status(503).json({
+                    ok: false,
+                    error: 'OpenAI memblokir region ini (HTTP 403 unsupported_country_region_territory). Coba endpoint alternatif: /ai/gemini, /ai/qwen, /ai/chatdeep, atau /ai/claude3',
+                    retryAfter: 60,
+                })
+            }
+            res.status(500).json({ ok: false, error: msg })
         }
     }
 }

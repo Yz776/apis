@@ -1,5 +1,6 @@
 // /info/github-search — GitHub repository search
 import axios from "axios"
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || ""
 export default {
     route: {
         method: "get",
@@ -7,7 +8,7 @@ export default {
         auth: false,
         tags: ["Info"],
         summary: "GitHub repository search",
-        description: "Cari repository di GitHub (tanpa API key, rate-limited by GitHub).",
+        description: "Cari repository di GitHub (rate-limited by GitHub. Set env GITHUB_TOKEN untuk rate limit lebih tinggi).",
         parameters: [
             { name: "q", in: "query", required: true, description: "Query pencarian", schema: { type: "string", example: "elysia bun" } },
             { name: "sort", in: "query", required: false, description: "Sort: stars, forks, updated (default best match)", schema: { type: "string", enum: ["stars", "forks", "updated"] } },
@@ -26,11 +27,22 @@ export default {
             }
             if (req.query.sort) params.sort = req.query.sort
             params.order = req.query.order || "desc"
-            const { data } = await axios.get("https://api.github.com/search/repositories", {
+            const headers = { "Accept": "application/vnd.github+json", "User-Agent": "kangwifi-api" }
+            if (GITHUB_TOKEN) headers["Authorization"] = `Bearer ${GITHUB_TOKEN}`
+            const { data, status } = await axios.get("https://api.github.com/search/repositories", {
                 params,
-                headers: { "Accept": "application/vnd.github+json", "User-Agent": "kangwifi-api" },
+                headers,
                 timeout: 15000,
+                validateStatus: () => true,
             })
+            if (status === 403 || status === 429) {
+                return res.status(503).json({
+                    ok: false,
+                    error: `GitHub API rate-limited (HTTP ${status}). Coba lagi nanti atau set env GITHUB_TOKEN.`,
+                    retryAfter: 60,
+                })
+            }
+            if (status !== 200) return res.status(502).json({ ok: false, error: `GitHub API error ${status}: ${data?.message || "unknown"}` })
             const repos = (data.items || []).map(r => ({
                 id: r.id,
                 name: r.name,

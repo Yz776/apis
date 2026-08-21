@@ -1,6 +1,8 @@
 // /info/github-user — GitHub user info
 import axios from "axios"
 
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || ""
+
 export default {
     route: {
         method: "get",
@@ -8,7 +10,7 @@ export default {
         auth: false,
         tags: ["Info"],
         summary: "GitHub user info",
-        description: "Mengambil informasi publik user GitHub: profil, jumlah repo, follower, bio, dll.",
+        description: "Mengambil informasi publik user GitHub: profil, jumlah repo, follower, bio, dll. Set env GITHUB_TOKEN untuk rate limit lebih tinggi.",
         parameters: [
             { name: "username", in: "query", required: true, description: "Username GitHub", schema: { type: "string", example: "torvalds" } },
         ],
@@ -18,13 +20,22 @@ export default {
         const u = String(req.query.username || "").trim()
         if (!u) return res.status(400).json({ ok: false, error: "username wajib diisi" })
         try {
+            const headers = { "User-Agent": "KangwifiAPI/1.0", "Accept": "application/vnd.github+json" }
+            if (GITHUB_TOKEN) headers["Authorization"] = `Bearer ${GITHUB_TOKEN}`
             const { data, status } = await axios.get(`https://api.github.com/users/${encodeURIComponent(u)}`, {
                 timeout: 15000,
-                headers: { "User-Agent": "KangwifiAPI/1.0", "Accept": "application/vnd.github+json" },
+                headers,
                 validateStatus: () => true,
             })
             if (status === 404) return res.status(404).json({ ok: false, error: "User tidak ditemukan" })
-            if (status !== 200) return res.status(502).json({ ok: false, error: `GitHub API error ${status}` })
+            if (status === 403 || status === 429) {
+                return res.status(503).json({
+                    ok: false,
+                    error: `GitHub API rate-limited (HTTP ${status}). Coba lagi nanti atau set env GITHUB_TOKEN.`,
+                    retryAfter: 60,
+                })
+            }
+            if (status !== 200) return res.status(502).json({ ok: false, error: `GitHub API error ${status}: ${data?.message || "unknown"}` })
             res.json({
                 ok: true,
                 login: data.login,

@@ -18,8 +18,12 @@ async function fetch_html(url) {
     headers: {
       'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36',
       'accept-language': 'en-US,en;q=0.9',
+      'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
     },
   })
+  if (res.status === 403 || res.status === 503) {
+    throw new Error(`manhwalist02.asia memblokir request (Cloudflare anti-bot, HTTP ${res.status}). Situs mungkin pindah domain atau butuh proxy. Coba endpoint alternatif: /search/otakudesu atau /anime/samehadaku`)
+  }
   if (!res.ok) throw new Error(`${res.status} ${url}`)
   return cheerio.load(await res.text())
 }

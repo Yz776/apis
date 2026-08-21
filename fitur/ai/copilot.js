@@ -192,7 +192,15 @@ export default {
             try {
                 ({ conversationId, cookies } = await createConversation())
             } catch (e) {
-                return res.status(500).json({ ok: false, error: `gagal membuat percakapan: ${e.message}` })
+                const msg = e.message || ''
+                if (msg.includes('403') || msg.includes('status code 403')) {
+                    return res.status(503).json({
+                        ok: false,
+                        error: 'Copilot (Microsoft) sedang memblokir request (HTTP 403). Coba endpoint alternatif: /ai/gemini, /ai/qwen, /ai/chatdeep, atau /ai/claude3',
+                        retryAfter: 60,
+                    })
+                }
+                return res.status(500).json({ ok: false, error: `gagal membuat percakapan: ${msg}` })
             }
         }
 
