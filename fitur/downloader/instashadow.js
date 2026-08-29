@@ -80,20 +80,30 @@ async function sign(payload) {
 async function instashadow(url) {
     const { ep, pl } = parseUrl(url)
     const body = await sign(pl)
-    const { data } = await axios.post(`${BASE}/${ep}`, body, {
-        headers: {
-            accept: "*/*",
-            "accept-language": "id-ID",
-            "content-type": "application/json",
-            origin: MEDIA_BASE,
-            referer: `${MEDIA_BASE}/en`,
-            "user-agent": UA,
-        },
-        timeout: 30000,
-    })
-    if (data.e) throw new Error(data.e === "something went wrong" ? "Media tidak ditemukan atau API gagal" : data.e)
+    let resp
+    try {
+        resp = await axios.post(`${BASE}/${ep}`, body, {
+            headers: {
+                accept: "*/*",
+                "accept-language": "id-ID",
+                "content-type": "application/json",
+                origin: MEDIA_BASE,
+                referer: `${MEDIA_BASE}/en`,
+                "user-agent": UA,
+            },
+            timeout: 30000,
+            validateStatus: () => true,
+        })
+    } catch (e) {
+        throw new Error(`instashadow.com tidak dapat dihubungi: ${e.message}. Coba endpoint alternatif: /downloader/instagram atau /downloader/instagram2`)
+    }
+    if (resp.status === 403 || resp.status === 503) {
+        throw new Error(`instashadow.com memblokir request (HTTP ${resp.status}, Cloudflare anti-bot). Coba endpoint alternatif: /downloader/instagram atau /downloader/instagram2`)
+    }
+    const data = resp.data
+    if (data?.e) throw new Error(data.e === "something went wrong" ? "Media tidak ditemukan atau URL tidak valid. Pastikan post/reel publik dan tidak private." : data.e)
     const result = processResponse(data)
-    if (!result || (Array.isArray(result) && !result.length)) throw new Error("Media tidak ditemukan")
+    if (!result || (Array.isArray(result) && !result.length)) throw new Error("Media tidak ditemukan. Pastikan URL valid dan post publik.")
     return Array.isArray(result) ? result : [result]
 }
 

@@ -2,15 +2,79 @@ import axios from "axios"
 
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 const ENDPOINT = "https://translate.googleapis.com/translate_a/single"
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
+// Fallback endpoints — Google operates multiple Translate endpoints, switch if one rate-limits.
+const ENDPOINTS = [
+    "https://translate.googleapis.com/translate_a/single",
+    "https://clients5.google.com/translate_a/t",
+    "https://translate.google.com/translate_a/single",
+]
+
+// MyMemory translation API (free, no key) — used when all Google endpoints are rate-limited.
+// Limit: 5000 chars/day anonymous, ~50k with email param.
+async function translateMyMemory(text, from, to) {
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${encodeURIComponent(from === "auto" ? "en" : from)}|${encodeURIComponent(to)}`
+    const { data, status } = await axios.get(url, {
+        headers: { "user-agent": UA, "accept": "application/json" },
+        timeout: 15000,
+        validateStatus: () => true,
+    })
+    if (status !== 200) throw new Error(`MyMemory error: HTTP ${status}`)
+    const translated = data?.responseData?.translatedText || ""
+    if (!translated || translated.includes("MYMEMORY WARNING")) {
+        throw new Error("MyMemory: " + (data?.responseStatus || "unknown error"))
+    }
+    const detected = data?.responseData?.detectedLanguage || from
+    return { translated, detected }
+}
 
 // Terjemah via endpoint gratis Google (tanpa API key / package tambahan).
 // from "auto" = deteksi otomatis. Mengembalikan teks + bahasa sumber terdeteksi.
+// Auto-retry 3x dengan backoff + rotate endpoints saat kena 429 (rate-limited).
+// Final fallback: MyMemory API jika semua Google endpoints rate-limited.
 export async function translate(text, from = "auto", to = "id") {
-    const url = `${ENDPOINT}?client=gtx&sl=${encodeURIComponent(from)}&tl=${encodeURIComponent(to)}&dt=t&q=${encodeURIComponent(text)}`
-    const { data } = await axios.get(url, { headers: { "user-agent": UA }, timeout: 30000 })
-    // data: [ [[segTerjemah, segAsli, ...], ...], null, detectedLang, ... ]
-    const translated = (data?.[0] || []).map(seg => seg?.[0]).filter(Boolean).join("")
-    return { translated, detected: data?.[2] || from }
+    let lastErr = null
+    for (let attempt = 0; attempt < 3; attempt++) {
+        const endpoint = ENDPOINTS[attempt % ENDPOINTS.length]
+        const url = `${endpoint}?client=gtx&sl=${encodeURIComponent(from)}&tl=${encodeURIComponent(to)}&dt=t&q=${encodeURIComponent(text)}`
+        try {
+            const { data, status } = await axios.get(url, {
+                headers: { "user-agent": UA, "accept": "application/json,text/plain,*/*" },
+                timeout: 15000,
+                validateStatus: () => true,
+            })
+            if (status === 429 || status === 503) {
+                lastErr = new Error(`Google Translate rate-limited (HTTP ${status})`)
+                await sleep(800 * (attempt + 1))
+                continue
+            }
+            if (status !== 200) {
+                lastErr = new Error(`Google Translate error: HTTP ${status}`)
+                continue
+            }
+            // data: [ [[segTerjemah, segAsli, ...], ...], null, detectedLang, ... ]
+            const translated = (data?.[0] || []).map(seg => seg?.[0]).filter(Boolean).join("")
+            if (translated) {
+                return { translated, detected: data?.[2] || from }
+            }
+        } catch (e) {
+            lastErr = e
+            await sleep(500 * (attempt + 1))
+        }
+    }
+
+    // Final fallback: MyMemory API when Google is fully rate-limited
+    try {
+        const result = await translateMyMemory(text, from, to)
+        return { ...result, source: "mymemory-fallback" }
+    } catch (e) {
+        const msg = lastErr?.message || e.message
+        if (msg.includes("429") || msg.includes("rate-limited")) {
+            throw new Error("Google Translate & MyMemory sedang rate-limited (HTTP 429). Coba lagi dalam beberapa menit. Endpoint alternatif: /tools/translate atau gunakan /ai/qwen untuk parafase multi-bahasa.")
+        }
+        throw lastErr || new Error(`Translate gagal — Google error: ${msg}, MyMemory error: ${e.message}`)
+    }
 }
 
 export default {

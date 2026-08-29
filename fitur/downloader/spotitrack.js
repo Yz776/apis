@@ -69,13 +69,16 @@ async function callAction(spotifyUrl) {
 
         if (!res.ok) {
             if (attempt === 0) continue // mungkin token basi -> refresh & coba lagi
-            throw new Error(`Server Action menolak permintaan (HTTP ${res.status})`)
+            if (res.status === 404) {
+                throw new Error("spotitrack.com sudah tidak aktif (HTTP 404). Coba endpoint alternatif: /downloader/spotidown atau /downloader/spotify")
+            }
+            throw new Error(`Server Action menolak permintaan (HTTP ${res.status}). Coba endpoint alternatif: /downloader/spotidown atau /downloader/spotify`)
         }
 
         const line = (await res.text()).split("\n").find(l => l.startsWith("1:"))
         if (!line) {
             if (attempt === 0) continue
-            throw new Error("Gagal mengekstrak metadata dari server stream")
+            throw new Error("Gagal mengekstrak metadata dari server stream. Coba endpoint alternatif: /downloader/spotidown")
         }
 
         const json = JSON.parse(line.slice(2))

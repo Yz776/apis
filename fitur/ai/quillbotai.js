@@ -10,7 +10,7 @@ async function quillbotAi(input) {
   const traceid = crypto.randomBytes(8).toString('hex');
   const spanid = crypto.randomBytes(8).toString('hex');
 
-  try {
+    try {
     const res = await fetch(`https://quillbot.com/api/ai-chat/chat/conversation/${crypto.randomUUID()}`, {
       method: 'POST',
       signal: ctl.signal,
@@ -38,7 +38,12 @@ async function quillbotAi(input) {
         origin: { name: 'ai-chat.chat', url: 'https://quillbot.com' }
       })
     });
-    if (!res.ok) throw new Error(`${res.status}`);
+    if (!res.ok) {
+      if (res.status === 403) {
+        throw new Error('quillbot.com memblokir request (HTTP 403, Cloudflare anti-bot). Coba endpoint alternatif: /ai/qwen, /ai/gemini, /ai/chatdeep, atau /ai/claude3');
+      }
+      throw new Error(`${res.status}`);
+    }
     if (!res.body) throw new Error('stream empty');
 
     const reader = res.body.getReader();

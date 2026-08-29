@@ -43,7 +43,14 @@ async function pindown(pinUrl) {
             cookie: cookies,
         },
     })
-    if (!j || j.error || !j.html) throw new Error(j?.message || "Media tidak ditemukan atau URL tidak valid")
+    if (!j || j.error || !j.html) {
+        // Common pindown error patterns
+        const errMsg = j?.message || ""
+        if (errMsg.toLowerCase().includes("private") || errMsg.toLowerCase().includes("unavailable")) {
+            throw new Error("Pin Pinterest private atau tidak tersedia. Pindown.io tidak bisa mengakses pin private. Coba pin publik atau gunakan endpoint lain.")
+        }
+        throw new Error(errMsg || "Media tidak ditemukan. Pastikan URL Pinterest valid dan pin publik (bukan private).")
+    }
 
     // 3) parse hasil
     const $ = cheerio.load(j.html)

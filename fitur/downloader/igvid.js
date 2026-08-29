@@ -8,7 +8,7 @@ const DOMAIN = "api-ak.igvideodownloader.net"
 
 async function igvid(igUrl) {
     const body = new URLSearchParams({ auth: AUTH, domain: DOMAIN, origin: "source", link: igUrl }).toString()
-    const { data: j } = await axios.post(API, body, {
+    const { data: j, status } = await axios.post(API, body, {
         headers: {
             "user-agent": UA,
             "content-type": "application/x-www-form-urlencoded",
@@ -19,9 +19,14 @@ async function igvid(igUrl) {
         validateStatus: () => true,
     })
 
+    // "analyze_risk" / "analyze failed" = upstream flagged our IP as bot
+    if (j?.status_code === "analyze_risk" || j?.msg === "analyze failed") {
+        throw new Error("igvideodownloader.net menolak (status: analyze_risk, anti-bot). Coba endpoint alternatif: /downloader/instagram, /downloader/instagram2, atau /downloader/instashadow")
+    }
+
     const d = j?.data
     if (!d || !Array.isArray(d.media)) {
-        throw new Error(j?.msg || "Media tidak ditemukan atau URL tidak valid")
+        throw new Error(j?.msg || "Media tidak ditemukan atau URL tidak valid. Coba alternatif: /downloader/instagram atau /downloader/instagram2")
     }
 
     const items = []

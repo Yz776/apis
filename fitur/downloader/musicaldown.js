@@ -93,7 +93,12 @@ async function musicaldown(tiktokUrl) {
 
     if (!medias.length) {
         const err = $(".alert, .red-text, [class*='error']").first().text().trim()
-        throw new Error(err || "Media tidak ditemukan atau URL tidak valid")
+        // Detect Cloudflare anti-bot page
+        const isCloudflare = out.includes("Just a moment") || out.includes("cf-browser-verification") || out.includes("challenge-platform")
+        if (isCloudflare) {
+            throw new Error("musicaldown.com memblokir request (Cloudflare anti-bot). Coba endpoint alternatif: /downloader/ssstik atau /downloader/tikwm")
+        }
+        throw new Error(err || "Media tidak ditemukan atau URL TikTok tidak valid. Pastikan URL post TikTok publik. Coba alternatif: /downloader/ssstik atau /downloader/tikwm")
     }
     return { author, title, thumbnail, total: medias.length, medias }
 }
