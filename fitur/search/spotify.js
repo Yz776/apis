@@ -148,7 +148,11 @@ async function spotifySearch(searchTerm, limit) {
         duration: t.duration,
         thumb: t.thumb,
         url: t.url,
-        urlpreview: previews[i]
+        // Spotify's public preview URL — limited to ~30 seconds by Spotify policy.
+        // For the FULL track MP3, pass `url` to /downloader/spotidown or /downloader/spotify.
+        urlpreview: previews[i],
+        urlpreviewDurationSec: previews[i] ? 30 : null,
+        downloadFull: t.url ? `/downloader/spotidown?url=${encodeURIComponent(t.url)}` : null
     }))
 }
 
@@ -159,7 +163,11 @@ export default {
         auth: false,
         tags: ["Search"],
         summary: "Cari lagu di Spotify",
-        description: "Mencari lagu di Spotify berdasarkan kata kunci dan mengembalikan data track beserta preview audio.",
+        description: "Mencari lagu di Spotify berdasarkan kata kunci. Mengembalikan:\n" +
+            "- `url`: URL track Spotify (kirim ini ke /downloader/spotidown untuk MP3 FULL)\n" +
+            "- `urlpreview`: URL preview MP3 30-detik (Spotify official preview, bukan lagu full)\n" +
+            "- `downloadFull`: endpoint /downloader/spotidown siap pakai untuk download MP3 full\n\n" +
+            "**PENTING:** `urlpreview` hanya 30 detik sesuai kebijakan Spotify. Untuk lagu FULL, gunakan `downloadFull` atau kirim `url` ke /downloader/spotidown.",
         parameters: [
             {
                 name: "query",
@@ -197,7 +205,9 @@ export default {
                                             duration: { type: "string", example: "3:45" },
                                             thumb: { type: "string", format: "uri", nullable: true },
                                             url: { type: "string", format: "uri", nullable: true },
-                                            urlpreview: { type: "string", format: "uri", nullable: true }
+                                            urlpreview: { type: "string", format: "uri", nullable: true, description: "Preview MP3 30-detik (kebijakan Spotify). BUKAN lagu full." },
+                                            urlpreviewDurationSec: { type: "integer", nullable: true, description: "Durasi preview dalam detik (biasanya 30)" },
+                                            downloadFull: { type: "string", nullable: true, description: "Endpoint /downloader/spotidown siap pakai untuk download MP3 full" }
                                         }
                                     }
                                 }
