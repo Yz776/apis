@@ -64,28 +64,31 @@ async function fetchViaJina(targetUrl) {
 // 2. Fall back to scraping brand pages by matching first word of query
 // 3. Brand URL pattern: /{brand-slug}-phones-{id}.php
 async function searchGsmArena(query) {
-    const queryWords = query.toLowerCase().split(/\s+/).filter(Boolean)
+    // Split on whitespace AND hyphens so "vivo-V2434" → ["vivo", "v2434"]
+    const queryWords = query.toLowerCase().split(/[\s-]+/).filter(Boolean)
     const firstWord = queryWords[0]
 
     // Attempt 1: Search results page (works sometimes via r.jina.ai)
+    // — but only try this if query has multiple words (single-word brand like "vivo" doesn't need search)
     let searchError = null
-    try {
-        const url = `${GSMARENA}/res.php3?sName=${encodeURIComponent(query)}`
-        const html = await fetchViaJina(url)
-        const $ = cheerio.load(html)
-        const phones = parseMakersList($)
-        if (phones.length > 0) {
-            // Filter by all query words
-            const filtered = phones.filter((p) => {
-                const phoneName = (p.name || "").toLowerCase()
-                return queryWords.every((qw) => phoneName.includes(qw))
-            })
-            if (filtered.length > 0) {
-                return { phones: filtered, source: "search-results" }
+    if (queryWords.length > 1) {
+        try {
+            const url = `${GSMARENA}/res.php3?sName=${encodeURIComponent(query)}`
+            const html = await fetchViaJina(url)
+            const $ = cheerio.load(html)
+            const phones = parseMakersList($)
+            if (phones.length > 0) {
+                const filtered = phones.filter((p) => {
+                    const haystack = `${p.name} ${p.description || ""} ${p.slug || ""}`.toLowerCase()
+                    return queryWords.every((qw) => matchQuery(qw, haystack))
+                })
+                if (filtered.length > 0) {
+                    return { phones: filtered, source: "search-results" }
+                }
             }
+        } catch (e) {
+            searchError = e.message
         }
-    } catch (e) {
-        searchError = e.message
     }
 
     // Attempt 2: Brand page by first word (apple, samsung, xiaomi, dll)
@@ -94,7 +97,7 @@ async function searchGsmArena(query) {
         return {
             phones: [],
             source: "brand-pages",
-            error: searchError || `Brand tidak dikenali: "${firstWord}". Coba brand populer: apple, samsung, xiaomi, oppo, vivo, realme, oneplus, google, motorola, huawei, honor, sony, nokia, nothing, infinix, tecno, asus, lg, htc, lenovo, microsoft, meizu, blackberry, zte, sharp, poco, iqoo.`,
+            error: `Brand tidak dikenali: "${firstWord}". Coba brand populer: apple, iphone, ipad, samsung, galaxy, xiaomi, redmi, poco, oppo, vivo, realme, huawei, honor, oneplus, motorola, moto, google, pixel, sony, xperia, nokia, nothing, infinix, tecno, asus, rog, zenfone, lg, htc, lenovo, microsoft, surface, meizu, blackberry, zte, nubia, sharp, iqoo.`,
         }
     }
 
@@ -149,6 +152,18 @@ async function searchGsmArena(query) {
         const haystack = `${p.name} ${p.description || ""} ${p.slug || ""}`.toLowerCase()
         return remainingWords.every((qw) => matchQuery(qw, haystack))
     })
+
+    // If filter returns nothing but brand has phones, return ALL brand phones
+    // with helpful hint — user might be searching for a model code (V2434) that
+    // isn't in the phone's name (GSMArena lists phones by marketing name, not model code)
+    if (filtered.length === 0 && allPhones.length > 0) {
+        return {
+            phones: allPhones,
+            source: "brand-pages",
+            error: `Tidak ada match spesifik untuk "${query}". GSMArena menyimpan phone by nama marketing (mis. "Vivo Y36") bukan kode model (mis. "V2434"). Menampilkan semua ${allPhones.length} phone dari brand "${firstWord}" — cari manual yang cocok, atau coba cari via ?slug= kalau sudah tahu URL-nya.`,
+        }
+    }
+
     return { phones: filtered, source: "brand-pages" }
 }
 
@@ -440,6 +455,7 @@ export default {
                 total: result.phones.length,
                 returned: limited.length,
                 source: result.source,
+                ...(result.error ? { warning: result.error } : {}),
                 phones: limited,
                 hint: "Untuk spec lengkap, ambil slug/url dari hasil di atas dan kirim ke ?url= atau ?slug=",
             })
