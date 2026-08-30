@@ -20,19 +20,21 @@ const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 // Reader-proxy helper: r.jina.ai bypass Cloudflare Turnstile + return raw HTML
 // r.jina.ai returns small cached response (237-2700 bytes = Turnstile challenge) for some URLs.
 // Detail pages (apple_iphone_15-12559.php) typically work; search.php3 / res.php3 are blocked.
-// Strategy: retry up to 3x with backoff, accept response only if size > 5000 bytes.
+// Strategy: retry up to 2x with backoff, accept response only if size > 5000 bytes.
+// We use 2 retries (not 3) so model-code searches (which fetch 50 detail pages) don't take
+// 5+ minutes total. Each retry has a 1.5s backoff.
 async function fetchViaJina(targetUrl) {
     let lastErr
-    for (let attempt = 0; attempt < 3; attempt++) {
+    for (let attempt = 0; attempt < 2; attempt++) {
         try {
             const { data, status } = await axios.get(`${JINA_READER}/${targetUrl}`, {
                 headers: {
                     "X-No-Cache": "true",
                     "X-Return-Format": "html",
-                    "X-Timeout": "60",
+                    "X-Timeout": "30",
                     "Accept": "text/html,application/xhtml+xml",
                 },
-                timeout: 75000,
+                timeout: 45000,
                 validateStatus: () => true,
                 responseType: "text",
                 maxRedirects: 5,
@@ -47,8 +49,7 @@ async function fetchViaJina(targetUrl) {
                 continue
             }
             // Small response (Turnstile cached, ~2KB) — don't keep retrying forever
-            lastErr = new Error(`GSMArena mengembalikan halaman anti-bot Turnstile (size=${data?.length || 0}). Endpoint ini diblokir Cloudflare, mungkin URL harus diakses via /search/gsmarena?slug= atau coba endpoint lain.`)
-            // Don't retry — just exit fast
+            lastErr = new Error(`GSMArena mengembalikan halaman anti-bot Turnstile (size=${data?.length || 0}).`)
             break
         } catch (e) {
             lastErr = e
@@ -67,6 +68,12 @@ async function searchGsmArena(query) {
     // Split on whitespace AND hyphens so "vivo-V2434" → ["vivo", "v2434"]
     const queryWords = query.toLowerCase().split(/[\s-]+/).filter(Boolean)
     const firstWord = queryWords[0]
+    const remainingWords = queryWords.slice(1)
+    const modelCode = remainingWords.join(" ") // e.g. "v2434" or "rmx3630"
+
+    // Detect model-code pattern: e.g. V2434, RMX3630, MZB, etc.
+    // (1-4 letters + 3-5 digits, optionally followed by more letters/digits)
+    const isModelCode = /^[a-z]{1,4}\d{3,6}[a-z0-9]*$/i.test(modelCode)
 
     // Attempt 1: Search results page (works sometimes via r.jina.ai)
     // — but only try this if query has multiple words (single-word brand like "vivo" doesn't need search)
@@ -101,6 +108,18 @@ async function searchGsmArena(query) {
         }
     }
 
+    // Attempt 3 (model-code search): If query is a model-code pattern like "vivo-V2434"
+    // → fetch detail pages of brand phones and check the "Models" spec field (Misc → Models).
+    // GSMArena stores model codes in data-spec="models" field, NOT in the brand-page listing.
+    // This is the only reliable way to map "V2434" → "Vivo Y29 4G".
+    if (isModelCode && modelCode.length >= 4) {
+        const modelResults = await searchByModelCode(modelCode, brandCandidates)
+        if (modelResults.length > 0) {
+            return { phones: modelResults, source: "model-code-search" }
+        }
+        // If model-code search found nothing, fall through to brand-page list (return all)
+    }
+
     const allPhones = []
     for (const brand of brandCandidates) {
         try {
@@ -113,7 +132,6 @@ async function searchGsmArena(query) {
 
             // Check if first page has any match — if yes, we're done
             // If not, fetch up to 4 more pages (50 phones each, total ~250)
-            const remainingWords = queryWords.slice(1)
             const hasMatchOnPage1 = remainingWords.length === 0 || brandPhones.some((p) => {
                 const haystack = `${p.name} ${p.description || ""} ${p.slug || ""}`.toLowerCase()
                 return remainingWords.every((qw) => matchQuery(qw, haystack))
@@ -146,7 +164,6 @@ async function searchGsmArena(query) {
     }
 
     // Filter by remaining query words (skip first word = brand)
-    const remainingWords = queryWords.slice(1)
     const filtered = allPhones.filter((p) => {
         if (remainingWords.length === 0) return true
         const haystack = `${p.name} ${p.description || ""} ${p.slug || ""}`.toLowerCase()
@@ -165,6 +182,90 @@ async function searchGsmArena(query) {
     }
 
     return { phones: filtered, source: "brand-pages" }
+}
+
+// Model-code search: fetch detail pages of brand phones and check the "Models" spec field.
+// GSMArena stores phone model codes (e.g., V2434, RMX3630) in the Misc → Models spec field,
+// NOT in the brand-page listing. So we need to fetch each candidate's detail page and
+// grep for the model code in the data-spec="models" field.
+//
+// Strategy:
+//   1. Fetch first page of brand (50 phones)
+//   2. For each phone on the page, fetch its detail page (10 at a time)
+//   3. Check if model code appears anywhere in the page (especially data-spec="models")
+//   4. If found, return the phone with the matched model code + Models field
+//   5. STOP — don't fetch more pages (limit to first 50 phones to avoid long delays)
+//
+// This is ~10-30 seconds for first 50 phones (10 parallel batches × 3s each).
+// If model code is older (e.g. phone from 2021), this won't find it — user should
+// use ?slug= directly with a Google-searched URL.
+const MODEL_SEARCH_MAX_PHONES = 50 // max 1 page (50 phones)
+const MODEL_SEARCH_BATCH_SIZE = 10  // fetch 10 detail pages in parallel
+
+async function searchByModelCode(modelCode, brandCandidates) {
+    const upperCode = modelCode.toUpperCase()
+    const matched = []
+    const checked = { count: 0 }
+
+    for (const brand of brandCandidates) {
+        if (matched.length > 0 || checked.count >= MODEL_SEARCH_MAX_PHONES) break
+
+        // Fetch first page of brand
+        let brandPhones = []
+        try {
+            const url1 = `${GSMARENA}/${brand.slug}.php`
+            const html1 = await fetchViaJina(url1)
+            const $1 = cheerio.load(html1)
+            brandPhones = parseMakersList($1)
+        } catch {
+            continue
+        }
+
+        // Limit to first 50 phones (1 page)
+        const phonesToCheck = brandPhones.slice(0, MODEL_SEARCH_MAX_PHONES - checked.count)
+
+        // Check each phone's detail page for the model code (in batches of 10)
+        const checkBatch = async (phones) => {
+            const results = await Promise.all(
+                phones.map(async (phone) => {
+                    try {
+                        const html = await fetchViaJina(phone.url)
+                        return { phone, html }
+                    } catch {
+                        return null
+                    }
+                })
+            )
+            const found = []
+            for (const r of results) {
+                if (!r) continue
+                // Check if model code appears anywhere in the detail page (case-insensitive)
+                const pageUpper = r.html.toUpperCase()
+                if (pageUpper.includes(upperCode)) {
+                    // Extract Models spec value for confirmation
+                    const m = r.html.match(/data-spec="models">([^<]+)/i)
+                    const modelsField = m ? m[1].trim() : null
+                    found.push({
+                        ...r.phone,
+                        matchedModelCode: upperCode,
+                        modelsField,
+                    })
+                }
+            }
+            return found
+        }
+
+        for (let i = 0; i < phonesToCheck.length; i += MODEL_SEARCH_BATCH_SIZE) {
+            if (checked.count >= MODEL_SEARCH_MAX_PHONES) break
+            const batch = phonesToCheck.slice(i, i + MODEL_SEARCH_BATCH_SIZE)
+            const found = await checkBatch(batch)
+            checked.count += batch.length
+            matched.push(...found)
+            if (matched.length > 0) break
+        }
+    }
+
+    return matched
 }
 
 // Match query word against haystack with word-boundary for short tokens
