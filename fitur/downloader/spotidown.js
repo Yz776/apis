@@ -11,24 +11,68 @@ const HEADERS = {
     "x-requested-with": "XMLHttpRequest",
 }
 
+// ─── Session cache ────────────────────────────────────────────────────────────
+// spotidown.app requires fresh session (cookie + hidden token) for each POST /action.
+// Without cache, every download needs 3 sequential HTTP requests:
+//   1. GET / (homepage) — fetch cookie + hidden token (~3-8s)
+//   2. POST /action — submit Spotify URL, get HTML form (~3-8s)
+//   3. POST /action/track — get MP3 link (~3-8s)
+// Total: 9-24s, often >30s when upstream is slow → bot timeout.
+//
+// With cache: step 1 is skipped on subsequent requests → 6-16s total.
+// Session validity: spotidown tokens live ~5 minutes, we cache for 3 minutes.
+const SESSION_TTL_MS = 3 * 60 * 1000 // 3 minutes
+let sessionCache = { token: null, cookie: null, ts: 0, pendingPromise: null }
+
 // spotidown menanam hidden field anti-bot dengan NAMA acak per-load (mis. _NMURm)
 // + cookie session_data. Keduanya harus dikirim ulang saat POST /action.
 async function getSession() {
-    const { data: html, headers } = await axios.get(`${BASE}/`, {
-        headers: { "user-agent": UA, accept: "text/html" },
-    })
-    const $ = cheerio.load(html)
-    let token = null
-    $('form[name="spotifyurl"] input[type="hidden"]').each((_, el) => {
-        const name = $(el).attr("name")
-        // lewati g-recaptcha-response; ambil field acak _XxxxX dengan value hex
-        if (name && /^_[A-Za-z]+$/.test(name)) token = { name, value: $(el).attr("value") }
-    })
-    if (!token?.value) throw new Error("Gagal mengambil token sesi dari spotidown")
+    // Return cached session if fresh
+    if (sessionCache.token && sessionCache.cookie && Date.now() - sessionCache.ts < SESSION_TTL_MS) {
+        return { token: sessionCache.token, cookie: sessionCache.cookie }
+    }
 
-    const setCookie = headers["set-cookie"] || []
-    const cookie = setCookie.map(c => c.split(";")[0]).join("; ")
-    return { token, cookie }
+    // Dedupe: if multiple requests come in simultaneously, share one getSession call
+    if (sessionCache.pendingPromise) {
+        return sessionCache.pendingPromise
+    }
+
+    sessionCache.pendingPromise = (async () => {
+        try {
+            const { data: html, headers } = await axios.get(`${BASE}/`, {
+                headers: { "user-agent": UA, accept: "text/html" },
+                timeout: 10000,
+                maxRedirects: 5,
+            })
+            const $ = cheerio.load(html)
+            let token = null
+            $('form[name="spotifyurl"] input[type="hidden"]').each((_, el) => {
+                const name = $(el).attr("name")
+                // lewati g-recaptcha-response; ambil field acak _XxxxX dengan value hex
+                if (name && /^_[A-Za-z]+$/.test(name)) token = { name, value: $(el).attr("value") }
+            })
+            if (!token?.value) throw new Error("Gagal mengambil token sesi dari spotidown")
+
+            const setCookie = headers["set-cookie"] || []
+            const cookie = setCookie.map(c => c.split(";")[0]).join("; ")
+
+            sessionCache.token = token
+            sessionCache.cookie = cookie
+            sessionCache.ts = Date.now()
+            return { token, cookie }
+        } finally {
+            sessionCache.pendingPromise = null
+        }
+    })()
+    return sessionCache.pendingPromise
+}
+
+// Force refresh session (called when /action returns token error)
+async function refreshSession() {
+    sessionCache.ts = 0
+    sessionCache.token = null
+    sessionCache.cookie = null
+    return getSession()
 }
 
 // Parse HTML balasan /action/track -> link MP3 final + cover
@@ -57,18 +101,39 @@ function decodeMeta(b64) {
 
 // POST /action -> HTML berisi satu/lebih <form name="submitspurl"> (data/base/token)
 async function callAction(spotifyUrl) {
-    const { token, cookie } = await getSession()
-    const reqHeaders = { ...HEADERS, cookie, "content-type": "application/x-www-form-urlencoded" }
+    let { token, cookie } = await getSession()
+    let reqHeaders = { ...HEADERS, cookie, "content-type": "application/x-www-form-urlencoded" }
 
     const body = new URLSearchParams({
         url: spotifyUrl,
         "g-recaptcha-response": "dummy", // tidak diverifikasi server
         [token.name]: token.value,
     }).toString()
-    const { data: action } = await axios.post(`${BASE}/action`, body, {
+
+    let { data: action } = await axios.post(`${BASE}/action`, body, {
         headers: reqHeaders,
         validateStatus: () => true,
+        timeout: 15000,
     })
+
+    // If token expired/invalid, refresh session and retry ONCE
+    if (action?.errorcode === "error_token" || (action?.error && /token|refresh/i.test(action?.message || ""))) {
+        await refreshSession()
+        ;({ token, cookie } = await getSession())
+        reqHeaders = { ...HEADERS, cookie, "content-type": "application/x-www-form-urlencoded" }
+        const retryBody = new URLSearchParams({
+            url: spotifyUrl,
+            "g-recaptcha-response": "dummy",
+            [token.name]: token.value,
+        }).toString()
+        const retry = await axios.post(`${BASE}/action`, retryBody, {
+            headers: reqHeaders,
+            validateStatus: () => true,
+            timeout: 15000,
+        })
+        action = retry.data
+    }
+
     if (!action || action.error) throw new Error(action?.message || "spotidown menolak permintaan (/action)")
     return { html: action.data || "", reqHeaders }
 }
@@ -100,6 +165,7 @@ async function scrapeTrack(spotifyUrl) {
     const { data: track } = await axios.post(`${BASE}/action/track`, trackBody, {
         headers: reqHeaders,
         validateStatus: () => true,
+        timeout: 15000,
     })
     if (!track || track.error) {
         const msg = track?.message || "Gagal mengambil link MP3"
