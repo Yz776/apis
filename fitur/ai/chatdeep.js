@@ -117,12 +117,28 @@ async function chatDeep(prompt, { thinking = false } = {}) {
         try {
             const parsed = JSON.parse(payloadStr)
 
-            // Handle error events (e.g. quota exhausted / upstream billing issue)
-            if (currentEvent === "error" || parsed.status === 402 || parsed.message?.includes("insufficient balance")) {
-                streamError = parsed.message || "Upstream error"
-                if (parsed.status === 402) {
-                    streamError = "chat-deep.ai: DeepSeek API balance habis (HTTP 402). Coba endpoint alternatif: /ai/qwen atau /ai/gemini"
+            // Handle error events from chat-deep.ai
+            if (currentEvent === "error" || parsed.status >= 400 || parsed.message) {
+                const msg = parsed.message || "Upstream error"
+                const status = parsed.status
+
+                // DeepSeek API key invalid (upstream's problem, not ours)
+                if (status === 401 || /api key/i.test(msg) || /rejected/i.test(msg)) {
+                    streamError = "chat-deep.ai: API key DeepSeek mereka invalid/expired (HTTP 401, masalah di sisi upstream). Coba endpoint alternatif: /ai/qwen, /ai/gemini, atau /ai/claude3"
+                    continue
                 }
+                // Quota exhausted
+                if (status === 429 || /quota|limit/i.test(msg)) {
+                    streamError = `chat-deep.ai: Quota habis (limit: ${quota?.day?.limit || "?"}/hari). Coba lagi nanti atau pakai /ai/qwen, /ai/gemini`
+                    continue
+                }
+                // Insufficient balance
+                if (status === 402 || /balance|insufficient/i.test(msg)) {
+                    streamError = "chat-deep.ai: DeepSeek API balance habis (HTTP 402, masalah upstream). Coba endpoint alternatif: /ai/qwen atau /ai/gemini"
+                    continue
+                }
+                // Generic
+                streamError = `chat-deep.ai error: ${msg}`
                 continue
             }
 

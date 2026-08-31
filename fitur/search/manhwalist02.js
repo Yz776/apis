@@ -14,13 +14,35 @@ const config = {
 }
 
 async function fetch_html(url) {
-  const res = await fetch(url, {
-    headers: {
-      'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36',
-      'accept-language': 'en-US,en;q=0.9',
-      'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    },
-  })
+  let res
+  try {
+    res = await fetch(url, {
+      headers: {
+        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36',
+        'accept-language': 'en-US,en;q=0.9',
+        'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      },
+      redirect: 'manual', // detect redirect to non-manhwa domain
+    })
+  } catch (e) {
+    throw new Error(`Tidak bisa terhubung ke manhwalist02.asia: ${e.message}. Situs mungkin sudah mati atau pindah domain. Coba endpoint alternatif: /search/otakudesu atau /anime/samehadaku`)
+  }
+
+  // Detect redirect to a different domain (site sold/moved)
+  const location = res.headers.get('location') || ''
+  if (res.status >= 300 && res.status < 400 && location) {
+    if (!/manhwalist/i.test(location)) {
+      throw new Error(`manhwalist02.asia sudah dijual/pindah — redirect ke ${location}. Situs manhwa tidak lagi aktif. Coba endpoint alternatif: /search/otakudesu atau /anime/samehadaku`)
+    }
+    // Same-domain redirect: follow manually
+    res = await fetch(location, {
+      headers: {
+        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36',
+        'accept-language': 'en-US,en;q=0.9',
+      },
+    })
+  }
+
   if (res.status === 403 || res.status === 503) {
     throw new Error(`manhwalist02.asia memblokir request (Cloudflare anti-bot, HTTP ${res.status}). Situs mungkin pindah domain atau butuh proxy. Coba endpoint alternatif: /search/otakudesu atau /anime/samehadaku`)
   }
