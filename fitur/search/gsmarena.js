@@ -20,9 +20,8 @@ const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 // Reader-proxy helper: r.jina.ai bypass Cloudflare Turnstile + return raw HTML
 // r.jina.ai returns small cached response (237-2700 bytes = Turnstile challenge) for some URLs.
 // Detail pages (apple_iphone_15-12559.php) typically work; search.php3 / res.php3 are blocked.
-// Strategy: retry up to 2x with backoff, accept response only if size > 5000 bytes.
-// We use 2 retries (not 3) so model-code searches (which fetch 50 detail pages) don't take
-// 5+ minutes total. Each retry has a 1.5s backoff.
+// Strategy: 1 retry only (was 2), 20s timeout (was 30s).
+// Production note: Cloudflare 60s timeout means total request must finish < 50s.
 async function fetchViaJina(targetUrl) {
     let lastErr
     for (let attempt = 0; attempt < 2; attempt++) {
@@ -31,10 +30,10 @@ async function fetchViaJina(targetUrl) {
                 headers: {
                     "X-No-Cache": "true",
                     "X-Return-Format": "html",
-                    "X-Timeout": "30",
+                    "X-Timeout": "20",
                     "Accept": "text/html,application/xhtml+xml",
                 },
-                timeout: 45000,
+                timeout: 25000,
                 validateStatus: () => true,
                 responseType: "text",
                 maxRedirects: 5,
@@ -45,7 +44,7 @@ async function fetchViaJina(targetUrl) {
             }
             if (status === 403 || status === 429) {
                 lastErr = new Error(`GSMArena reader rate-limited (HTTP ${status}).`)
-                await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)))
+                await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)))
                 continue
             }
             // Small response (Turnstile cached, ~2KB) — don't keep retrying forever
@@ -53,7 +52,7 @@ async function fetchViaJina(targetUrl) {
             break
         } catch (e) {
             lastErr = e
-            await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)))
+            await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)))
         }
     }
     throw lastErr || new Error("GSMArena reader gagal")
@@ -191,24 +190,29 @@ async function searchGsmArena(query) {
 //
 // Strategy:
 //   1. Fetch first page of brand (50 phones)
-//   2. For each phone on the page, fetch its detail page (10 at a time)
-//   3. Check if model code appears anywhere in the page (especially data-spec="models")
-//   4. If found, return the phone with the matched model code + Models field
-//   5. STOP — don't fetch more pages (limit to first 50 phones to avoid long delays)
+//   2. Take FIRST 20 phones only (limit to avoid Cloudflare 60s timeout in production)
+//   3. Fetch detail page in batches of 5 parallel (10 if user wants faster)
+//   4. Check if model code appears anywhere in the page
+//   5. If found, return immediately with model code + Models spec field
 //
-// This is ~10-30 seconds for first 50 phones (10 parallel batches × 3s each).
-// If model code is older (e.g. phone from 2021), this won't find it — user should
-// use ?slug= directly with a Google-searched URL.
-const MODEL_SEARCH_MAX_PHONES = 50 // max 1 page (50 phones)
-const MODEL_SEARCH_BATCH_SIZE = 10  // fetch 10 detail pages in parallel
+// Performance: 20 phones × 5s avg / 5 parallel = ~20-25s total.
+// Production Cloudflare allows ~60s, so this fits comfortably.
+//
+// Limitation: Only checks 20 most recent phones. For older models (2022 and before),
+// user should use ?slug= directly with Google-searched URL.
+const MODEL_SEARCH_MAX_PHONES = 20 // max 20 phones (was 50)
+const MODEL_SEARCH_BATCH_SIZE = 5  // fetch 5 detail pages in parallel (was 10)
+const MODEL_SEARCH_TIMEOUT_MS = 25000 // hard timeout per batch (5 phones × 5s = 25s max)
 
 async function searchByModelCode(modelCode, brandCandidates) {
     const upperCode = modelCode.toUpperCase()
     const matched = []
     const checked = { count: 0 }
+    const startTime = Date.now()
 
     for (const brand of brandCandidates) {
         if (matched.length > 0 || checked.count >= MODEL_SEARCH_MAX_PHONES) break
+        if (Date.now() - startTime > MODEL_SEARCH_TIMEOUT_MS) break
 
         // Fetch first page of brand
         let brandPhones = []
@@ -221,10 +225,10 @@ async function searchByModelCode(modelCode, brandCandidates) {
             continue
         }
 
-        // Limit to first 50 phones (1 page)
+        // Limit to first 20 phones (top 20 most recent from this brand)
         const phonesToCheck = brandPhones.slice(0, MODEL_SEARCH_MAX_PHONES - checked.count)
 
-        // Check each phone's detail page for the model code (in batches of 10)
+        // Check each phone's detail page for the model code (in batches of 5)
         const checkBatch = async (phones) => {
             const results = await Promise.all(
                 phones.map(async (phone) => {
@@ -257,6 +261,7 @@ async function searchByModelCode(modelCode, brandCandidates) {
 
         for (let i = 0; i < phonesToCheck.length; i += MODEL_SEARCH_BATCH_SIZE) {
             if (checked.count >= MODEL_SEARCH_MAX_PHONES) break
+            if (Date.now() - startTime > MODEL_SEARCH_TIMEOUT_MS) break
             const batch = phonesToCheck.slice(i, i + MODEL_SEARCH_BATCH_SIZE)
             const found = await checkBatch(batch)
             checked.count += batch.length
