@@ -75,11 +75,20 @@ async function callAction(spotifyUrl) {
 
 // Track tunggal: /action lalu /action/track utk dapat link MP3 final
 async function scrapeTrack(spotifyUrl) {
-    const { html, reqHeaders } = await callAction(spotifyUrl)
+    // Strip query string (?si=...) yang sering bikin upstream bingung
+    // Spotify share URLs biasanya format: track/ID?si=abc123
+    const cleanUrl = spotifyUrl.split("?")[0]
+
+    const { html, reqHeaders } = await callAction(cleanUrl)
 
     const $ = cheerio.load(html)
     const form = $('form[name="submitspurl"]').first()
-    if (!form.length) throw new Error("Track tidak ditemukan pada balasan spotidown")
+    if (!form.length) {
+        // Cek pesan error dari upstream
+        const errMsg = $(".alert, .error, .text-danger, [class*='error']").first().text().trim()
+        if (errMsg) throw new Error(`spotidown: ${errMsg}`)
+        throw new Error("Track tidak ditemukan pada balasan spotidown. Pastikan URL track (bukan playlist/album/artist) dan track tersebut publik di Spotify.")
+    }
 
     const field = n => form.find(`input[name="${n}"]`).attr("value")
     const data = field("data")
@@ -87,15 +96,23 @@ async function scrapeTrack(spotifyUrl) {
     const tokenField = field("token")
     if (!data || !tokenField) throw new Error("Gagal mem-parse data track dari spotidown")
 
-    const trackBody = new URLSearchParams({ data, base: baseField || spotifyUrl, token: tokenField }).toString()
+    const trackBody = new URLSearchParams({ data, base: baseField || cleanUrl, token: tokenField }).toString()
     const { data: track } = await axios.post(`${BASE}/action/track`, trackBody, {
         headers: reqHeaders,
         validateStatus: () => true,
     })
-    if (!track || track.error) throw new Error(track?.message || "Gagal mengambil link MP3 (/action/track)")
+    if (!track || track.error) {
+        const msg = track?.message || "Gagal mengambil link MP3"
+        if (/not found|tidak ditemukan|does not exist/i.test(msg)) {
+            throw new Error(`Track tidak ditemukan di Spotify. Pastikan URL track valid dan track publik (bukan private/region-locked). URL: ${cleanUrl}`)
+        }
+        throw new Error(msg || "Gagal mengambil link MP3 (/action/track)")
+    }
 
     const result = parseTrackResult(track.data || "")
-    if (!result.downloadUrl) throw new Error("Link download tidak ditemukan pada balasan spotidown")
+    if (!result.downloadUrl) {
+        throw new Error("Link download MP3 tidak ditemukan. Mungkin track private, region-locked, atau Spotify tidak punya preview untuk track ini.")
+    }
 
     const meta = decodeMeta(data)
     return {
@@ -114,7 +131,9 @@ async function scrapeTrack(spotifyUrl) {
 // Playlist/album: hanya daftar metadata tiap track (tanpa resolve MP3).
 // Untuk mengunduh, panggil endpoint ini lagi per `trackUrl`.
 async function scrapeList(spotifyUrl) {
-    const { html } = await callAction(spotifyUrl)
+    // Strip query string (?si=...) yang sering bikin upstream bingung
+    const cleanUrl = spotifyUrl.split("?")[0]
+    const { html } = await callAction(cleanUrl)
     const $ = cheerio.load(html)
 
     const tracks = $('form[name="submitspurl"]')
