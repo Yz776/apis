@@ -2,63 +2,90 @@ import axios from "axios"
 import * as cheerio from "cheerio"
 
 const PAGE_URL = "https://chat-deep.ai/deepseek-chat/"
+const NEW_PAGE_URL = "https://seek-chat.com/"
 const BOOTSTRAP_URL = "https://chat-deep.ai/wp-admin/admin-ajax.php?action=dsc_chat_bootstrap"
 const CHAT_URL = "https://chat-deep.ai/wp-json/dsc/v1/chat"
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 
-// chat-deep.ai v2 flow:
-//   1. Visit page (get cookies + verify human-like)
-//   2. POST to bootstrap URL → returns fresh nonce + quota info
-//   3. POST to /wp-json/dsc/v1/chat with X-WP-Nonce header
+// chat-deep.ai pindah ke seek-chat.com (Sep 2026).
+// seek-chat.com butuh WP cookie + nonce yang hanya bisa didapat dari browser asli
+// (Cloudflare blokir Set-Cookie untuk curl/axios/cloudscraper).
+// Endpoint ini tidak bisa dipakai lagi sampai upstream berubah.
 async function getSession() {
-    const jar = { cookies: {} }
-
-    // Step 1: Visit page first to establish session (cookies, referer chain)
-    const { data: html, status: pageStatus, headers: pageHeaders } = await axios.get(PAGE_URL, {
-        headers: {
-            "User-Agent": UA,
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Language": "en-US,en;q=0.9,id;q=0.8"
-        },
-        validateStatus: () => true,
-        maxRedirects: 5
-    })
-    if (pageStatus !== 200) throw new Error(`Gagal nembus halaman utama (HTTP ${pageStatus})`)
-
-    // Save cookies
-    const setCookies = pageHeaders["set-cookie"] || []
-    for (const sc of setCookies) {
-        const parts = sc.split(";")[0].split("=")
-        if (parts.length >= 2) {
-            jar.cookies[parts[0].trim()] = parts.slice(1).join("=").trim()
+    // First check if chat-deep.ai still redirects
+    let pageUrl = PAGE_URL
+    try {
+        const head = await axios.head(PAGE_URL, {
+            headers: { "User-Agent": UA },
+            timeout: 8000,
+            validateStatus: () => true,
+            maxRedirects: 0,
+        })
+        // 301/302 → site moved
+        if (head.status >= 300 && head.status < 400 && head.headers.location) {
+            const newLocation = head.headers.location
+            if (/seek-chat\.com/i.test(newLocation)) {
+                throw new Error(
+                    "chat-deep.ai sudah pindah ke seek-chat.com (Sep 2026). " +
+                    "Situs baru memerlukan Cloudflare challenge + WP cookie yang tidak bisa didapat dari server-side. " +
+                    "Coba endpoint alternatif: /ai/qwen, /ai/gemini, /ai/chatilm, atau /ai/claude3"
+                )
+            }
         }
-    }
-    const cookieHeader = Object.entries(jar.cookies).map(([k, v]) => `${k}=${v}`).join("; ")
-
-    // Step 2: POST to bootstrap endpoint to get nonce
-    const { data: boot, status: bootStatus } = await axios.post(BOOTSTRAP_URL, "", {
-        headers: {
-            "User-Agent": UA,
-            "Accept": "application/json",
-            "Origin": "https://chat-deep.ai",
-            "Referer": PAGE_URL,
-            "Content-Type": "application/x-www-form-urlencoded",
-            ...(cookieHeader ? { "Cookie": cookieHeader } : {})
-        },
-        validateStatus: () => true,
-        timeout: 15000
-    })
-
-    if (bootStatus !== 200 || !boot?.nonce) {
-        throw new Error("Gagal mengambil WP-Nonce dari bootstrap endpoint")
+    } catch (e) {
+        if (e.message.includes("seek-chat.com")) throw e
+        // network error, continue to try bootstrap
     }
 
-    // Region/quota check (chat-deep blocks EEA/UK/CH)
-    if (boot.access && boot.access.chatEnabled === false) {
-        throw new Error(`Region diblokir oleh chat-deep.ai (scope: ${boot.access.scope || "unknown"}). Coba endpoint alternatif: /ai/qwen, /ai/gemini, atau /ai/claude3`)
-    }
+    // Attempt 1: chat-deep.ai bootstrap (legacy flow — may still work if redirect disabled)
+    const jar = { cookies: {} }
+    try {
+        const { data: html, status: pageStatus, headers: pageHeaders } = await axios.get(pageUrl, {
+            headers: {
+                "User-Agent": UA,
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.9,id;q=0.8"
+            },
+            validateStatus: () => true,
+            maxRedirects: 5,
+            timeout: 10000,
+        })
+        if (pageStatus !== 200) throw new Error(`Gagal nembus halaman utama (HTTP ${pageStatus})`)
 
-    return { nonce: boot.nonce, cookieHeader, quota: boot }
+        const setCookies = pageHeaders["set-cookie"] || []
+        for (const sc of setCookies) {
+            const parts = sc.split(";")[0].split("=")
+            if (parts.length >= 2) jar.cookies[parts[0].trim()] = parts.slice(1).join("=").trim()
+        }
+        const cookieHeader = Object.entries(jar.cookies).map(([k, v]) => `${k}=${v}`).join("; ")
+
+        const { data: boot, status: bootStatus } = await axios.post(BOOTSTRAP_URL, "", {
+            headers: {
+                "User-Agent": UA,
+                "Accept": "application/json",
+                "Origin": "https://chat-deep.ai",
+                "Referer": pageUrl,
+                "Content-Type": "application/x-www-form-urlencoded",
+                ...(cookieHeader ? { "Cookie": cookieHeader } : {})
+            },
+            validateStatus: () => true,
+            timeout: 10000
+        })
+
+        if (bootStatus !== 200 || !boot?.nonce) {
+            throw new Error("Gagal mengambil WP-Nonce dari bootstrap endpoint")
+        }
+        if (boot.access && boot.access.chatEnabled === false) {
+            throw new Error(`Region diblokir oleh chat-deep.ai (scope: ${boot.access.scope || "unknown"}). Coba endpoint alternatif: /ai/qwen, /ai/gemini, atau /ai/claude3`)
+        }
+        return { nonce: boot.nonce, cookieHeader, quota: boot }
+    } catch (e) {
+        if (e.message.includes("seek-chat.com") || e.message.includes("alternatif")) throw e
+        throw new Error(
+            "chat-deep.ai upstream sedang tidak bisa diakses (kemungkinan pindah domain atau Cloudflare challenge). " +
+            "Coba endpoint alternatif: /ai/qwen, /ai/gemini, /ai/chatilm, atau /ai/claude3"
+        )
+    }
 }
 
 async function chatDeep(prompt, { thinking = false } = {}) {
@@ -84,7 +111,8 @@ async function chatDeep(prompt, { thinking = false } = {}) {
         },
         validateStatus: () => true,
         responseType: "text",
-        maxRedirects: 0
+        maxRedirects: 0,
+        timeout: 30000,
     })
     if (status !== 200) {
         if (status === 403) {
