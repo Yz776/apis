@@ -7,3 +7,12 @@ result.json
 thumbnail.jpg
 .env.local
 .env.production
+
+# runtime cache (auto-downloaded oleh cuaca/cek-nik)
+assets/tools/
+
+# local test artefacts (jangan commit)
+t_*.json
+test_run*.json
+test_final*.json
+server.log

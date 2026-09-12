@@ -140,11 +140,22 @@ export default {
         if (!url || !/^https?:\/\//i.test(url)) {
             return res.status(400).json({ ok: false, error: "URL tidak valid" })
         }
-        try {
-            const result = await pindown(url)
-            res.json({ ok: true, result })
-        } catch (e) {
-            res.status(500).json({ ok: false, error: e.message })
-        }
+ try {
+ // pindown.io intermittently returns a "private/unavailable/refresh" error even
+ // for valid public pins (transient anti-bot/race on their side); retry up to 5x.
+ let lastErr
+ for (let attempt = 0; attempt < 5; attempt++) {
+ try {
+ const result = await pindown(url)
+ return res.json({ ok: true, result })
+ } catch (e) {
+ lastErr = e
+ if (attempt < 4) await new Promise(r => setTimeout(r, 700))
+ }
+ }
+ throw lastErr
+ } catch (e) {
+ res.status(500).json({ ok: false, error: e.message })
+ }
     },
 }

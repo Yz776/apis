@@ -21,7 +21,7 @@ export default {
         const lang = String(req.query.lang || "en").trim().toLowerCase()
         try {
             const { data, status } = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/${encodeURIComponent(lang)}/${encodeURIComponent(word)}`, {
-                timeout: 15000, validateStatus: () => true,
+                timeout: 30000, validateStatus: () => true,
             })
             if (status === 404) return res.status(404).json({ ok: false, error: "Kata tidak ditemukan di kamus" })
             if (status !== 200) return res.status(502).json({ ok: false, error: `Dictionary API error ${status}` })

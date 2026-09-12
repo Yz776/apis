@@ -19,8 +19,13 @@ export default {
             const params = new URLSearchParams()
             if (req.query.name) params.append("name", req.query.name)
             if (req.query.country) params.append("country", req.query.country)
-            const url = `http://universities.hipolabs.com/search?${params.toString()}`
-            const { data } = await axios.get(url, { timeout: 15000 })
+ const url = `http://universities.hipolabs.com/search?${params.toString()}`
+ // Hipolabs is plain HTTP and occasionally resets the socket; retry once.
+ let data
+ for (let attempt = 0; attempt < 2; attempt++) {
+ try { data = (await axios.get(url, { timeout: 20000 })).data; break }
+ catch (e) { if (attempt === 1) throw e }
+ }
             const results = data.map(u => ({
                 name: u.name,
                 domains: u.domains,

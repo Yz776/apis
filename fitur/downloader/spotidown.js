@@ -41,7 +41,7 @@ async function getSession() {
         try {
             const { data: html, headers } = await axios.get(`${BASE}/`, {
                 headers: { "user-agent": UA, accept: "text/html" },
-                timeout: 10000,
+                timeout: 30000,
                 maxRedirects: 5,
             })
             const $ = cheerio.load(html)
@@ -113,7 +113,7 @@ async function callAction(spotifyUrl) {
     let { data: action } = await axios.post(`${BASE}/action`, body, {
         headers: reqHeaders,
         validateStatus: () => true,
-        timeout: 15000,
+        timeout: 35000,
     })
 
     // If token expired/invalid, refresh session and retry ONCE
@@ -129,7 +129,7 @@ async function callAction(spotifyUrl) {
         const retry = await axios.post(`${BASE}/action`, retryBody, {
             headers: reqHeaders,
             validateStatus: () => true,
-            timeout: 15000,
+            timeout: 35000,
         })
         action = retry.data
     }
@@ -165,7 +165,7 @@ async function scrapeTrack(spotifyUrl) {
     const { data: track } = await axios.post(`${BASE}/action/track`, trackBody, {
         headers: reqHeaders,
         validateStatus: () => true,
-        timeout: 15000,
+        timeout: 35000,
     })
     if (!track || track.error) {
         const msg = track?.message || "Gagal mengambil link MP3"

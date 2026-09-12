@@ -1,14 +1,23 @@
 # Kangwifi APIs v2
 
-> High-performance REST API collection built on **Elysia + Bun**. 142 endpoints, Swagger docs, sub-ms latency, no API key required. **Now supports both GET + POST!**
+> High-performance REST API collection built on **Elysia + Bun**. **296 endpoints**, Swagger docs, no API key required. **Every endpoint supports both GET + POST!**
 
 ![Bun](https://img.shields.io/badge/Bun-1.3+-000000?logo=bun&logoColor=white)
 ![Elysia](https://img.shields.io/badge/Elysia-1.x-00eggf?logo=elysia&logoColor=white)
 ![License](https://img.shields.io/badge/license-ISC-blue)
-![Endpoints](https://img.shields.io/badge/endpoints-142-success)
+![Endpoints](https://img.shields.io/badge/endpoints-296-success)
 ![POST](https://img.shields.io/badge/POST-supported-9b59b6)
 
 ---
+
+## What's New — Full endpoint audit & maintenance (2026-09-12)
+
+All 296 endpoints were live-tested against their real upstreams and fixed until green:
+
+- **Fixed bugs**: `/downloader/cnv` (cnv.cx now needs the YouTube video ID on the key call), `/info/dns` (multi-resolver DoH fallback: Google → AliDNS → Quad9 → Cloudflare, so a poisoned router DNS no longer breaks it), `/tools/sekolah` (Bun-fetch-first after the Dapodik WAF flipped to blocking curl), `/tools/uploader` (postimages.org went behind a JS challenge → rewritten on uguu.se), plus raised timeouts on `/info/dictionary`, `/downloader/spotidown` and 429-retry hardening on `/info/{genderize,agify,nationalize}` and a 5× retry on `/downloader/pindown`.
+- **Removed 13 endpoints** whose upstreams are dead or permanently bot-blocked and cannot be driven server-side: `/ai/{chatdeep,copilot,quillbotai,deepsek-ai}`, `/search/{apkmodysearch,groupsor,nhentai}`, `/downloader/spotitrack`, `/anime/seegore`, `/tools/{photiu-upscale,wink-enhancer,unggah,uploader-postimages-org}`.
+- **Added 3 new working endpoints**: `/ai/pollinations` (AI image generation via Pollinations FLUX — no key), `/search/wikipedia` (MediaWiki search, any language), `/search/appstore` (Apple iTunes Search).
+- `endpoints.json` and `swagger.json` were regenerated from the live server, clearing 16 stale doc entries that pointed at files which no longer exist.
 
 ## What's New in v2
 
@@ -159,7 +168,7 @@ kangwifi-apis/
 ├── scripts/
 │   ├── bench.js          # micro-benchmark
 │   └── convert_kana.py   # snippet → feature file converter
-├── fitur/                # 142 endpoint files
+├── fitur/                # 296 endpoint files
 │   ├── ai/               # AI scrapers (GET + POST)
 │   ├── downloader/       # media downloaders (GET + POST)
 │   ├── islamic/          # Islamic utilities (GET + POST)
@@ -185,7 +194,7 @@ kangwifi-apis/
 Access at `http://localhost:47291/docs` — Scalar-powered UI with features:
 
 - Purple theme — dark mode default
-- Search bar — press `Ctrl+K` to search across 142 endpoints
+- Search bar — press `Ctrl+K` to search across 296 endpoints
 - Try-it-out button — test endpoints directly from the browser
 - Code examples in multiple languages — curl, JS, Python, Go, PHP, etc.
 - Intro Markdown with tutorials and quick examples

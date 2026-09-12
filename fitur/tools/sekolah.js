@@ -2,11 +2,11 @@
 // Adapted from HaidarMahiru/snippet-vault snippets/haidar/sdsekolah.js
 // Upstream: https://dapo.kemendikdasmen.go.id (auto-scraped VITE_API_TOKEN from env.js)
 //
-// IMPORTANT: Dapodik uses SafeLine WAF with TLS fingerprinting.
-// - axios: rejected (extra Accept-Encoding header)
-// - Bun fetch(): rejected (TLS fingerprint differs from curl)
-// - curl via child_process: works
-// We use execFile('curl') for upstream calls.
+// Dapodik sits behind a SafeLine WAF that TLS-fingerprints clients, and its
+// verdict has flipped over time: at one point only curl passed, later the WAF
+// started returning 403 to curl while Bun's native fetch was accepted. So we
+// try Bun fetch first and fall back to curl if fetch is refused (or vice versa
+// implicitly via whichever returns 200).
 
 import { execFile } from "node:child_process"
 import { promisify } from "node:util"
@@ -20,32 +20,58 @@ let cachedApiUrl = BASE
 let tokenExpiry = 0
 const TTL = 30 * 60_000 // 30 minutes
 
+// Fetch a URL via Bun's native fetch; returns { status, body }.
+async function nativeGet(url, extraHeaders = {}) {
+  const r = await fetch(url, {
+    headers: { "user-agent": UA, ...extraHeaders },
+    signal: AbortSignal.timeout(25000),
+    redirect: "follow",
+  })
+  return { status: r.status, body: await r.text() }
+}
+
+// Legacy curl path — kept as fallback in case the WAF starts refusing Bun's TLS fingerprint again.
 async function curlGet(url, extraHeaders = {}) {
-    const args = ["-sS", "--max-time", "20", "-w", "\n__HTTP_STATUS__:%{http_code}", url,
-        "-H", `User-Agent: ${UA}`]
-    for (const [k, v] of Object.entries(extraHeaders)) {
-        args.push("-H", `${k}: ${v}`)
-    }
-    const { stdout } = await execFileAsync("curl", args, { maxBuffer: 5 * 1024 * 1024 })
-    // Split body and trailing status marker
-    const markerIdx = stdout.lastIndexOf("\n__HTTP_STATUS__:")
-    if (markerIdx === -1) {
-        throw new Error("curl tidak return status marker")
-    }
-    const body = stdout.slice(0, markerIdx)
-    const statusLine = stdout.slice(markerIdx).trim()
-    const status = parseInt(statusLine.split(":")[1], 10)
-    return { status, body }
+ const args = ["-sS", "--max-time", "20", "-w", "\n__HTTP_STATUS__:%{http_code}", url,
+ "-H", `User-Agent: ${UA}`]
+ for (const [k, v] of Object.entries(extraHeaders)) {
+ args.push("-H", `${k}: ${v}`)
+ }
+ const { stdout } = await execFileAsync("curl", args, { maxBuffer: 5 * 1024 * 1024 })
+ // Split body and trailing status marker
+ const markerIdx = stdout.lastIndexOf("\n__HTTP_STATUS__:")
+ if (markerIdx === -1) {
+ throw new Error("curl tidak return status marker")
+ }
+ const body = stdout.slice(0, markerIdx)
+ const statusLine = stdout.slice(markerIdx).trim()
+ const status = parseInt(statusLine.split(":")[1], 10)
+ return { status, body }
+}
+
+// Try Bun fetch, then curl; prefer whichever returns a 2xx JSON-able response.
+async function httpGet(url, extraHeaders = {}) {
+  let firstErr = null
+  try {
+    const r = await nativeGet(url, extraHeaders)
+    if (r.status >= 200 && r.status < 400) return r
+    firstErr = new Error(`HTTP ${r.status}`)
+  } catch (e) { firstErr = e }
+  try {
+    return await curlGet(url, extraHeaders)
+  } catch (e) {
+    throw firstErr || e
+  }
 }
 
 async function fetchConfig() {
-    if (cachedToken && Date.now() < tokenExpiry) {
-        return { token: cachedToken, apiUrl: cachedApiUrl }
-    }
-    const { status, body } = await curlGet(`${BASE}/env.js`)
-    if (status !== 200) {
-        throw new Error(`Gagal fetch env.js (HTTP ${status})`)
-    }
+ if (cachedToken && Date.now() < tokenExpiry) {
+ return { token: cachedToken, apiUrl: cachedApiUrl }
+ }
+ const { status, body } = await httpGet(`${BASE}/env.js`)
+ if (status !== 200) {
+ throw new Error(`Gagal fetch env.js (HTTP ${status})`)
+ }
     const urlMatch = body.match(/VITE_STRAPI_URL\s*:\s*"(.*?)"/)
     const tokenMatch = body.match(/VITE_API_TOKEN\s*:\s*"(.*?)"/)
     if (urlMatch) cachedApiUrl = urlMatch[1].replace(/\/$/, "")
@@ -60,10 +86,11 @@ async function fetchConfig() {
 }
 
 async function fetchJson(path) {
-    const { token, apiUrl } = await fetchConfig()
-    const { status, body } = await curlGet(`${apiUrl}${path}`, {
-        "Authorization": `Bearer ${token}`,
-    })
+ const { token, apiUrl } = await fetchConfig()
+ const { status, body } = await httpGet(`${apiUrl}${path}`, {
+ "Authorization": `Bearer ${token}`,
+ "Accept": "application/json",
+ })
     if (status === 400) throw new Error("Pencarian gagal: kata kunci minimal 4 karakter.")
     if (status === 429) throw new Error("Rate limit Dapodik. Coba lagi nanti.")
     if (status < 200 || status >= 300) {

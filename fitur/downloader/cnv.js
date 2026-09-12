@@ -9,21 +9,30 @@ const VIDEO_QUALITIES = ["2160", "1440", "1080", "720", "480", "360", "240", "14
 
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
-async function getKey() {
-    const { data, status, headers } = await axios.get(`${BASE}/v2/sanity/key`, {
-        headers: { ...HEADERS, "content-type": "application/json" },
-        validateStatus: () => true,
-        timeout: 15000,
-    })
-    if (status === 403 || status === 503) {
-        throw new Error("cnv.cx sedang memblokir request (Cloudflare anti-bot). Coba endpoint alternatif: /downloader/y2meta, /downloader/kolyt, atau /downloader/musicfab")
-    }
-    if (!data?.key) throw new Error("Gagal mengambil key dari cnv.cx")
-    return data.key
+// cnv.cx requires the 11-char YouTube video ID as `id` on the sanity-key call.
+function extractVideoId(youtubeUrl) {
+ const m = String(youtubeUrl).match(/(?:v=|youtu\.be\/|shorts\/|embed\/|live\/)([A-Za-z0-9_-]{11})/)
+ return m ? m[1] : null
+}
+
+async function getKey(videoId) {
+ const { data, status } = await axios.get(`${BASE}/v2/sanity/key`, {
+ params: { id: videoId },
+ headers: { ...HEADERS, "content-type": "application/json" },
+ validateStatus: () => true,
+ timeout: 15000,
+ })
+ if (status === 403 || status === 503) {
+ throw new Error("cnv.cx sedang memblokir request (Cloudflare anti-bot). Coba endpoint alternatif: /downloader/y2meta, /downloader/kolyt, atau /downloader/musicfab")
+ }
+ if (!data?.key) throw new Error(`Gagal mengambil key dari cnv.cx (HTTP ${status}): ${data?.errorMsg || "no key"}`)
+ return data.key
 }
 
 async function convert(youtubeUrl, format, quality) {
-    const key = await getKey()
+ const videoId = extractVideoId(youtubeUrl)
+ if (!videoId) throw new Error("URL YouTube tidak valid (video ID tidak ditemukan)")
+ const key = await getKey(videoId)
     const body = new URLSearchParams({
         link: youtubeUrl,
         format,

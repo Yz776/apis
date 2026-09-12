@@ -17,12 +17,18 @@ export default {
         try {
             const name = String(req.query.name || "").trim()
             if (!name) return res.status(400).json({ ok: false, error: "name wajib diisi" })
-            const params = new URLSearchParams({ name })
-            if (req.query.country_id) params.set("country_id", String(req.query.country_id).toUpperCase())
-            const r = await fetch(`https://api.genderize.io?${params}`, { headers: { "Accept": "application/json" } })
-            if (!r.ok) return res.status(502).json({ ok: false, error: "Genderize error: " + r.status })
-            const data = await r.json()
-            res.json({ ok: true, ...data })
+ const params = new URLSearchParams({ name })
+ if (req.query.country_id) params.set("country_id", String(req.query.country_id).toUpperCase())
+ // genderize.io shares a tight free-tier rate limit; retry on 429 with backoff.
+ let lastStatus
+ for (let attempt = 0; attempt < 3; attempt++) {
+ const r = await fetch(`https://api.genderize.io?${params}`, { headers: { "Accept": "application/json" }, signal: AbortSignal.timeout(15000) })
+ if (r.ok) { const data = await r.json(); return res.json({ ok: true, ...data }) }
+ lastStatus = r.status
+ if (r.status === 429) { await new Promise(res => setTimeout(res, 1200 * (attempt + 1))); continue }
+ break
+ }
+ res.status(502).json({ ok: false, error: "Genderize error: " + lastStatus + " (rate limited — coba lagi)" })
         } catch (e) { res.status(502).json({ ok: false, error: e.message }) }
     },
 }
