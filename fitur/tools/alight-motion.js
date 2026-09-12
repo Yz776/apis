@@ -243,6 +243,9 @@ export default {
             "```\nGET /tools/alight-motion?email=user@example.com&link=<link_verifikasi>&orderId=my-order-001\n```\n\n" +
             "Jika `orderId` tidak diisi, akan di-generate otomatis (`neo-<random hex>`).\n" +
             "Jika diisi, nilai tersebut dipakai apa adanya sebagai `orderId` pada payload `verifyPurchase`.\n\n" +
+            "Setelah Tahap 2 berhasil, response berisi `auth.refreshToken`. Gunakan token tersebut di:\n" +
+            "```\nGET /tools/alight-motion/refresh?refreshToken=<refreshToken>\n```\n" +
+            "untuk memperpanjang sesi tanpa perlu verifikasi email ulang.\n\n" +
             "Catatan: endpoint ini melakukan request ke upstream Google/Firebase & Alight Motion — rate-limit upstream berlaku.",
         parameters: [
             {
