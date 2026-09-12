@@ -1,23 +1,33 @@
 // ============================================================================
-// Kangwifi APIs — Elysia + Bun edition (v3: Rate Limit + Auto-update + DDoS Shield)
+// Kangwifi APIs — Elysia + Bun edition
+// v4: Performance & Reliability Overhaul
 // ============================================================================
 // REST API collection on Elysia + Bun. Auto-discovery: drop a file in
 // `fitur/`, restart, and the endpoint is live.
 //
-// v3 IMPROVEMENTS:
-//   - Rate limiting per IP (60 req/min, burst 10) + anti-DDoS protection
-//   - **Auto DDoS Production Mode** — kalau serangan terdeteksi, otomatis naik level
-//   - Simplified docs description (shorter, cleaner)
-//   - Auto-update endpoint: POST /admin/sync fetches new code from all sources
-//   - Every GET endpoint also accepts POST with JSON body
-//   - CORS headers added
+// v4 (2026-09-13) — faster & more reliable:
+//   - Hardened global fetch layer: anti-hang timeout for every upstream call,
+//     auto-retry idempotent GETs, per-host circuit breaker (fail-fast when an
+//     upstream is down instead of queuing 15-30s each time)
+//   - Response cache: TTL + single-flight (stampede protection) + ETag/304 for
+//     GET endpoints. Opt-out per route (noCache: true) or per request
+//     (?nocache=1)
+//   - Handler-level timeout → 504, so no request can hang forever
+//   - gzip compression for JSON/HTML/text responses
+//   - x-response-time header on every response
+//   - GET /health — uptime, cache stats, per-host breaker/latency states
+//   - Graceful shutdown (SIGINT/SIGTERM) + uncaughtException guards
+//   - Retained from v3: rate limiting, DDoS shield, /admin/sync auto-update,
+//     GET+POST dual methods, CORS
 // ============================================================================
 
 import { Elysia } from "elysia"
 import { swagger } from "@elysiajs/swagger"
-import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from "fs"
+import { readdirSync, writeFileSync, mkdirSync } from "fs"
 import { join, dirname } from "path"
 import { fileURLToPath, pathToFileURL } from "url"
+import { TTLCache, toCacheEntry, entryToResponse } from "./lib/cache.js"
+import { installFetchEnhancers } from "./lib/fetchx.js"
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -34,6 +44,13 @@ const DDOS_SPIKE_THRESHOLD = Number(process.env.DDOS_SPIKE) || 3  // spike = 3x 
 const DDOS_UNIQUE_IP_THRESHOLD = Number(process.env.DDOS_IPS) || 50 // >50 unique IPs in 30s = suspicious
 const DDOS_COOLDOWN_MINUTES = Number(process.env.DDOS_COOLDOWN) || 5 // auto-recovery after 5 min of normal traffic
 
+// v4 tuning knobs
+const FETCH_TIMEOUT_MS = Number(process.env.FETCH_TIMEOUT) || 60_000   // hard cap per upstream call (when caller set no signal)
+const HANDLER_TIMEOUT_MS = Number(process.env.HANDLER_TIMEOUT) || 75_000 // hard cap per feature handler → 504
+const CACHE_TTL_MS = Number(process.env.CACHE_TTL) || 60_000           // GET response cache TTL
+const CACHE_MAX_ENTRIES = Number(process.env.CACHE_MAX) || 400
+const SLOW_LOG_MS = Number(process.env.SLOW_LOG) || 3_000              // log requests slower than this
+
 if (ENABLE_AUTH && !API_KEY) {
     console.warn("[auth] ENABLE_AUTH=true tapi API_KEY belum di-set.")
 }
@@ -43,6 +60,79 @@ if (!ENABLE_AUTH) {
 console.log(`[rate-limit] Normal: ${RATE_LIMIT_PER_MIN} req/min, burst ${RATE_LIMIT_BURST}`)
 console.log(`[rate-limit] DDoS Production: ${DDOS_RATE_LIMIT} req/min, burst ${DDOS_BURST}`)
 console.log(`[ddos-shield] Spike threshold: ${DDOS_SPIKE_THRESHOLD}x, Unique IPs: ${DDOS_UNIQUE_IP_THRESHOLD}, Cooldown: ${DDOS_COOLDOWN_MINUTES} min)`)
+
+// ─── v4 core: hardened fetch + axios guard + response cache ──────────────────
+// Must run BEFORE feature modules are imported so every upstream call in every
+// endpoint is covered (anti-hang timeout, retry, circuit breaker, metrics).
+const breaker = installFetchEnhancers({ timeoutMs: FETCH_TIMEOUT_MS })
+const responseCache = new TTLCache({ max: CACHE_MAX_ENTRIES, defaultTtl: CACHE_TTL_MS })
+
+// Endpoints whose responses are random/per-user — never cache these.
+const NO_CACHE_PATHS = new Set([
+    "/utils/uuid", "/utils/nanoid", "/utils/password", "/utils/random-string",
+    "/utils/random-bytes", "/utils/random-int", "/utils/cuid", "/utils/snowflake",
+    "/info/quote", "/info/random-quotes", "/info/fact", "/info/useless-fact",
+    "/info/cat-facts", "/info/dog-facts", "/info/dog-facts-v2", "/info/joke",
+    "/info/bored", "/info/advice", "/info/affirmation", "/info/random",
+    "/info/xkcd", "/maker/brat", "/maker/bratanim",
+])
+
+// axios is used by many feature files; give it a sane default timeout so a
+// forgotten timeout can never hang a handler forever (request-level timeouts
+// still override this), and wire it into the same circuit breaker + metrics
+// as the hardened fetch layer via global interceptors.
+try {
+    const axios = (await import("axios")).default
+    axios.defaults.timeout = 30_000
+    axios.interceptors.request.use((config) => {
+        try {
+            const host = new URL(config.url, config.baseURL || "http://localhost").host
+            if (host && breaker.isOpen(host)) {
+                return Promise.reject(new Error(`upstream ${host} sedang tidak sehat (circuit open, coba lagi beberapa detik)`))
+            }
+        } catch { /* unparseable url — let axios handle it */ }
+        config.metadata = { t0: performance.now() }
+        return config
+    })
+    axios.interceptors.response.use(
+        (res) => {
+            try {
+                const cfg = res.config
+                const host = cfg ? new URL(cfg.url, cfg.baseURL || "http://localhost").host : null
+                if (host) {
+                    breaker.recordSuccess(host)
+                    if (cfg.metadata?.t0) breaker.recordLatency(host, performance.now() - cfg.metadata.t0)
+                }
+            } catch { /* metrics only */ }
+            return res
+        },
+        (err) => {
+            try {
+                const cfg = err?.config
+                const host = cfg ? new URL(cfg.url, cfg.baseURL || "http://localhost").host : null
+                if (host) {
+                    if (err.response) {
+                        // 5xx = upstream unhealthy; 4xx (429, 403, ...) = host alive
+                        if (err.response.status >= 500) breaker.recordFailure(host, new Error(`HTTP ${err.response.status}`))
+                        else breaker.recordSuccess(host)
+                    } else {
+                        breaker.recordFailure(host, err)
+                    }
+                }
+            } catch { /* metrics only */ }
+            // auto-retry idempotent GETs once on transient network errors
+            // (no response = network/DNS flake, not an upstream verdict)
+            const cfg = err?.config
+            if (cfg && !err.response && !cfg.__retried && String(cfg.method || "get").toLowerCase() === "get") {
+                cfg.__retried = true
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => axios.request(cfg).then(resolve, reject), 400)
+                })
+            }
+            return Promise.reject(err)
+        },
+    )
+} catch { /* axios optional */ }
 
 // ─── Rate Limiter (in-memory, per IP, dynamic limits) ──────────────────────────
 class RateLimiter {
@@ -126,6 +216,7 @@ const ddosShield = {
     modeHistory: [],                  // log mode transitions
     trafficWindow: [],                // rolling 30-second windows: { timestamp, totalRequests, uniqueIPs }
     lastModeChange: Date.now(),
+    lastPrune: 0,                     // throttle for trafficWindow pruning
     blacklist: new Map(),             // ip → { blockedAt, reason, duration }
     normalBaseline: null,             // learned average request rate
     baselineSamples: [],              // for calculating baseline
@@ -172,17 +263,24 @@ const ddosShield = {
         const now = Date.now()
         const windowStart = now - (now % 30_000)  // align to 30-second windows
 
-        // Find or create current window
-        let window = this.trafficWindow.find(w => w.timestamp === windowStart)
-        if (!window) {
-            window = { timestamp: windowStart, totalRequests: 0, uniqueIPs: new Set() }
-            this.trafficWindow.push(window)
+        // Find or create current window (fast path: check the newest window first)
+        let window = this.trafficWindow[this.trafficWindow.length - 1]
+        if (!window || window.timestamp !== windowStart) {
+            window = this.trafficWindow.find(w => w.timestamp === windowStart)
+            if (!window) {
+                window = { timestamp: windowStart, totalRequests: 0, uniqueIPs: new Set() }
+                this.trafficWindow.push(window)
+            }
         }
         window.totalRequests++
         window.uniqueIPs.add(ip)
 
-        // Prune old windows (keep last 5 minutes = 10 windows)
-        this.trafficWindow = this.trafficWindow.filter(w => now - w.timestamp < 300_000)
+        // Prune old windows (keep last 5 minutes = 10 windows) — cheap periodic
+        // sweep instead of an array filter() on every request
+        if (now - this.lastPrune > 15_000) {
+            this.lastPrune = now
+            this.trafficWindow = this.trafficWindow.filter(w => now - w.timestamp < 300_000)
+        }
 
         // Learn baseline (first 5 minutes)
         if (!this.normalBaseline && this.trafficWindow.length >= 10) {
@@ -384,10 +482,13 @@ let features = await loadFeatures()
 // ─── Express-style → Elysia adapter ──────────────────────────────────────────
 function adapt(feature) {
     const run = feature.handler
+    const routeTimeout = Number(feature.route?.timeout) || HANDLER_TIMEOUT_MS
     return async (c) => {
         let status = 200
         let response = null
+        let timedOut = false
         const extraHeaders = {}
+        const t0 = performance.now()
 
         const body = (c.body && typeof c.body === "object" && !Buffer.isBuffer(c.body)) ? c.body : {}
         const mergedQuery = { ...c.query, ...body }
@@ -410,6 +511,7 @@ function adapt(feature) {
             header(name, value) { return this.set(name, value) },
             type(value) { extraHeaders['content-type'] = value; return this },
             json(obj) {
+                if (timedOut) return null // client already got the 504 — drop late writes
                 response = new Response(JSON.stringify(obj), {
                     status,
                     headers: { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*", ...extraHeaders },
@@ -417,6 +519,7 @@ function adapt(feature) {
                 return response
             },
             send(body) {
+                if (timedOut) return null
                 const isBuf = Buffer.isBuffer(body)
                 const headers = {
                     ...(isBuf ? { "content-type": "application/octet-stream" } : { "content-type": "text/html; charset=utf-8" }),
@@ -427,6 +530,7 @@ function adapt(feature) {
                 return response
             },
             end(body) {
+                if (timedOut) return null
                 response = new Response(body ?? null, {
                     status,
                     headers: { "access-control-allow-origin": "*", ...extraHeaders },
@@ -436,10 +540,32 @@ function adapt(feature) {
         }
 
         try {
-            await run(req, res)
+            const work = run(req, res)
+            let guardResolve
+            const guard = new Promise(resolve => {
+                const t = setTimeout(() => { timedOut = true; guardResolve() }, routeTimeout)
+                t.unref?.() // never keep the process alive just for this timer
+                guardResolve = resolve
+            })
+            await Promise.race([work, guard])
+            const ms = performance.now() - t0
+            if (timedOut && !response) {
+                const u = new URL(c.request.url)
+                console.warn(`[timeout] ${c.request.method} ${u.pathname}${u.search} exceeded ${routeTimeout}ms → 504`)
+                return new Response(
+                    JSON.stringify({ ok: false, error: `Handler timeout setelah ${Math.round(routeTimeout / 1000)}s — upstream terlalu lambat/stuck. Coba lagi atau pakai endpoint alternatif.` }),
+                    { status: 504, headers: { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*" } },
+                )
+            }
+            if (ms > SLOW_LOG_MS) {
+                console.warn(`[slow] ${ms.toFixed(0)}ms ${c.request.method} ${new URL(c.request.url).pathname}`)
+            }
             if (response) return response
             return new Response(null, { status, headers: { "access-control-allow-origin": "*", ...extraHeaders } })
         } catch (e) {
+            const ms = performance.now() - t0
+            const u = new URL(c.request.url)
+            console.error(`[error] ${ms.toFixed(0)}ms ${c.request.method} ${u.pathname}${u.search} :: ${e?.message || e}`)
             return new Response(
                 JSON.stringify({ ok: false, error: e?.message || String(e) }),
                 { status: 500, headers: { "content-type": "application/json; charset=utf-8", "access-control-allow-origin": "*" } },
@@ -448,14 +574,82 @@ function adapt(feature) {
     }
 }
 
+// ─── GET response cache wrapper (TTL + single-flight + ETag) ─────────────────
+function withCache(feature, handler) {
+    return async (c) => {
+        const url = new URL(c.request.url)
+        const bypass = url.searchParams.has("nocache")
+            || (c.headers["cache-control"] || "").includes("no-cache")
+        const key = TTLCache.buildKey("GET", c.request.url)
+
+        if (bypass) {
+            responseCache.stats.bypassed++
+            return handler(c)
+        }
+
+        const cached = responseCache.get(key)
+        if (cached) {
+            const inm = c.headers["if-none-match"]
+            if (inm && inm === cached.etag) {
+                return new Response(null, { status: 304, headers: { etag: cached.etag, "x-cache": "HIT" } })
+            }
+            return entryToResponse(cached, { hit: true })
+        }
+
+        // single-flight: collapse identical concurrent misses into ONE handler run
+        const { store, raw } = await responseCache.singleFlight(key, async () => {
+            const res = await handler(c)
+            if (!(res instanceof Response)) return { store: null, raw: res }
+            const out = await toCacheEntry(res, responseCache)
+            responseCache.stats.misses++
+            if (out.store) responseCache.set(key, out.store)
+            return out
+        })
+
+        if (store) return entryToResponse(store, { hit: false })
+        return raw // not cacheable (binary/stream/error) — return the original response
+    }
+}
+
 // ─── Build the Elysia app ────────────────────────────────────────────────────
 const app = new Elysia()
 
+// v4: gzip compression for compressible responses + x-response-time header.
+// Runs after the handler; returns a transformed Response when beneficial.
+const reqTiming = new WeakMap() // Request → t0 (performance.now)
+app.onAfterHandle(async ({ request, response }) => {
+    if (!(response instanceof Response)) return
+    const status = response.status
+    if (status === 304 || status === 204) return response
+
+    // x-response-time (set from the t0 recorded in onRequest)
+    const t0 = reqTiming.get(request)
+    const headers = new Headers(response.headers)
+    if (t0) headers.set("x-response-time", `${(performance.now() - t0).toFixed(1)}ms`)
+
+    const ct = headers.get("content-type") || ""
+    const compressible = /^(application\/(json|javascript|xml)|text\/|image\/svg)/i.test(ct)
+    const accepts = /gzip/.test(request.headers.get("accept-encoding") || "")
+    if (!compressible || !accepts) return new Response(response.body, { status, headers })
+
+    const buf = Buffer.from(await response.arrayBuffer())
+    if (buf.length < 1024) return new Response(buf, { status, headers }) // not worth it
+    const gz = Buffer.from(await new Response(new Blob([buf]).stream().pipeThrough(new CompressionStream("gzip"))).arrayBuffer())
+    headers.delete("content-length")
+    headers.set("content-encoding", "gzip")
+    headers.append("vary", "Accept-Encoding")
+    return new Response(gz, { status, headers })
+})
+
 // ─── Rate Limit + DDoS Shield middleware ───────────────────────────────────────
 app.onRequest(({ request, set }) => {
+    reqTiming.set(request, performance.now())
     set.headers["access-control-allow-origin"] = "*"
     set.headers["access-control-allow-methods"] = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
     set.headers["access-control-allow-headers"] = "Content-Type, x-api-key, Authorization, Accept, Origin"
+
+    // /health is exempt: uptime monitors must never be rate-limited or count as traffic
+    if (new URL(request.url).pathname === "/health") return
 
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
         || request.headers.get("x-real-ip")
@@ -615,7 +809,10 @@ for (const f of features) {
         continue
     }
 
-    const handler = adapt(f)
+    const baseHandler = adapt(f)
+    // v4: cache GET responses (opt-out via route.noCache: true or the NO_CACHE_PATHS set)
+    const cacheable = verb === "get" && !f.route.noCache && !NO_CACHE_PATHS.has(routePath)
+    const handler = cacheable ? withCache(f, baseHandler) : baseHandler
     const enforceAuth = ENABLE_AUTH && auth
 
     const buildRouteOptions = (forPost = false) => {
@@ -940,6 +1137,22 @@ app.get("/ddos-mode", ({ set }) => {
     return { mode: ddosShield.mode, limits: { rateLimit: limiter.maxPerMin, burst: limiter.burst }, violationThreshold: ddosShield.getViolationThreshold() }
 })
 
+// ─── GET /health — liveness + observability (no rate limit, no auth) ─────────
+const BOOT_TIME = Date.now()
+app.get("/health", ({ set }) => {
+    set.headers["access-control-allow-origin"] = "*"
+    const mem = process.memoryUsage()
+    return {
+        ok: true,
+        uptime_s: Math.round((Date.now() - BOOT_TIME) / 1000),
+        endpoints: features.length,
+        ddosMode: ddosShield.mode,
+        memory: { rssMb: +(mem.rss / 1e6).toFixed(1), heapMb: +(mem.heapUsed / 1e6).toFixed(1) },
+        cache: responseCache.statsSnapshot(),
+        breaker: { open: Object.values(breaker.snapshot()).filter(h => h.state !== "closed").length, hosts: breaker.snapshot() },
+    }
+})
+
 // ─── 404 / 500 ────────────────────────────────────────────────────────────────
 app.onError(({ code, error, path, set }) => {
     set.headers["access-control-allow-origin"] = "*"
@@ -951,14 +1164,37 @@ app.onError(({ code, error, path, set }) => {
     return { ok: false, error: error?.message || String(error), code }
 })
 
+// ─── Process guards: one bad async handler must never kill the server ────────
+process.on("uncaughtException", (e) => {
+    console.error("[uncaughtException]", e?.message || e)
+})
+process.on("unhandledRejection", (e) => {
+    console.error("[unhandledRejection]", e?.message || e)
+})
+
+// ─── Graceful shutdown (SIGINT/SIGTERM): stop accepting, drain, exit ─────────
+let server
+function shutdown(signal) {
+    console.log(`\n[shutdown] ${signal} diterima — mematikan dengan rapi...`)
+    try { server?.stop(true) } catch { /* already closed */ }
+    limiter.destroy()
+    ddosShield.stopDetection()
+    process.exit(0)
+}
+process.on("SIGINT", () => shutdown("SIGINT"))
+process.on("SIGTERM", () => shutdown("SIGTERM"))
+
 // ─── Boot ────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+server = app.listen(PORT, () => {
     console.log("")
-    console.log("  Kangwifi APIs  →  Elysia + Bun v3 (Rate Limit + DDoS Shield + Auto-update)")
+    console.log("  Kangwifi APIs  →  Elysia + Bun v4 (Cache + Circuit Breaker + DDoS Shield)")
     console.log(`  Listen         →  http://localhost:${PORT}`)
     console.log(`  Docs           →  http://localhost:${PORT}/docs`)
+    console.log(`  Health         →  http://localhost:${PORT}/health`)
     console.log(`  Rate Limit     →  ${RATE_LIMIT_PER_MIN} req/min per IP (normal)`)
     console.log(`  DDoS Shield    →  ${ddosShield.mode} mode`)
+    console.log(`  Cache          →  TTL ${CACHE_TTL_MS / 1000}s, max ${CACHE_MAX_ENTRIES} entries`)
+    console.log(`  Timeouts       →  fetch ${FETCH_TIMEOUT_MS / 1000}s, handler ${HANDLER_TIMEOUT_MS / 1000}s`)
     console.log(`  Routes         →  ${features.length} endpoint`)
     console.log("")
 })

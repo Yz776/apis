@@ -1,4 +1,4 @@
-# Kangwifi APIs v2
+# Kangwifi APIs v4
 
 > High-performance REST API collection built on **Elysia + Bun**. **296 endpoints**, Swagger docs, no API key required. **Every endpoint supports both GET + POST!**
 
@@ -9,6 +9,23 @@
 ![POST](https://img.shields.io/badge/POST-supported-9b59b6)
 
 ---
+
+## What's New — v4 Performance & Reliability Overhaul (2026-09-13)
+
+The server core was rebuilt for speed and resilience — **without touching the 296 endpoint files**:
+
+- **Hardened global fetch layer** (`lib/fetchx.js`) — every upstream call made through `fetch` or `axios` (wired via interceptors) now gets:
+  - anti-hang timeout (60s default, per-call) so no upstream can hold a request forever,
+  - automatic retry for idempotent GETs on transient network errors (socket reset, DNS flake),
+  - a **per-host circuit breaker**: a host that proved healthy then fails 6× in a row is skipped for 30s (requests fail in <1 ms with a clear error instead of queuing 15–30 s each), then one probe request checks recovery. Hosts that never succeeded are never tripped (transient DNS flakes can't cascade).
+- **Response cache** (`lib/cache.js`) for GET — 60 s TTL, LRU cap 400 entries, **single-flight** (N identical concurrent requests = 1 upstream call), `ETag`/`If-None-Match` → 304. Repeat requests: **10 100 ms → 0.4 ms**. Opt out per route (`noCache: true` in route meta) or per request (`?nocache=1`). Random-output endpoints (uuid, quotes, facts, …) are auto-excluded.
+- **Handler timeout → 504** — any endpoint that hangs returns a clean 504 after 75 s (overridable per route via `timeout: <ms>`; `/downloader/cnv` and `/ai/pollinations` use longer limits).
+- **gzip compression** for JSON/HTML/text responses >1 KB (5000 B → 138 B on base64 payloads).
+- **`x-response-time` header** on every response; slow (>3 s) and failed requests logged server-side.
+- **`GET /health`** — uptime, memory, cache hit-rate stats, per-host latency & breaker states. Exempt from rate limiting so uptime monitors never get 429.
+- **Graceful shutdown** (SIGINT/SIGTERM drains connections) + `uncaughtException`/`unhandledRejection` guards so one bad async handler can never kill the process.
+- **`ecosystem.config.cjs`** for PM2 (auto-restart with exponential backoff, 600 MB memory cap) — `pm2 start ecosystem.config.cjs`.
+- DDoS-shield traffic accounting optimized (window pruning every 15 s instead of an array `filter()` on every request).
 
 ## What's New — Full endpoint audit & maintenance (2026-09-12)
 

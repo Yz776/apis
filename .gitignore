@@ -16,3 +16,6 @@ t_*.json
 test_run*.json
 test_final*.json
 server.log
+
+# pm2 logs
+logs/

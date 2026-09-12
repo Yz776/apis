@@ -12,6 +12,7 @@ export default {
   route: {
     method: "get",
     path: "/ai/pollinations",
+        timeout: 110000, // v4: route-level handler timeout override (polling converter/render bisa >75s)
     auth: false,
     tags: ["AI"],
     summary: "AI Image Generator (Pollinations FLUX)",

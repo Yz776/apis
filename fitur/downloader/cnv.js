@@ -69,6 +69,7 @@ export default {
     route: {
         method: "get",
         path: "/downloader/cnv",
+        timeout: 120000, // route-level handler timeout: converter polling bisa >75s
         auth: false,
         tags: ["Downloader"],
         summary: "Download YouTube via cnv.cx",
