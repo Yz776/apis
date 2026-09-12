@@ -246,6 +246,9 @@ export default {
             "Setelah Tahap 2 berhasil, response berisi `auth.refreshToken`. Gunakan token tersebut di:\n" +
             "```\nGET /tools/alight-motion/refresh?refreshToken=<refreshToken>\n```\n" +
             "untuk memperpanjang sesi tanpa perlu verifikasi email ulang.\n\n" +
+            "Untuk cek status akun & indikator premium, gunakan:\n" +
+            "```\nGET /tools/alight-motion/status?idToken=<idToken>\n```\n" +
+            "(disarankan POST body agar idToken tidak terekspos di URL)\n\n" +
             "Catatan: endpoint ini melakukan request ke upstream Google/Firebase & Alight Motion — rate-limit upstream berlaku.",
         parameters: [
             {
