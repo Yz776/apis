@@ -1,12 +1,12 @@
 # Kangwifi APIs v4
 
-> High-performance REST API collection built on **Elysia + Bun**. **296 endpoints**, Swagger docs, no API key required. **Every endpoint supports both GET + POST!**
+> High-performance REST API collection built on **Elysia + Bun**. **296+ endpoints**, Swagger docs, no API key required. **All endpoints use GET with query params** (v4.1 — POST removed).
 
 ![Bun](https://img.shields.io/badge/Bun-1.3+-000000?logo=bun&logoColor=white)
 ![Elysia](https://img.shields.io/badge/Elysia-1.x-00eggf?logo=elysia&logoColor=white)
 ![License](https://img.shields.io/badge/license-ISC-blue)
 ![Endpoints](https://img.shields.io/badge/endpoints-296-success)
-![POST](https://img.shields.io/badge/POST-supported-9b59b6)
+![GET](https://img.shields.io/badge/GET-only-9b59b6)
 
 ---
 
@@ -38,10 +38,10 @@ All 296 endpoints were live-tested against their real upstreams and fixed until 
 
 ## What's New in v2
 
-- **POST support** — Every GET endpoint now also accepts POST with JSON body. Much easier on mobile/Hoppscotch!
+- **~~POST support~~** — *removed in v4.1: all endpoints are GET-only now.*
 - **CORS headers** — All responses include `Access-Control-Allow-Origin: *`. Works in browsers, mobile apps, and cross-origin requests.
-- **Smart parameter merging** — On POST, JSON body params override URL query params. Handlers work unchanged for both methods.
-- **Better error hints** — When you miss a parameter, the error response tells you how to fix it (GET vs POST examples).
+- **~~Smart parameter merging~~** — *removed in v4.1 along with the POST methods.*
+- **Better error hints** — When you miss a parameter, the error response tells you how to fix it.
 - **Mobile-friendly landing page** — Root `/` now shows a simple usage guide instead of just redirecting to /docs.
 
 ---
@@ -74,105 +74,42 @@ PORT=47291
 
 ---
 
-## How to Use — 2 Methods
+## How to Use — GET only
 
-### Method 1: GET (for quick testing)
+Semua endpoint memakai **GET** dengan query params (v4.1 menghapus metode POST):
 
 ```bash
-# Chat with DeepSeek AI
-curl "http://localhost:47291/ai/chatdeep?prompt=halo"
-
-# Chat with Gemini
+# Chat dengan Gemini
 curl "http://localhost:47291/ai/gemini?prompt=Siapa+penemu+telepon?"
 
 # Download TikTok video
-curl "http://localhost:47291/downloader/tiktokio?url=https://vm.tiktok.com/xxx"
-```
-
-### Method 2: POST (RECOMMENDED — easier on mobile/Hoppscotch)
-
-```bash
-# Chat with DeepSeek AI
-curl -X POST "http://localhost:47291/ai/chatdeep" \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "halo"}'
-
-# Chat with Gemini
-curl -X POST "http://localhost:47291/ai/gemini" \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "Siapa penemu telepon?"}'
-
-# Chat with ChatGPT
-curl -X POST "http://localhost:47291/ai/chatgpt" \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "Halo, kamu siapa?"}'
-
-# Chat with Mistral AI
-curl -X POST "http://localhost:47291/ai/mistral" \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "Apa itu artificial intelligence?"}'
-
-# DeepSeek with thinking mode
-curl -X POST "http://localhost:47291/ai/chatdeep" \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "Apa itu lubang hitam?", "thinking": true}'
-
-# Qwen with custom model
-curl -X POST "http://localhost:47291/ai/qwen" \
-  -H "Content-Type: application/json" \
-  -d '{"prompt": "Jelaskan relativitas", "model": "qwen3.7-plus"}'
-
-# Download TikTok video
-curl -X POST "http://localhost:47291/downloader/tiktokio" \
-  -H "Content-Type: application/json" \
-  -d '{"url": "https://vm.tiktok.com/xxx"}'
+curl "http://localhost:47291/downloader/ssstik?url=https://vm.tiktok.com/xxx"
 
 # Search Wikipedia
-curl -X POST "http://localhost:47291/search/wikipedia" \
-  -H "Content-Type: application/json" \
-  -d '{"query": "indonesia"}'
+curl "http://localhost:47291/search/wikipedia?q=indonesia"
 
 # BMKG earthquake data (no params needed)
 curl "http://localhost:47291/tools/gempa"
 
 # Prayer times
-curl -X POST "http://localhost:47291/islamic/jadwal-sholat" \
-  -H "Content-Type: application/json" \
-  -d '{"kota": "Jakarta"}'
+curl "http://localhost:47291/islamic/jadwal-sholat?kota=Jakarta"
 ```
 
-**Why POST is better:**
-- No need to URL-encode parameters
-- Can send long prompts without issues
-- JSON format is cleaner and easier to read
-- Just fill in the body in Hoppscotch/Postman — no fuss
-
-### JavaScript Example (POST)
+### JavaScript Example
 
 ```javascript
-const res = await fetch("http://localhost:47291/ai/chatdeep", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ prompt: "Apa itu lubang hitam?" })
-})
+const res = await fetch("http://localhost:47291/ai/gemini?prompt=halo")
 const data = await res.json()
-console.log(data.answer)
+console.log(data.text)
 ```
 
 ---
 
 ## Using in Hoppscotch (Mobile)
 
-1. Set method to **POST**
-2. Set URL: `http://your-server:47291/ai/chatdeep`
-3. Set Content-Type: `application/json`
-4. Set Body:
-   ```json
-   {
-     "prompt": "halo"
-   }
-   ```
-5. Click **Send** — done!
+1. Set method to **GET**
+2. Set URL: `http://your-server:47291/ai/gemini?prompt=halo`
+3. Click **Send** — done!
 
 ---
 
@@ -180,19 +117,19 @@ console.log(data.answer)
 
 ```
 kangwifi-apis/
-├── index.js              # Elysia server + Express adapter + CORS + POST support
+├── index.js              # Elysia server + Express adapter + CORS + v4 cache/breaker
 ├── package.json
 ├── scripts/
 │   ├── bench.js          # micro-benchmark
 │   └── convert_kana.py   # snippet → feature file converter
 ├── fitur/                # 296 endpoint files
-│   ├── ai/               # AI scrapers (GET + POST)
-│   ├── downloader/       # media downloaders (GET + POST)
-│   ├── islamic/          # Islamic utilities (GET + POST)
-│   ├── maker/            # image/text makers (GET + POST)
-│   ├── search/           # search scrapers (GET + POST)
-│   ├── tools/            # utility tools (GET + POST)
-│   └── kana/             # additional scrapers (GET + POST)
+│   ├── ai/               # AI scrapers (GET)
+│   ├── downloader/       # media downloaders (GET)
+│   ├── islamic/          # Islamic utilities (GET)
+│   ├── maker/            # image/text makers (GET)
+│   ├── search/           # search scrapers (GET)
+│   ├── tools/            # utility tools (GET)
+│   └── kana/             # additional scrapers (GET)
 ├── lib/
 │   ├── qwen.js
 │   └── uploader.js
@@ -239,7 +176,7 @@ Create a `.js` file in `fitur/<category>/`:
 // fitur/category/newfeature.js
 export default {
   route: {
-    method: "get",                    // All GET endpoints auto-get POST too
+    method: "get",                    // GET-only (v4.1)
     path: "/category/newfeature",
     auth: false,
     tags: ["Category"],
@@ -262,7 +199,7 @@ export default {
   },
   handler: async (req, res) => {
     const { prompt } = req.query
-    if (!prompt) return res.status(400).json({ ok: false, error: "prompt wajib diisi", hint: "GET: ?prompt=halo or POST: {\"prompt\": \"halo\"}" })
+    if (!prompt) return res.status(400).json({ ok: false, error: "prompt wajib diisi", hint: "GET: ?prompt=halo" })
     try {
       res.json({ ok: true, result: prompt })
     } catch (e) {
@@ -272,7 +209,7 @@ export default {
 }
 ```
 
-Restart server — new endpoint appears in `/docs` automatically. It will also accept POST with JSON body.
+Restart server — new endpoint appears in `/docs` automatically.
 
 ---
 
@@ -293,7 +230,7 @@ API_KEY=your-secret-key-here
 - Elysia compiled router — flat switch dispatch
 - Parallel feature loading — ~100ms cold start
 - CORS headers added inline — no middleware overhead
-- POST support via smart parameter merging — zero handler changes
+- GET-only surface (v4.1) — zero handler changes
 
 ---
 

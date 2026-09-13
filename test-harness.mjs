@@ -221,10 +221,13 @@ function buildParams(path, requiredList) {
     return params
 }
 
+// endpoints yang tidak boleh di-test harness (keputusan pemeliharaan)
+const EXCLUDE_PATHS = [/alight-motion/i]
+
 const eps = JSON.parse(readFileSync("endpoints.json", "utf8"))
 const uniq = new Map()
 for (const e of eps) if (!uniq.has(e.path)) uniq.set(e.path, e)
-let list = [...uniq.values()].filter(e => e.method === "get" && !e.path.startsWith("/admin") && (only ? e.path.startsWith(only) : true))
+let list = [...uniq.values()].filter(e => e.method === "get" && !e.path.startsWith("/admin") && !EXCLUDE_PATHS.some(rx => rx.test(e.path)) && (only ? e.path.startsWith(only) : true))
 const failedFile = arg("--failed", "")
 if (failedFile) {
     const prev = JSON.parse(readFileSync(failedFile, "utf8"))

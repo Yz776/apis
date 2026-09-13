@@ -18,7 +18,7 @@
 //   - GET /health — uptime, cache stats, per-host breaker/latency states
 //   - Graceful shutdown (SIGINT/SIGTERM) + uncaughtException guards
 //   - Retained from v3: rate limiting, DDoS shield, /admin/sync auto-update,
-//     GET+POST dual methods, CORS
+//     GET-only routes (v4.1 removed the dual POST), CORS
 // ============================================================================
 
 import { Elysia } from "elysia"
@@ -723,14 +723,10 @@ app.use(
 
 **${features.length} endpoint** gratis, tanpa API key.
 
-Support **GET** (query params) dan **POST** (JSON body).
+Semua endpoint pakai **GET** (query params).
 
 \`\`\`bash
-# GET
-curl "/ai/chatdeep?prompt=halo"
-
-# POST (recommended)
-curl -X POST "/ai/chatdeep" -H "Content-Type: application/json" -d '{"prompt":"halo"}'
+curl "/ai/gemini?prompt=halo"
 \`\`\``,
             },
             components: {
@@ -795,67 +791,35 @@ app.get("/docs/json", () => new Response(null, {
     headers: { "location": "/swagger/json", "access-control-allow-origin": "*" },
 }))
 
-// ─── Register every feature route (GET + POST) ──────────────────────────────
+// ─── Register every feature route (GET only — v4.1 removed the dual POST) ───
 for (const f of features) {
     const {
         method, path: routePath, auth,
         tags = [], summary, description,
-        parameters, requestBody, responses,
+        parameters, responses,
     } = f.route
 
     const verb = method.toLowerCase()
-    if (typeof app[verb] !== "function") {
-        console.warn(`[skip] unsupported HTTP method "${method}" for ${routePath}`)
+    if (verb !== "get" || typeof app.get !== "function") {
+        console.warn(`[skip] only GET routes are supported (v4.1), skipped "${method}" for ${routePath}`)
         continue
     }
 
     const baseHandler = adapt(f)
     // v4: cache GET responses (opt-out via route.noCache: true or the NO_CACHE_PATHS set)
-    const cacheable = verb === "get" && !f.route.noCache && !NO_CACHE_PATHS.has(routePath)
+    const cacheable = !f.route.noCache && !NO_CACHE_PATHS.has(routePath)
     const handler = cacheable ? withCache(f, baseHandler) : baseHandler
     const enforceAuth = ENABLE_AUTH && auth
 
-    const buildRouteOptions = (forPost = false) => {
-        const detail = {
+    const buildRouteOptions = () => ({
+        detail: {
             tags,
-            ...(summary && { summary: forPost ? `${summary} (POST)` : summary }),
+            ...(summary && { summary }),
             ...(description && { description }),
+            ...(parameters && parameters.length > 0 && { parameters }),
             ...(enforceAuth && { security: [{ ApiKeyAuth: [] }] }),
-        }
-
-        if (!forPost && parameters) {
-            detail.parameters = parameters
-        }
-
-        if (forPost && parameters) {
-            const allParams = parameters.filter(p => p.in === "query" || p.in === "path")
-            if (allParams.length > 0) {
-                const properties = {}
-                const required = []
-                for (const p of allParams) {
-                    properties[p.name] = {
-                        ...(p.schema || { type: "string" }),
-                        ...(p.description && { description: p.description }),
-                    }
-                    if (p.required) required.push(p.name)
-                }
-                detail.requestBody = {
-                    required: required.length > 0,
-                    content: {
-                        "application/json": {
-                            schema: { type: "object", properties, ...(required.length > 0 && { required }) },
-                        },
-                    },
-                }
-            }
-        }
-
-        if (forPost && requestBody) {
-            detail.requestBody = requestBody
-        }
-
-        return { detail }
-    }
+        },
+    })
 
     const authHook = enforceAuth ? {
         beforeHandle: (c) => {
@@ -869,18 +833,14 @@ for (const f of features) {
         },
     } : {}
 
-    app[verb](routePath, handler, { ...buildRouteOptions(false), ...authHook })
-
-    if (verb === "get") {
-        app.post(routePath, handler, { ...buildRouteOptions(true), ...authHook })
-        console.log(`  [dual] ${routePath} → GET + POST`)
-    }
+    app.get(routePath, handler, { ...buildRouteOptions(), ...authHook })
+    console.log(`  [route] ${routePath}`)
 }
 
 // ─── Auto-update: /admin/sync ────────────────────────────────────────────────
 // Fetches new/updated snippets from all 3 sources and creates endpoint files.
-// POST /admin/sync with header x-sync-secret to trigger.
-app.post("/admin/sync", async ({ request, body }) => {
+// GET /admin/sync with header x-sync-secret to trigger (v4.1: GET-only API).
+app.get("/admin/sync", async ({ request, query }) => {
     const secret = request.headers.get("x-sync-secret")
     if (secret !== SYNC_SECRET) {
         return new Response(
@@ -889,7 +849,10 @@ app.post("/admin/sync", async ({ request, body }) => {
         )
     }
 
-    const sources = body?.sources || ["snippet", "nathanlune", "haidarmahiru"]
+    // optional ?sources=snippet,nathanlune (comma-separated); default = all
+    const sources = String(query.sources || "").trim()
+        ? String(query.sources).split(",").map(s => s.trim()).filter(Boolean)
+        : ["snippet", "nathanlune", "haidarmahiru"]
     const results = { added: [], updated: [], skipped: [], errors: [] }
 
     // Tag → directory mapping
@@ -1072,8 +1035,8 @@ pre { background: #0f3460; padding: 12px; border-radius: 8px; overflow-x: auto; 
 <div class="shield ${ddosShield.mode.toLowerCase()}">DDoS Shield: ${ddosShield.mode} — ${ddosShield.mode === "NORMAL" ? "Aman" : ddosShield.mode === "SUSPICIOUS" ? "Perhatian" : "Produksi (Strict)"}</div>
 
 <div class="card">
-<p>Support <code>GET</code> (query) dan <code>POST</code> (JSON body):</p>
-<pre>curl -X POST "/ai/gemini" -H "Content-Type: application/json" -d '{"prompt":"halo"}'</pre>
+<p>Semua endpoint pakai <code>GET</code> (query params):</p>
+<pre>curl "/ai/gemini?prompt=halo"</pre>
 </div>
 
 <div class="card">
@@ -1113,14 +1076,14 @@ app.get("/admin/ddos-status", ({ request, set }) => {
 })
 
 // ─── Admin: Manual DDoS Mode Control ──────────────────────────────────────────
-app.post("/admin/ddos-mode", ({ request, body, set }) => {
+app.get("/admin/ddos-mode", ({ request, query, set }) => {
     const secret = request.headers.get("x-sync-secret")
     if (secret !== SYNC_SECRET) {
         set.status = 401
         set.headers["access-control-allow-origin"] = "*"
         return { ok: false, error: "Secret tidak valid (header: x-sync-secret)" }
     }
-    const newMode = body?.mode
+    const newMode = String(query.mode || "").toUpperCase()
     if (!newMode || !["NORMAL", "SUSPICIOUS", "PRODUCTION"].includes(newMode)) {
         set.status = 400
         set.headers["access-control-allow-origin"] = "*"
