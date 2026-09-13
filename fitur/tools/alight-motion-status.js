@@ -1,11 +1,10 @@
 // ============================================================================
-// Alight Motion Premium — Account Status Check
+// Alight Motion Premium — Account Status Check (GET only, v4.1 compliant)
 // ----------------------------------------------------------------------------
 // Pasangan dari /tools/alight-motion dan /tools/alight-motion/refresh.
 // Memeriksa status akun & premium Alight Motion via Firebase getAccountInfo.
 //
-//   GET  /tools/alight-motion/status?idToken=<idToken>
-//   POST /tools/alight-motion/status    { "idToken": "..." }
+//   GET /tools/alight-motion/status?idToken=<idToken>
 //
 // Backend memakai Firebase Identity Toolkit getAccountInfo untuk:
 //   1. Memvalidasi idToken (jika invalid/expired → 401)
@@ -13,7 +12,7 @@
 //   3. Mencoba mendeteksi status premium dari:
 //        - customAttributes (Firebase Custom Claims)
 //        - providerUserInfo
-//        - photoUrl / displayName perubahan post-premium
+//        - photoUrl / displayName perubahan setelah premium
 //
 // Catatan: Alight Motion menyimpan status premium di sisi server aplikasi
 // (Cloud Firestore / Realtime DB), bukan di Firebase Auth custom claims.
@@ -178,8 +177,7 @@ export default {
             "Mengambil info akun Firebase Auth dari `idToken` dan menjalankan heuristik untuk mendeteksi apakah akun sudah premium.\n\n" +
             "**Contoh (GET):**\n" +
             "```\nGET /tools/alight-motion/status?idToken=eyJhbGc...\n```\n\n" +
-            "**Contoh (POST — direkomendasikan agar idToken tidak muncul di URL):**\n" +
-            "```\nPOST /tools/alight-motion/status\nContent-Type: application/json\n\n{ \"idToken\": \"eyJhbGc...\" }\n```\n\n" +
+            "Catatan: idToken berupa JWT yang cukup panjang. Endpoint ini hanya menerima GET (v4.1 GET-only API). Jika idToken melebihi batas panjang URL browser/server, pendekatan alternatifnya adalah menggunakan /tools/alight-motion/refresh untuk memperpendek sesi atau memangkas idToken.\n\n" +
             "**Response:**\n" +
             "```\n{\n  \"ok\": true,\n  \"premium\": true | null,\n  \"premiumSources\": [\"customAttributes.premium=true\"],\n  \"user\": {\n    \"localId\": \"...\",\n    \"email\": \"...\",\n    \"emailVerified\": true,\n    \"createdAt\": \"...\",\n    \"lastLoginAt\": \"...\"\n  }\n}\n```\n\n" +
             "Catatan penting:\n" +
@@ -193,7 +191,7 @@ export default {
                 in: "query",
                 required: true,
                 description:
-                    "Firebase idToken (Bearer token) dari /tools/alight-motion Tahap 2 atau dari /tools/alight-motion/refresh. Untuk keamanan lebih baik, kirim via POST body.",
+                    "Firebase idToken (Bearer token) dari /tools/alight-motion Tahap 2 atau dari /tools/alight-motion/refresh. Wajib dikirim via query string (v4.1 GET-only API).",
                 schema: { type: "string" },
             },
         ],
@@ -250,16 +248,15 @@ export default {
 
     // ─── Handler ─────────────────────────────────────────────────────────────
     handler: async (req, res) => {
-        // Endpoint ini menerima idToken lewat query (GET) atau body (POST).
-        // index.js menggabungkan keduanya di req.query (lihat adapt() di index.js:
-        // `const mergedQuery = { ...c.query, ...body }`).
+        // Endpoint ini menerima idToken lewat query (GET) — sesuai arsitektur
+        // GET-only v4.1.
         const idToken = String(req.query.idToken || "").trim()
 
         if (!idToken) {
             return res.status(400).json({
                 ok: false,
                 error:
-                    "Parameter 'idToken' wajib diisi. Dapat via query (GET) atau body (POST).",
+                    "Parameter 'idToken' wajib diisi via query string (GET).",
             })
         }
 
