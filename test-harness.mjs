@@ -157,6 +157,7 @@ const overrides = {
     "/ai/pollinations": { prompt: "seekor kucing Astronot", width: "512", height: "512", check: "true" },
     "/search/wikipedia": { q: "Indonesia" },
     "/search/appstore": { query: "whatsapp" },
+    "/search/image": { query: "kucing", limit: "10" },
     "/tools/zoneai/img2txt": { url: IMG },
 }
 
