@@ -155,6 +155,7 @@ const overrides = {
     "/info/university": { name: "harvard" },
     "/tools/uploader": { url: IMG },
     "/ai/pollinations": { prompt: "seekor kucing Astronot", width: "512", height: "512", check: "true" },
+    "/ai/g-ai": { query: "info" },
     "/search/wikipedia": { q: "Indonesia" },
     "/search/appstore": { query: "whatsapp" },
     "/search/image": { query: "kucing", limit: "10" },
