@@ -1,1 +1,5488 @@
-[{"method":"get","path":"/","required":[]},{"method":"get","path":"/admin/ddos-mode","required":[]},{"method":"get","path":"/admin/ddos-status","required":[]},{"method":"get","path":"/admin/sync","required":[]},{"method":"get","path":"/ai/chatday","required":[{"name":"prompt","in":"query","required":true,"description":"Your message/prompt","schema":{"type":"string"}}]},{"method":"get","path":"/ai/chatgpt","required":[{"name":"prompt","in":"query","required":true,"description":"Pertanyaan atau pesan yang dikirim ke ChatGPT","schema":{"type":"string","example":"Halo, kamu siapa?"}}]},{"method":"get","path":"/ai/chatilm","required":[{"name":"prompt","in":"query","required":true,"description":"Pertanyaan / prompt untuk AI","schema":{"type":"string","example":"Apa itu zakat?"}}]},{"method":"get","path":"/ai/claude3","required":[{"name":"prompt","in":"query","required":true,"description":"Pertanyaan / prompt untuk AI","schema":{"type":"string"}}]},{"method":"get","path":"/ai/deepai-chat","required":[{"name":"prompt","in":"query","required":true,"description":"Pesan atau pertanyaan yang dikirim ke DeepAI","schema":{"type":"string"}}]},{"method":"get","path":"/ai/deepai-v2","required":[{"name":"prompt","in":"query","required":true,"description":"Pesan / pertanyaan untuk AI.","schema":{"type":"string","example":"Halo, siapa kamu?"}}]},{"method":"get","path":"/ai/felo","required":[{"name":"query","in":"query","required":true,"description":"Pertanyaan atau query pencarian","schema":{"type":"string","example":"siapa presiden indonesia sekarang?"}}]},{"method":"get","path":"/ai/g-ai","required":[]},{"method":"get","path":"/ai/gemini","required":[{"name":"prompt","in":"query","required":true,"description":"Pertanyaan atau pesan yang dikirim ke Gemini","schema":{"type":"string","example":"Siapa penemu telepon?"}}]},{"method":"get","path":"/ai/mistral","required":[{"name":"prompt","in":"query","required":true,"description":"Pesan atau pertanyaan yang dikirim ke Mistral AI","schema":{"type":"string","example":"Apa itu artificial intelligence?"}}]},{"method":"get","path":"/ai/pollinations","required":[{"name":"prompt","in":"query","required":true,"description":"Deskripsi gambar","schema":{"type":"string","example":"seekor rubah merah di hutan, sinematik"}}]},{"method":"get","path":"/ai/qwen","required":[{"name":"prompt","in":"query","required":true,"description":"Pesan atau pertanyaan dalam bahasa apa pun. Untuk t2i/t2v: deskripsi gambar/video yang diinginkan.","schema":{"type":"string","example":"Jelaskan teori relativitas secara singkat"}}]},{"method":"get","path":"/anime/anibiplay","required":[]},{"method":"get","path":"/anime/dubindo","required":[]},{"method":"get","path":"/anime/hurawatch","required":[]},{"method":"get","path":"/anime/klikfilm","required":[]},{"method":"get","path":"/anime/livechart","required":[{"name":"query","in":"query","required":true,"description":"Kata kunci pencarian atau slug/ID anime (untuk type=detail)","schema":{"type":"string","example":"frieren"}}]},{"method":"get","path":"/anime/moviebox","required":[]},{"method":"get","path":"/anime/samehadaku","required":[]},{"method":"get","path":"/ddos-mode","required":[]},{"method":"get","path":"/docs","required":[]},{"method":"get","path":"/docs/json","required":[]},{"method":"get","path":"/downloader/9xbuddy","required":[{"name":"url","in":"query","required":true,"description":"URL media yang ingin diunduh","schema":{"type":"string","example":"https://www.youtube.com/watch?v=dQw4w9WgXcQ"}}]},{"method":"get","path":"/downloader/aiodl","required":[{"name":"url","in":"query","required":true,"description":"URL media (TikTok, Instagram, Facebook, dll.)","schema":{"type":"string","example":"https://www.tiktok.com/@scout2015/video/6718335390845095173"}}]},{"method":"get","path":"/downloader/cnv","required":[{"name":"url","in":"query","required":true,"description":"URL YouTube (watch atau youtu.be)","schema":{"type":"string","example":"https://youtu.be/pNNnrE_RSdE"}}]},{"method":"get","path":"/downloader/ensave","required":[{"name":"url","in":"query","required":true,"description":"URL media (YouTube, TikTok, Instagram, Facebook, Reddit, SoundCloud, X)","schema":{"type":"string","example":"https://youtu.be/dQw4w9WgXcQ"}}]},{"method":"get","path":"/downloader/ensaveyt","required":[{"name":"url","in":"query","required":true,"description":"URL YouTube (watch, youtu.be, shorts, live, atau embed)","schema":{"type":"string","example":"https://youtu.be/dQw4w9WgXcQ"}}]},{"method":"get","path":"/downloader/fbdown","required":[{"name":"url","in":"query","required":true,"description":"URL video Facebook (postingan, reels, atau watch)","schema":{"type":"string","example":"https://www.facebook.com/facebook/videos/10153231379946729/"}}]},{"method":"get","path":"/downloader/flickreels","required":[{"name":"url","in":"query","required":true,"description":"URL FlickReels (drama/episode) atau kata kunci pencarian","schema":{"type":"string","example":"https://www.flickreels.net/drama/420"}}]},{"method":"get","path":"/downloader/igvid","required":[{"name":"url","in":"query","required":true,"description":"URL Instagram (post /p/, reel /reel/, atau /tv/)","schema":{"type":"string","example":"https://www.instagram.com/reel/DXVZ4yCCG0J/"}}]},{"method":"get","path":"/downloader/instagram","required":[{"name":"url","in":"query","required":true,"description":"URL post/reel Instagram","schema":{"type":"string","example":"https://www.instagram.com/p/DaHSc8TjxAW/"}}]},{"method":"get","path":"/downloader/instagram2","required":[{"name":"url","in":"query","required":true,"description":"URL post/reel Instagram","schema":{"type":"string","example":"https://www.instagram.com/reel/DZOyRZNTfLZ/"}}]},{"method":"get","path":"/downloader/kolig","required":[{"name":"url","in":"query","required":true,"description":"URL Instagram (post /p/, reel /reel/, atau story)","schema":{"type":"string","example":"https://www.instagram.com/reel/DXVZ4yCCG0J/"}}]},{"method":"get","path":"/downloader/kolyt","required":[{"name":"url","in":"query","required":true,"description":"URL YouTube (watch atau youtu.be)","schema":{"type":"string","example":"https://youtu.be/dQw4w9WgXcQ"}}]},{"method":"get","path":"/downloader/musicaldown","required":[{"name":"url","in":"query","required":true,"description":"URL TikTok (video, photo/slideshow, atau short link vm.tiktok.com)","schema":{"type":"string","example":"https://vm.tiktok.com/ZSQbmkw89/"}}]},{"method":"get","path":"/downloader/musicfab","required":[{"name":"url","in":"query","required":true,"description":"URL track Spotify","schema":{"type":"string","example":"https://open.spotify.com/track/4bCoqCjwZggHxHcUSRpFDG"}}]},{"method":"get","path":"/downloader/pindown","required":[{"name":"url","in":"query","required":true,"description":"URL Pinterest (pin.it atau pinterest.com)","schema":{"type":"string","example":"https://pin.it/uWysLLKpr"}}]},{"method":"get","path":"/downloader/soundcloud","required":[]},{"method":"get","path":"/downloader/spotidown","required":[{"name":"url","in":"query","required":true,"description":"URL Spotify: track, playlist, atau album","schema":{"type":"string","example":"https://open.spotify.com/track/4PTG3Z6ehGkBFwjybzWkR8"}}]},{"method":"get","path":"/downloader/ssstik","required":[{"name":"url","in":"query","required":true,"description":"URL video TikTok","schema":{"type":"string","example":"https://vm.tiktok.com/ZSQB7uUrV/"}}]},{"method":"get","path":"/downloader/threads","required":[{"name":"url","in":"query","required":true,"description":"URL post Threads","schema":{"type":"string","example":"https://www.threads.com/@derahmatsyuhada/post/DaIUHnSjyIb"}}]},{"method":"get","path":"/downloader/threadsdl","required":[{"name":"url","in":"query","required":true,"description":"URL postingan Threads","schema":{"type":"string","example":"https://www.threads.com/@esports.ku/post/DZm4eSFEiDs"}}]},{"method":"get","path":"/downloader/threadster","required":[{"name":"url","in":"query","required":true,"description":"URL postingan Threads","schema":{"type":"string","example":"https://www.threads.com/@citra_nurmalasarii/post/DZmxdS9mIw0"}}]},{"method":"get","path":"/downloader/y2meta","required":[{"name":"url","in":"query","required":true,"description":"URL YouTube (watch, youtu.be, shorts, live, atau embed)","schema":{"type":"string","example":"https://youtu.be/dQw4w9WgXcQ"}}]},{"method":"get","path":"/downloader/youtube-summary","required":[{"name":"url","in":"query","required":true,"description":"URL video YouTube (youtube.com/watch?v=... atau youtu.be/...)","schema":{"type":"string","example":"https://www.youtube.com/watch?v=dQw4w9WgXcQ"}}]},{"method":"get","path":"/downloader/yt-music","required":[{"name":"query","in":"query","required":true,"description":"Kata kunci pencarian atau videoId (untuk type=detail)","schema":{"type":"string","example":"never gonna give you up"}}]},{"method":"get","path":"/downloader/yttranscript","required":[{"name":"url","in":"query","required":true,"description":"URL video YouTube (youtube.com/watch?v=... atau youtu.be/...)","schema":{"type":"string","example":"https://www.youtube.com/watch?v=dQw4w9WgXcQ"}}]},{"method":"get","path":"/health","required":[]},{"method":"get","path":"/info/advice","required":[]},{"method":"get","path":"/info/affirmation","required":[]},{"method":"get","path":"/info/age","required":[{"name":"birth","in":"query","required":true,"description":"Tanggal lahir (YYYY-MM-DD)","schema":{"type":"string","example":"1990-05-15"}}]},{"method":"get","path":"/info/agify","required":[{"name":"name","in":"query","required":true,"description":"Nama depan","schema":{"type":"string","example":"alex"}}]},{"method":"get","path":"/info/arxiv","required":[{"name":"q","in":"query","required":true,"description":"Query pencarian","schema":{"type":"string","example":"transformer attention"}}]},{"method":"get","path":"/info/avatar","required":[]},{"method":"get","path":"/info/books","required":[{"name":"q","in":"query","required":true,"description":"Query pencarian","schema":{"type":"string","example":"harry potter"}}]},{"method":"get","path":"/info/bored","required":[]},{"method":"get","path":"/info/breaking-bad","required":[]},{"method":"get","path":"/info/cat-facts","required":[]},{"method":"get","path":"/info/chinese-zodiac","required":[{"name":"year","in":"query","required":true,"description":"Tahun lahir (1900-2100)","schema":{"type":"integer","example":1990}}]},{"method":"get","path":"/info/cocktail","required":[]},{"method":"get","path":"/info/country","required":[{"name":"query","in":"query","required":true,"description":"Nama negara atau kode ISO 2/3 huruf (mis. indonesia, ID, IDN)","schema":{"type":"string","example":"indonesia"}}]},{"method":"get","path":"/info/crossref","required":[{"name":"q","in":"query","required":true,"description":"Query pencarian","schema":{"type":"string","example":"climate change"}}]},{"method":"get","path":"/info/crypto-price","required":[]},{"method":"get","path":"/info/currency","required":[{"name":"from","in":"query","required":true,"description":"Kode mata uang sumber (mis. USD)","schema":{"type":"string","example":"USD"}},{"name":"to","in":"query","required":true,"description":"Kode mata uang tujuan (mis. IDR)","schema":{"type":"string","example":"IDR"}}]},{"method":"get","path":"/info/dictionary","required":[{"name":"word","in":"query","required":true,"description":"Kata yang dicari","schema":{"type":"string","example":"hello"}}]},{"method":"get","path":"/info/dns","required":[{"name":"domain","in":"query","required":true,"description":"Nama domain (mis. example.com)","schema":{"type":"string","example":"google.com"}}]},{"method":"get","path":"/info/dog-ceo","required":[]},{"method":"get","path":"/info/dog-facts","required":[]},{"method":"get","path":"/info/dog-facts-v2","required":[]},{"method":"get","path":"/info/fact","required":[]},{"method":"get","path":"/info/genderize","required":[{"name":"name","in":"query","required":true,"description":"Nama depan","schema":{"type":"string","example":"alex"}}]},{"method":"get","path":"/info/geocode","required":[{"name":"q","in":"query","required":true,"description":"Nama lokasi","schema":{"type":"string","example":"Jakarta"}}]},{"method":"get","path":"/info/github-repo","required":[{"name":"owner","in":"query","required":true,"description":"Owner repo","schema":{"type":"string","example":"torvalds"}},{"name":"repo","in":"query","required":true,"description":"Nama repo","schema":{"type":"string","example":"linux"}}]},{"method":"get","path":"/info/github-search","required":[{"name":"q","in":"query","required":true,"description":"Query pencarian","schema":{"type":"string","example":"elysia bun"}}]},{"method":"get","path":"/info/github-user","required":[{"name":"username","in":"query","required":true,"description":"Username GitHub","schema":{"type":"string","example":"torvalds"}}]},{"method":"get","path":"/info/hackernews","required":[]},{"method":"get","path":"/info/holidays","required":[{"name":"country","in":"query","required":true,"description":"Kode negara 2 huruf (mis. ID, US, GB)","schema":{"type":"string","example":"ID"}}]},{"method":"get","path":"/info/http-headers","required":[{"name":"url","in":"query","required":true,"description":"URL target","schema":{"type":"string","example":"https://example.com"}}]},{"method":"get","path":"/info/http-status","required":[]},{"method":"get","path":"/info/ip","required":[]},{"method":"get","path":"/info/iss-location","required":[]},{"method":"get","path":"/info/joke","required":[]},{"method":"get","path":"/info/markdown","required":[{"name":"text","in":"query","required":true,"description":"Teks Markdown","schema":{"type":"string","example":"# Halo\nIni **bold** dan *italic*."}}]},{"method":"get","path":"/info/meal","required":[]},{"method":"get","path":"/info/moon-phase","required":[]},{"method":"get","path":"/info/nationalize","required":[{"name":"name","in":"query","required":true,"description":"Nama depan","schema":{"type":"string","example":"rahmat"}}]},{"method":"get","path":"/info/npm","required":[{"name":"name","in":"query","required":true,"description":"Nama paket NPM","schema":{"type":"string","example":"axios"}}]},{"method":"get","path":"/info/numbers","required":[]},{"method":"get","path":"/info/open-weather","required":[{"name":"lat","in":"query","required":true,"description":"Latitude","schema":{"type":"number","example":-6.2088}},{"name":"lon","in":"query","required":true,"description":"Longitude","schema":{"type":"number","example":106.8456}}]},{"method":"get","path":"/info/placeholder","required":[]},{"method":"get","path":"/info/pokemon","required":[{"name":"name","in":"query","required":true,"description":"Nama atau ID Pokemon","schema":{"type":"string","example":"pikachu"}}]},{"method":"get","path":"/info/pokemon-list","required":[]},{"method":"get","path":"/info/qr-api","required":[{"name":"text","in":"query","required":true,"description":"Teks/URL yang akan di-encode","schema":{"type":"string","example":"https://kangwifi.eu.org"}}]},{"method":"get","path":"/info/quotable","required":[]},{"method":"get","path":"/info/quote","required":[]},{"method":"get","path":"/info/quotes-categories","required":[]},{"method":"get","path":"/info/random","required":[]},{"method":"get","path":"/info/random-quotes","required":[]},{"method":"get","path":"/info/rickandmorty","required":[]},{"method":"get","path":"/info/space-people","required":[]},{"method":"get","path":"/info/swapi","required":[]},{"method":"get","path":"/info/time","required":[]},{"method":"get","path":"/info/timezone","required":[]},{"method":"get","path":"/info/tv-maze","required":[{"name":"q","in":"query","required":true,"description":"Query pencarian","schema":{"type":"string","example":"breaking bad"}}]},{"method":"get","path":"/info/university","required":[]},{"method":"get","path":"/info/useless-fact","required":[]},{"method":"get","path":"/info/user-agent","required":[]},{"method":"get","path":"/info/weather-coord","required":[{"name":"lat","in":"query","required":true,"description":"Latitude (-90 to 90)","schema":{"type":"number","example":-6.2}},{"name":"lon","in":"query","required":true,"description":"Longitude (-180 to 180)","schema":{"type":"number","example":106.8}}]},{"method":"get","path":"/info/xkcd","required":[]},{"method":"get","path":"/info/zodiac","required":[{"name":"month","in":"query","required":true,"description":"Bulan lahir 1-12","schema":{"type":"integer","example":7}},{"name":"day","in":"query","required":true,"description":"Tanggal lahir 1-31","schema":{"type":"integer","example":15}}]},{"method":"get","path":"/islamic/asmaul-husna","required":[]},{"method":"get","path":"/islamic/doa-harian","required":[]},{"method":"get","path":"/islamic/hadits","required":[]},{"method":"get","path":"/islamic/jadwal-sholat","required":[]},{"method":"get","path":"/islamic/quran-list","required":[]},{"method":"get","path":"/islamic/quran-surah","required":[{"name":"id","in":"query","required":true,"description":"Nomor surah (1-114)","schema":{"type":"integer","minimum":1,"maximum":114,"example":1}}]},{"method":"get","path":"/maker/brat","required":[{"name":"text","in":"query","required":true,"description":"Teks yang ditampilkan (otomatis lowercase, maks 20 kata)","schema":{"type":"string","example":"brat"}}]},{"method":"get","path":"/maker/bratanim","required":[{"name":"text","in":"query","required":true,"description":"Teks. Tiap kata muncul bergantian. (maks 10 kata)","schema":{"type":"string","example":"i'm so julia"}}]},{"method":"get","path":"/maker/iqc","required":[{"name":"text","in":"query","required":true,"description":"Isi pesan (maks 400 karakter, auto-wrap, mendukung markdown *tebal* _miring_ ~coret~)","schema":{"type":"string","example":"Ini adalah *contoh* fake chat iPhone.\nMendukung _markdown_ ~juga~."}}]},{"method":"get","path":"/maker/jj-capcut-generator","required":[]},{"method":"get","path":"/maker/qc","required":[{"name":"username","in":"query","required":true,"description":"Nama yang ditampilkan (maks 40 karakter)","schema":{"type":"string","example":"jauhariel.cc"}},{"name":"text","in":"query","required":true,"description":"Isi pesan (maks 500 karakter, auto-wrap)","schema":{"type":"string","example":"halo dunia apa kabar"}}]},{"method":"get","path":"/search/appstore","required":[{"name":"query","in":"query","required":true,"description":"Kata kunci","schema":{"type":"string"}}]},{"method":"get","path":"/search/cek-nik","required":[{"name":"nik","in":"query","required":true,"description":"Nomor Induk Kependudukan 16 digit","schema":{"type":"string","example":"3271011708950001"}}]},{"method":"get","path":"/search/cek-plat","required":[{"name":"plate","in":"query","required":true,"description":"Plat nomor kendaraan (contoh: B 1234 ABC)","schema":{"type":"string","example":"B 1234 ABC"}}]},{"method":"get","path":"/search/ff-verify","required":[{"name":"id","in":"query","required":true,"description":"User ID akun Free Fire","schema":{"type":"string","example":"1000695760"}}]},{"method":"get","path":"/search/gsm-area","required":[{"name":"nomor","in":"query","required":true,"description":"Nomor telepon Indonesia. Format apa pun diterima: 08xxx, +628xxx, 628xxx, 021xxx, dll.","schema":{"type":"string","example":"081234567890"}}]},{"method":"get","path":"/search/gsmarena","required":[]},{"method":"get","path":"/search/ik21","required":[{"name":"query","in":"query","required":true,"description":"Kata kunci pencarian","schema":{"type":"string"}}]},{"method":"get","path":"/search/image","required":[{"name":"query","in":"query","required":true,"description":"Kata kunci gambar","schema":{"type":"string","example":"kucing lucu"}}]},{"method":"get","path":"/search/iq-search-drama","required":[{"name":"query","in":"query","required":true,"description":"Kata kunci pencarian","schema":{"type":"string"}}]},{"method":"get","path":"/search/manhwalist02","required":[{"name":"query","in":"query","required":true,"description":"Kata kunci pencarian","schema":{"type":"string"}}]},{"method":"get","path":"/search/moviev2","required":[{"name":"query","in":"query","required":true,"description":"Kata kunci pencarian","schema":{"type":"string"}}]},{"method":"get","path":"/search/otakudesu","required":[{"name":"query","in":"query","required":true,"description":"Kata kunci pencarian","schema":{"type":"string"}}]},{"method":"get","path":"/search/pinterest","required":[{"name":"query","in":"query","required":true,"description":"Kata kunci pencarian","schema":{"type":"string","example":"furina"}}]},{"method":"get","path":"/search/pinterest2","required":[{"name":"query","in":"query","required":true,"description":"Kata kunci pencarian","schema":{"type":"string","example":"furina genshin"}}]},{"method":"get","path":"/search/spotify","required":[{"name":"query","in":"query","required":true,"description":"Kata kunci pencarian lagu","schema":{"type":"string","example":"introvert lirik"}}]},{"method":"get","path":"/search/spotify-playlist","required":[{"name":"url","in":"query","required":true,"description":"URL playlist, album, atau artist Spotify","schema":{"type":"string","example":"https://open.spotify.com/playlist/3Lf9PqUBWQMeOtfuCNPnoY"}}]},{"method":"get","path":"/search/stalk-game","required":[{"name":"game","in":"query","required":true,"description":"Game yang dicek: ml, ff, gi (Genshin), pubgm, codm, aov","schema":{"type":"string","enum":["ml","ff","gi","pubgm","codm","aov"],"example":"ml"}},{"name":"id","in":"query","required":true,"description":"User ID / UID akun game","schema":{"type":"string","example":"157228049"}}]},{"method":"get","path":"/search/tokopedia","required":[{"name":"q","in":"query","required":true,"description":"Kata kunci pencarian produk","schema":{"type":"string","example":"vivo x300"}}]},{"method":"get","path":"/search/wikipedia","required":[{"name":"q","in":"query","required":true,"description":"Kata kunci pencarian","schema":{"type":"string"}}]},{"method":"get","path":"/search/youtube","required":[{"name":"q","in":"query","required":true,"description":"Kata kunci pencarian","schema":{"type":"string","example":"never gonna give you up"}}]},{"method":"get","path":"/search/youtube-playlist","required":[{"name":"url","in":"query","required":true,"description":"URL playlist YouTube atau ID playlist (PL..., OLAK..., dst.)","schema":{"type":"string","example":"https://youtube.com/playlist?list=PL4fGSI1pDJn5QPpj0R4vVgRWk8sSq549G"}}]},{"method":"get","path":"/text/affine","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"AFFINE CIPHER"}}]},{"method":"get","path":"/text/anagram","required":[{"name":"a","in":"query","required":true,"description":"String pertama","schema":{"type":"string","example":"listen"}},{"name":"b","in":"query","required":true,"description":"String kedua","schema":{"type":"string","example":"silent"}}]},{"method":"get","path":"/text/case","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia selamat"}}]},{"method":"get","path":"/text/char-frequency","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia"}}]},{"method":"get","path":"/text/char-info","required":[{"name":"char","in":"query","required":true,"description":"Satu karakter (atau string, hanya karakter pertama)","schema":{"type":"string","example":"A"}}]},{"method":"get","path":"/text/count","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"Halo dunia. Selamat datang di API."}}]},{"method":"get","path":"/text/diff","required":[{"name":"a","in":"query","required":true,"description":"Teks pertama","schema":{"type":"string","example":"baris 1\nbaris 2\nbaris 3"}},{"name":"b","in":"query","required":true,"description":"Teks kedua","schema":{"type":"string","example":"baris 1\nbaris baru\nbaris 3"}}]},{"method":"get","path":"/text/escape","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"<b>halo & dunia</b>"}}]},{"method":"get","path":"/text/find-replace","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia halo semua"}},{"name":"find","in":"query","required":true,"description":"Pattern yang dicari (string atau /regex/flags)","schema":{"type":"string","example":"halo"}},{"name":"replace","in":"query","required":true,"description":"Teks pengganti","schema":{"type":"string","example":"hi"}}]},{"method":"get","path":"/text/leetspeak","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia"}}]},{"method":"get","path":"/text/line-numbers","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"baris 1\nbaris 2\nbaris 3"}}]},{"method":"get","path":"/text/pad","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo"}}]},{"method":"get","path":"/text/palindrome","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"Kasur ini rusak"}}]},{"method":"get","path":"/text/pig-latin","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"hello world"}}]},{"method":"get","path":"/text/rail-fence","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"HELLO WORLD"}}]},{"method":"get","path":"/text/reading-time","required":[{"name":"text","in":"query","required":true,"description":"Teks yang dihitung","schema":{"type":"string","example":"This is a sample text for reading time estimation."}}]},{"method":"get","path":"/text/regex","required":[{"name":"pattern","in":"query","required":true,"description":"Pattern regex tanpa delimiter","schema":{"type":"string","example":"\\d+"}},{"name":"text","in":"query","required":true,"description":"Teks yang diuji","schema":{"type":"string","example":"abc 123 def 456"}}]},{"method":"get","path":"/text/reverse","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia"}}]},{"method":"get","path":"/text/rot47","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"Hello World"}}]},{"method":"get","path":"/text/sort","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"banana\napple\ncherry"}}]},{"method":"get","path":"/text/strip-html","required":[{"name":"text","in":"query","required":true,"description":"Teks HTML input","schema":{"type":"string","example":"<p>Halo <b>dunia</b> &amp; semuanya</p>"}}]},{"method":"get","path":"/text/syllable-count","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"Hello beautiful world"}}]},{"method":"get","path":"/text/text-stat","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"This is a sample sentence. It contains several words for analysis."}}]},{"method":"get","path":"/text/truncate","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"Lorem ipsum dolor sit amet consectetur adipiscing elit"}}]},{"method":"get","path":"/text/unique","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"apple\nbanana\napple\ncherry"}}]},{"method":"get","path":"/text/word-frequency","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"the quick brown fox jumps over the lazy dog the the"}}]},{"method":"get","path":"/text/wrap","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod"}}]},{"method":"get","path":"/tools/alight-motion","required":[{"name":"email","in":"query","required":true,"description":"Alamat email akun Alight Motion yang akan dipromosikan","schema":{"type":"string","example":"user@example.com"}}]},{"method":"get","path":"/tools/alight-motion/refresh","required":[{"name":"refreshToken","in":"query","required":true,"description":"Refresh token yang didapat dari response /tools/alight-motion (field `auth.refreshToken`).","schema":{"type":"string","example":"AMf-vBx...long-token-string..."}}]},{"method":"get","path":"/tools/alight-motion/status","required":[{"name":"idToken","in":"query","required":true,"description":"Firebase idToken (Bearer token) dari /tools/alight-motion Tahap 2 atau dari /tools/alight-motion/refresh. Wajib dikirim via query string (v4.1 GET-only API).","schema":{"type":"string"}}]},{"method":"get","path":"/tools/bmkg","required":[]},{"method":"get","path":"/tools/cuaca","required":[]},{"method":"get","path":"/tools/cuaca-global","required":[{"name":"kota","in":"query","required":true,"description":"Nama kota (mis. Tokyo, Sumenep, Bandung)","schema":{"type":"string","example":"Tokyo"}}]},{"method":"get","path":"/tools/farestop","required":[{"name":"query","in":"query","required":true,"description":"Nama game atau game ID yang dicari (mis. 'roblox' atau '100')","schema":{"type":"string","example":"roblox"}}]},{"method":"get","path":"/tools/gempa","required":[]},{"method":"get","path":"/tools/hd","required":[{"name":"url","in":"query","required":true,"description":"URL gambar yang akan diperbesar","schema":{"type":"string","example":"https://picsum.photos/200/200.jpg"}}]},{"method":"get","path":"/tools/idnapp","required":[{"name":"input","in":"query","required":true,"description":"Parameter input","schema":{"type":"string"}}]},{"method":"get","path":"/tools/ihancer","required":[{"name":"url","in":"query","required":true,"description":"URL gambar publik yang akan dienhance","schema":{"type":"string","example":"https://example.com/photo.jpg"}}]},{"method":"get","path":"/tools/linkpreview","required":[{"name":"url","in":"query","required":true,"description":"URL yang ingin di-preview","schema":{"type":"string","example":"https://www.youtube.com"}}]},{"method":"get","path":"/tools/nyckel-nsfw","required":[{"name":"url","in":"query","required":true,"description":"URL gambar yang akan diperiksa","schema":{"type":"string","example":"https://github.com/fluidicon.png"}}]},{"method":"get","path":"/tools/photoihancer","required":[{"name":"url","in":"query","required":true,"description":"URL gambar/video yang akan diproses","schema":{"type":"string"}}]},{"method":"get","path":"/tools/picsart","required":[{"name":"url","in":"query","required":true,"description":"URL gambar publik yang akan di-enhance","schema":{"type":"string","example":"https://example.com/photo.jpg"}}]},{"method":"get","path":"/tools/qrcode","required":[]},{"method":"get","path":"/tools/removalai","required":[{"name":"url","in":"query","required":true,"description":"URL gambar publik yang akan dihapus background-nya.","schema":{"type":"string","example":"https://example.com/foto.jpg"}}]},{"method":"get","path":"/tools/removebg","required":[{"name":"url","in":"query","required":true,"description":"URL gambar publik yang akan dihapus background-nya (hindari URL yang redirect lintas-host).","schema":{"type":"string","example":"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=512&h=512&fit=crop"}}]},{"method":"get","path":"/tools/restoredphoto","required":[{"name":"url","in":"query","required":true,"description":"URL gambar/video yang akan diproses","schema":{"type":"string"}}]},{"method":"get","path":"/tools/sekolah","required":[{"name":"type","in":"query","required":true,"description":"Jenis aksi: `search` (cari sekolah) atau `detail` (detail sekolah berdasarkan NPSN).","schema":{"type":"string","enum":["search","detail"],"example":"search"}}]},{"method":"get","path":"/tools/shortlink","required":[{"name":"url","in":"query","required":true,"description":"URL yang akan dipersingkat","schema":{"type":"string"}}]},{"method":"get","path":"/tools/shorturl","required":[{"name":"url","in":"query","required":true,"description":"URL yang ingin dipersingkat","schema":{"type":"string","example":"https://example.com/halaman-yang-sangat-panjang"}}]},{"method":"get","path":"/tools/tempmail","required":[]},{"method":"get","path":"/tools/translate","required":[{"name":"text","in":"query","required":true,"description":"Teks yang ingin diterjemahkan","schema":{"type":"string","example":"Selamat pagi, apa kabar?"}}]},{"method":"get","path":"/tools/tts","required":[{"name":"text","in":"query","required":true,"description":"Teks yang ingin dijadikan audio","schema":{"type":"string","example":"Selamat pagi semuanya"}}]},{"method":"get","path":"/tools/ttsbrando","required":[{"name":"text","in":"query","required":true,"description":"Teks yang akan dijadikan suara","schema":{"type":"string"}}]},{"method":"get","path":"/tools/ufile","required":[{"name":"url","in":"query","required":true,"description":"URL file yang akan diunggah ulang","schema":{"type":"string"}}]},{"method":"get","path":"/tools/uploader","required":[{"name":"url","in":"query","required":true,"description":"URL file/gambar yang akan diunggah ulang","schema":{"type":"string","example":"https://picsum.photos/id/237/400/400.jpg"}}]},{"method":"get","path":"/tools/visualparadigm","required":[{"name":"url","in":"query","required":true,"description":"URL gambar publik yang akan di-enhance","schema":{"type":"string","example":"https://example.com/photo.jpg"}}]},{"method":"get","path":"/tools/webshot","required":[{"name":"url","in":"query","required":true,"description":"URL website yang ingin di-screenshot","schema":{"type":"string","example":"https://www.google.com"}}]},{"method":"get","path":"/tools/ytmeta","required":[{"name":"url","in":"query","required":true,"description":"URL atau ID video YouTube (watch, youtu.be, shorts, music, embed)","schema":{"type":"string","example":"https://youtu.be/pNNnrE_RSdE"}}]},{"method":"get","path":"/tools/zoneai/img2txt","required":[{"name":"url","in":"query","required":true,"description":"URL gambar yang akan diproses","schema":{"type":"string","example":"https://example.com/image.jpg"}}]},{"method":"get","path":"/tools/zoneai/text2img","required":[{"name":"prompt","in":"query","required":true,"description":"Teks deskripsi gambar","schema":{"type":"string","example":"anime maid girl with red hair glasses"}}]},{"method":"get","path":"/utils/aes","required":[{"name":"text","in":"query","required":true,"description":"Teks input (plaintext atau base64 ciphertext)","schema":{"type":"string","example":"halo dunia"}},{"name":"password","in":"query","required":true,"description":"Password/kunci","schema":{"type":"string","example":"s3cr3t"}}]},{"method":"get","path":"/utils/armstrong","required":[{"name":"n","in":"query","required":true,"description":"Bilangan yang diperiksa","schema":{"type":"string","example":"153"}}]},{"method":"get","path":"/utils/ascii85","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia"}}]},{"method":"get","path":"/utils/atbash","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia"}}]},{"method":"get","path":"/utils/base-converter","required":[{"name":"value","in":"query","required":true,"description":"Nilai yang akan dikonversi","schema":{"type":"string","example":"255"}}]},{"method":"get","path":"/utils/base32","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia"}}]},{"method":"get","path":"/utils/base58","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"hello"}}]},{"method":"get","path":"/utils/base62","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"hello"}}]},{"method":"get","path":"/utils/base64","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia"}}]},{"method":"get","path":"/utils/base85","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"hello"}}]},{"method":"get","path":"/utils/binary","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo"}}]},{"method":"get","path":"/utils/binomial-coefficient","required":[{"name":"n","in":"query","required":true,"description":"Total","schema":{"type":"integer","example":10}},{"name":"k","in":"query","required":true,"description":"Pilih","schema":{"type":"integer","example":3}}]},{"method":"get","path":"/utils/bitwise","required":[{"name":"a","in":"query","required":true,"description":"Bilangan pertama","schema":{"type":"integer","example":12}},{"name":"op","in":"query","required":true,"description":"Operasi","schema":{"type":"string","enum":["and","or","xor","not","left_shift","right_shift","right_shift_unsigned"],"example":"and"}}]},{"method":"get","path":"/utils/bmi","required":[{"name":"weight","in":"query","required":true,"description":"Berat badan dalam kg","schema":{"type":"number","example":70}},{"name":"height","in":"query","required":true,"description":"Tinggi badan dalam cm","schema":{"type":"number","example":170}}]},{"method":"get","path":"/utils/braille","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia"}}]},{"method":"get","path":"/utils/caesar","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo"}}]},{"method":"get","path":"/utils/catalan","required":[]},{"method":"get","path":"/utils/char-code","required":[]},{"method":"get","path":"/utils/collatz","required":[{"name":"n","in":"query","required":true,"description":"Bilangan awal (positif)","schema":{"type":"string","example":"27"}}]},{"method":"get","path":"/utils/color","required":[{"name":"color","in":"query","required":true,"description":"Warna input (#RRGGBB atau r,g,b)","schema":{"type":"string","example":"#ff6600"}}]},{"method":"get","path":"/utils/color-scheme","required":[{"name":"color","in":"query","required":true,"description":"Warna dasar (HEX)","schema":{"type":"string","example":"#3498db"}}]},{"method":"get","path":"/utils/complex-number","required":[{"name":"a","in":"query","required":true,"description":"Bilangan kompleks pertama (cth: 3+4i)","schema":{"type":"string","example":"3+4i"}},{"name":"b","in":"query","required":true,"description":"Bilangan kompleks kedua (cth: 1-2i)","schema":{"type":"string","example":"1-2i"}}]},{"method":"get","path":"/utils/crc32","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia"}}]},{"method":"get","path":"/utils/credit-card","required":[]},{"method":"get","path":"/utils/csv-to-json","required":[{"name":"csv","in":"query","required":true,"description":"String CSV","schema":{"type":"string","example":"name,age\nAlice,30\nBob,25"}}]},{"method":"get","path":"/utils/cuid","required":[]},{"method":"get","path":"/utils/decimal-codec","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo"}}]},{"method":"get","path":"/utils/ean13","required":[{"name":"code","in":"query","required":true,"description":"Kode EAN-13 (12 atau 13 digit)","schema":{"type":"string","example":"590123412345"}}]},{"method":"get","path":"/utils/email-check","required":[{"name":"email","in":"query","required":true,"description":"Alamat email","schema":{"type":"string","example":"test@gmail.com"}}]},{"method":"get","path":"/utils/emoji-info","required":[{"name":"emoji","in":"query","required":true,"description":"Emoji yang akan diperiksa","schema":{"type":"string","example":"😀"}}]},{"method":"get","path":"/utils/factorial","required":[{"name":"n","in":"query","required":true,"description":"Bilangan (0-1000)","schema":{"type":"integer","example":10}}]},{"method":"get","path":"/utils/fibonacci","required":[]},{"method":"get","path":"/utils/fraction","required":[]},{"method":"get","path":"/utils/gcd-lcm","required":[{"name":"numbers","in":"query","required":true,"description":"Daftar angka dipisah koma","schema":{"type":"string","example":"12,18,24"}}]},{"method":"get","path":"/utils/geographic-distance","required":[{"name":"lat1","in":"query","required":true,"description":"Latitude titik 1","schema":{"type":"number","example":-6.2088}},{"name":"lon1","in":"query","required":true,"description":"Longitude titik 1","schema":{"type":"number","example":106.8456}},{"name":"lat2","in":"query","required":true,"description":"Latitude titik 2","schema":{"type":"number","example":-7.7956}},{"name":"lon2","in":"query","required":true,"description":"Longitude titik 2","schema":{"type":"number","example":110.3695}}]},{"method":"get","path":"/utils/hash","required":[{"name":"text","in":"query","required":true,"description":"Teks yang akan dihash","schema":{"type":"string","example":"halo dunia"}}]},{"method":"get","path":"/utils/hex-codec","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo"}}]},{"method":"get","path":"/utils/hmac","required":[{"name":"text","in":"query","required":true,"description":"Teks yang akan di-HMAC","schema":{"type":"string","example":"halo dunia"}},{"name":"key","in":"query","required":true,"description":"Kunci rahasia","schema":{"type":"string","example":"s3cr3t"}}]},{"method":"get","path":"/utils/html-entities","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"<a href='x'>halo & dunia</a>"}}]},{"method":"get","path":"/utils/imei","required":[]},{"method":"get","path":"/utils/interest","required":[{"name":"principal","in":"query","required":true,"description":"Pokok pinjaman/investasi","schema":{"type":"number","example":1000000}},{"name":"rate","in":"query","required":true,"description":"Suku bunga tahunan (%)","schema":{"type":"number","example":5}},{"name":"time","in":"query","required":true,"description":"Periode (tahun)","schema":{"type":"number","example":3}}]},{"method":"get","path":"/utils/ipv4-info","required":[{"name":"ip","in":"query","required":true,"description":"Alamat IPv4","schema":{"type":"string","example":"192.168.1.1"}}]},{"method":"get","path":"/utils/ipv4-subnet","required":[{"name":"cidr","in":"query","required":true,"description":"CIDR","schema":{"type":"string","example":"192.168.1.0/24"}}]},{"method":"get","path":"/utils/isbn","required":[{"name":"isbn","in":"query","required":true,"description":"Nomor ISBN","schema":{"type":"string","example":"978-3-16-148410-0"}}]},{"method":"get","path":"/utils/isbn-validator","required":[{"name":"isbn","in":"query","required":true,"description":"Nomor ISBN (boleh dengan tanda hubung)","schema":{"type":"string","example":"978-3-16-148410-0"}}]},{"method":"get","path":"/utils/js-escape","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"Halo \"dunia\"\\nBaris 2"}}]},{"method":"get","path":"/utils/json-format","required":[{"name":"json","in":"query","required":true,"description":"String JSON","schema":{"type":"string","example":"{\"name\":\"halo\",\"age\":25,\"items\":[1,2,3]}"}}]},{"method":"get","path":"/utils/json-to-csv","required":[{"name":"json","in":"query","required":true,"description":"JSON array of objects","schema":{"type":"string","example":"[{\"name\":\"Alice\",\"age\":30},{\"name\":\"Bob\",\"age\":25}]"}}]},{"method":"get","path":"/utils/json-validate","required":[{"name":"json","in":"query","required":true,"description":"String JSON","schema":{"type":"string","example":"{\"name\":\"halo\"}"}}]},{"method":"get","path":"/utils/jwt-create","required":[]},{"method":"get","path":"/utils/jwt-decode","required":[{"name":"token","in":"query","required":true,"description":"JWT token","schema":{"type":"string","example":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"}}]},{"method":"get","path":"/utils/logarithm","required":[{"name":"x","in":"query","required":true,"description":"Nilai","schema":{"type":"number","example":100}}]},{"method":"get","path":"/utils/lorem-ipsum","required":[]},{"method":"get","path":"/utils/luhn","required":[{"name":"number","in":"query","required":true,"description":"Nomor kartu (digit 13-19)","schema":{"type":"string","example":"4111111111111111"}}]},{"method":"get","path":"/utils/mac-address","required":[]},{"method":"get","path":"/utils/matrix-op","required":[{"name":"a","in":"query","required":true,"description":"Matriks A (JSON 2D array)","schema":{"type":"string","example":"[[1,2],[3,4]]"}}]},{"method":"get","path":"/utils/modular-arithmetic","required":[{"name":"a","in":"query","required":true,"description":"Bilangan a","schema":{"type":"string","example":"7"}},{"name":"m","in":"query","required":true,"description":"Modulus","schema":{"type":"string","example":"11"}}]},{"method":"get","path":"/utils/morse","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"SOS"}}]},{"method":"get","path":"/utils/nanoid","required":[]},{"method":"get","path":"/utils/nato-phonetic","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"SOS"}}]},{"method":"get","path":"/utils/number-to-words","required":[{"name":"number","in":"query","required":true,"description":"Angka","schema":{"type":"integer","example":12345}}]},{"method":"get","path":"/utils/octal-codec","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo"}}]},{"method":"get","path":"/utils/password","required":[]},{"method":"get","path":"/utils/password-strength","required":[{"name":"password","in":"query","required":true,"description":"Password yang akan dicek","schema":{"type":"string","example":"P@ssw0rd123"}}]},{"method":"get","path":"/utils/pbkdf2","required":[{"name":"password","in":"query","required":true,"description":"Password input","schema":{"type":"string","example":"s3cr3t"}}]},{"method":"get","path":"/utils/percentage","required":[{"name":"mode","in":"query","required":true,"description":"Mode: of (X% dari Y), is (X adalah % dari Y), change (% perubahan dari X ke Y)","schema":{"type":"string","enum":["of","is","change"],"example":"of"}},{"name":"x","in":"query","required":true,"description":"Nilai X","schema":{"type":"number","example":20}},{"name":"y","in":"query","required":true,"description":"Nilai Y","schema":{"type":"number","example":150}}]},{"method":"get","path":"/utils/perfect-number","required":[]},{"method":"get","path":"/utils/permutation-combination","required":[{"name":"n","in":"query","required":true,"description":"Total items","schema":{"type":"integer","example":10}},{"name":"r","in":"query","required":true,"description":"Items terpilih","schema":{"type":"integer","example":3}}]},{"method":"get","path":"/utils/prime","required":[{"name":"n","in":"query","required":true,"description":"Bilangan yang dicek (integer 1-1e12)","schema":{"type":"integer","example":97}}]},{"method":"get","path":"/utils/prime-factorization","required":[{"name":"n","in":"query","required":true,"description":"Bilangan bulat positif","schema":{"type":"string","example":"123456789"}}]},{"method":"get","path":"/utils/punycode","required":[{"name":"text","in":"query","required":true,"description":"Teks input (label domain tanpa dot)","schema":{"type":"string","example":"münchen"}}]},{"method":"get","path":"/utils/quadratic","required":[{"name":"a","in":"query","required":true,"description":"Koefisien a","schema":{"type":"number","example":1}},{"name":"b","in":"query","required":true,"description":"Koefisien b","schema":{"type":"number","example":-3}},{"name":"c","in":"query","required":true,"description":"Koefisien c","schema":{"type":"number","example":2}}]},{"method":"get","path":"/utils/query-string","required":[{"name":"mode","in":"query","required":true,"description":"parse atau build","schema":{"type":"string","enum":["parse","build"],"example":"parse"}}]},{"method":"get","path":"/utils/random-bytes","required":[]},{"method":"get","path":"/utils/random-int","required":[]},{"method":"get","path":"/utils/random-string","required":[]},{"method":"get","path":"/utils/roman","required":[{"name":"value","in":"query","required":true,"description":"Angka (1-3999) atau angka Romawi (mis. XIV)","schema":{"type":"string","example":"2024"}}]},{"method":"get","path":"/utils/root","required":[{"name":"x","in":"query","required":true,"description":"Bilangan","schema":{"type":"number","example":27}}]},{"method":"get","path":"/utils/rot13","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia"}}]},{"method":"get","path":"/utils/scrypt","required":[{"name":"password","in":"query","required":true,"description":"Password input","schema":{"type":"string","example":"s3cr3t"}}]},{"method":"get","path":"/utils/sha3","required":[{"name":"text","in":"query","required":true,"description":"Teks yang akan dihash","schema":{"type":"string","example":"hello world"}}]},{"method":"get","path":"/utils/shake","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"hello"}}]},{"method":"get","path":"/utils/slugify","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"Halo Dunia! Ini adalah Test."}}]},{"method":"get","path":"/utils/snowflake","required":[]},{"method":"get","path":"/utils/statistics","required":[{"name":"numbers","in":"query","required":true,"description":"Daftar angka dipisah koma","schema":{"type":"string","example":"1,2,3,4,5,5,6"}}]},{"method":"get","path":"/utils/timestamp","required":[]},{"method":"get","path":"/utils/trig","required":[{"name":"func","in":"query","required":true,"description":"Fungsi","schema":{"type":"string","enum":["sin","cos","tan","asin","acos","atan","sinh","cosh","tanh"],"example":"sin"}},{"name":"x","in":"query","required":true,"description":"Nilai input","schema":{"type":"number","example":0.5}}]},{"method":"get","path":"/utils/ulid","required":[]},{"method":"get","path":"/utils/unicode-escape","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia"}}]},{"method":"get","path":"/utils/unicode-info","required":[]},{"method":"get","path":"/utils/unit-angle","required":[{"name":"value","in":"query","required":true,"description":"Nilai","schema":{"type":"number","example":90}},{"name":"from","in":"query","required":true,"description":"Satuan asal","schema":{"type":"string","enum":["deg","rad","grad","turn","arcmin","arcsec"],"example":"deg"}}]},{"method":"get","path":"/utils/unit-data","required":[{"name":"value","in":"query","required":true,"description":"Nilai","schema":{"type":"number","example":1}},{"name":"from","in":"query","required":true,"description":"Satuan asal","schema":{"type":"string","example":"GB"}}]},{"method":"get","path":"/utils/unit-length","required":[{"name":"value","in":"query","required":true,"description":"Nilai","schema":{"type":"number","example":1}},{"name":"from","in":"query","required":true,"description":"Satuan asal","schema":{"type":"string","enum":["mm","cm","m","km","in","ft","yd","mi","nmi","league","furlong","chain"],"example":"km"}}]},{"method":"get","path":"/utils/unit-speed","required":[{"name":"value","in":"query","required":true,"description":"Nilai","schema":{"type":"number","example":100}},{"name":"from","in":"query","required":true,"description":"Satuan asal","schema":{"type":"string","example":"km/h"}}]},{"method":"get","path":"/utils/unit-temperature","required":[{"name":"value","in":"query","required":true,"description":"Nilai","schema":{"type":"number","example":100}},{"name":"from","in":"query","required":true,"description":"Satuan asal (c/f/k/r)","schema":{"type":"string","enum":["c","f","k","r"],"example":"c"}}]},{"method":"get","path":"/utils/unit-time","required":[{"name":"value","in":"query","required":true,"description":"Nilai","schema":{"type":"number","example":1}},{"name":"from","in":"query","required":true,"description":"Satuan asal","schema":{"type":"string","example":"day"}}]},{"method":"get","path":"/utils/unit-weight","required":[{"name":"value","in":"query","required":true,"description":"Nilai","schema":{"type":"number","example":1}},{"name":"from","in":"query","required":true,"description":"Satuan asal","schema":{"type":"string","example":"kg"}}]},{"method":"get","path":"/utils/url-codec","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia & selamat"}}]},{"method":"get","path":"/utils/url-parse","required":[{"name":"url","in":"query","required":true,"description":"URL","schema":{"type":"string","example":"https://example.com:8080/path/to/page?foo=bar&baz=qux#section"}}]},{"method":"get","path":"/utils/uuid","required":[]},{"method":"get","path":"/utils/vector-op","required":[{"name":"a","in":"query","required":true,"description":"Vektor A (JSON array)","schema":{"type":"string","example":"[1,2,3]"}}]},{"method":"get","path":"/utils/vigenere","required":[{"name":"text","in":"query","required":true,"description":"Teks input","schema":{"type":"string","example":"halo dunia"}},{"name":"key","in":"query","required":true,"description":"Kunci cipher (alfabet)","schema":{"type":"string","example":"rahasia"}}]}]
+[
+  {
+    "method": "get",
+    "path": "/docs",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/docs/json",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/ai/chatday",
+    "required": [
+      {
+        "name": "prompt",
+        "in": "query",
+        "required": true,
+        "description": "Your message/prompt",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": [
+      "model"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/ai/chatgpt",
+    "required": [
+      {
+        "name": "prompt",
+        "in": "query",
+        "required": true,
+        "description": "Pertanyaan atau pesan yang dikirim ke ChatGPT",
+        "schema": {
+          "type": "string",
+          "example": "Halo, kamu siapa?"
+        }
+      }
+    ],
+    "optional": [
+      "chatId",
+      "auth"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/ai/chatilm",
+    "required": [
+      {
+        "name": "prompt",
+        "in": "query",
+        "required": true,
+        "description": "Pertanyaan / prompt untuk AI",
+        "schema": {
+          "type": "string",
+          "example": "Apa itu zakat?"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/ai/claude3",
+    "required": [
+      {
+        "name": "prompt",
+        "in": "query",
+        "required": true,
+        "description": "Pertanyaan / prompt untuk AI",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/ai/deepai-chat",
+    "required": [
+      {
+        "name": "prompt",
+        "in": "query",
+        "required": true,
+        "description": "Pesan atau pertanyaan yang dikirim ke DeepAI",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": [
+      "model"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/ai/deepai-v2",
+    "required": [
+      {
+        "name": "prompt",
+        "in": "query",
+        "required": true,
+        "description": "Pesan / pertanyaan untuk AI.",
+        "schema": {
+          "type": "string",
+          "example": "Halo, siapa kamu?"
+        }
+      }
+    ],
+    "optional": [
+      "model"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/ai/felo",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Pertanyaan atau query pencarian",
+        "schema": {
+          "type": "string",
+          "example": "siapa presiden indonesia sekarang?"
+        }
+      }
+    ],
+    "optional": [
+      "lang",
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/ai/g-ai",
+    "required": [],
+    "optional": [
+      "query"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/ai/gemini",
+    "required": [
+      {
+        "name": "prompt",
+        "in": "query",
+        "required": true,
+        "description": "Pertanyaan atau pesan yang dikirim ke Gemini",
+        "schema": {
+          "type": "string",
+          "example": "Siapa penemu telepon?"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/ai/mistral",
+    "required": [
+      {
+        "name": "prompt",
+        "in": "query",
+        "required": true,
+        "description": "Pesan atau pertanyaan yang dikirim ke Mistral AI",
+        "schema": {
+          "type": "string",
+          "example": "Apa itu artificial intelligence?"
+        }
+      }
+    ],
+    "optional": [
+      "session"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/ai/pollinations",
+    "required": [
+      {
+        "name": "prompt",
+        "in": "query",
+        "required": true,
+        "description": "Deskripsi gambar",
+        "schema": {
+          "type": "string",
+          "example": "seekor rubah merah di hutan, sinematik"
+        }
+      }
+    ],
+    "optional": [
+      "width",
+      "height",
+      "model",
+      "seed",
+      "check"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/ai/qwen",
+    "required": [
+      {
+        "name": "prompt",
+        "in": "query",
+        "required": true,
+        "description": "Pesan atau pertanyaan dalam bahasa apa pun. Untuk t2i/t2v: deskripsi gambar/video yang diinginkan.",
+        "schema": {
+          "type": "string",
+          "example": "Jelaskan teori relativitas secara singkat"
+        }
+      }
+    ],
+    "optional": [
+      "mode",
+      "model",
+      "thinking",
+      "search",
+      "size",
+      "fileUrl"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/anime/anibiplay",
+    "required": [],
+    "optional": [
+      "type",
+      "query",
+      "slug"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/anime/dubindo",
+    "required": [],
+    "optional": [
+      "type",
+      "query",
+      "url"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/anime/hurawatch",
+    "required": [],
+    "optional": [
+      "type",
+      "query",
+      "id",
+      "media_type",
+      "page"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/anime/klikfilm",
+    "required": [],
+    "optional": [
+      "type",
+      "query",
+      "url"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/anime/livechart",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian atau slug/ID anime (untuk type=detail)",
+        "schema": {
+          "type": "string",
+          "example": "frieren"
+        }
+      }
+    ],
+    "optional": [
+      "type"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/anime/moviebox",
+    "required": [],
+    "optional": [
+      "type",
+      "query",
+      "id",
+      "detailPath",
+      "ranking",
+      "page",
+      "se",
+      "ep"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/anime/samehadaku",
+    "required": [],
+    "optional": [
+      "type",
+      "query",
+      "url"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/downloader/9xbuddy",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL media yang ingin diunduh",
+        "schema": {
+          "type": "string",
+          "example": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/aiodl",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL media (TikTok, Instagram, Facebook, dll.)",
+        "schema": {
+          "type": "string",
+          "example": "https://www.tiktok.com/@scout2015/video/6718335390845095173"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/cnv",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL YouTube (watch atau youtu.be)",
+        "schema": {
+          "type": "string",
+          "example": "https://youtu.be/pNNnrE_RSdE"
+        }
+      }
+    ],
+    "optional": [
+      "format",
+      "quality"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/downloader/ensave",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL media (YouTube, TikTok, Instagram, Facebook, Reddit, SoundCloud, X)",
+        "schema": {
+          "type": "string",
+          "example": "https://youtu.be/dQw4w9WgXcQ"
+        }
+      }
+    ],
+    "optional": [
+      "platform"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/downloader/ensaveyt",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL YouTube (watch, youtu.be, shorts, live, atau embed)",
+        "schema": {
+          "type": "string",
+          "example": "https://youtu.be/dQw4w9WgXcQ"
+        }
+      }
+    ],
+    "optional": [
+      "type",
+      "quality"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/downloader/fbdown",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL video Facebook (postingan, reels, atau watch)",
+        "schema": {
+          "type": "string",
+          "example": "https://www.facebook.com/facebook/videos/10153231379946729/"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/flickreels",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL FlickReels (drama/episode) atau kata kunci pencarian",
+        "schema": {
+          "type": "string",
+          "example": "https://www.flickreels.net/drama/420"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/igvid",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL Instagram (post /p/, reel /reel/, atau /tv/)",
+        "schema": {
+          "type": "string",
+          "example": "https://www.instagram.com/reel/DXVZ4yCCG0J/"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/instagram",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL post/reel Instagram",
+        "schema": {
+          "type": "string",
+          "example": "https://www.instagram.com/p/DaHSc8TjxAW/"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/instagram2",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL post/reel Instagram",
+        "schema": {
+          "type": "string",
+          "example": "https://www.instagram.com/reel/DZOyRZNTfLZ/"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/kolig",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL Instagram (post /p/, reel /reel/, atau story)",
+        "schema": {
+          "type": "string",
+          "example": "https://www.instagram.com/reel/DXVZ4yCCG0J/"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/kolyt",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL YouTube (watch atau youtu.be)",
+        "schema": {
+          "type": "string",
+          "example": "https://youtu.be/dQw4w9WgXcQ"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/musicaldown",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL TikTok (video, photo/slideshow, atau short link vm.tiktok.com)",
+        "schema": {
+          "type": "string",
+          "example": "https://vm.tiktok.com/ZSQbmkw89/"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/musicfab",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL track Spotify",
+        "schema": {
+          "type": "string",
+          "example": "https://open.spotify.com/track/4bCoqCjwZggHxHcUSRpFDG"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/pindown",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL Pinterest (pin.it atau pinterest.com)",
+        "schema": {
+          "type": "string",
+          "example": "https://pin.it/uWysLLKpr"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/soundcloud",
+    "required": [],
+    "optional": [
+      "url",
+      "query",
+      "download"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/downloader/ssstik",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL video TikTok",
+        "schema": {
+          "type": "string",
+          "example": "https://vm.tiktok.com/ZSQB7uUrV/"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/threads",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL post Threads",
+        "schema": {
+          "type": "string",
+          "example": "https://www.threads.com/@derahmatsyuhada/post/DaIUHnSjyIb"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/threadsdl",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL postingan Threads",
+        "schema": {
+          "type": "string",
+          "example": "https://www.threads.com/@esports.ku/post/DZm4eSFEiDs"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/threadster",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL postingan Threads",
+        "schema": {
+          "type": "string",
+          "example": "https://www.threads.com/@citra_nurmalasarii/post/DZmxdS9mIw0"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/downloader/y2meta",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL YouTube (watch, youtu.be, shorts, live, atau embed)",
+        "schema": {
+          "type": "string",
+          "example": "https://youtu.be/dQw4w9WgXcQ"
+        }
+      }
+    ],
+    "optional": [
+      "format",
+      "quality"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/downloader/youtube-summary",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL video YouTube (youtube.com/watch?v=... atau youtu.be/...)",
+        "schema": {
+          "type": "string",
+          "example": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        }
+      }
+    ],
+    "optional": [
+      "lang"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/downloader/yt-music",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian atau videoId (untuk type=detail)",
+        "schema": {
+          "type": "string",
+          "example": "never gonna give you up"
+        }
+      }
+    ],
+    "optional": [
+      "type"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/downloader/yttranscript",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL video YouTube (youtube.com/watch?v=... atau youtu.be/...)",
+        "schema": {
+          "type": "string",
+          "example": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/advice",
+    "required": [],
+    "optional": [
+      "id"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/affirmation",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/age",
+    "required": [
+      {
+        "name": "birth",
+        "in": "query",
+        "required": true,
+        "description": "Tanggal lahir (YYYY-MM-DD)",
+        "schema": {
+          "type": "string",
+          "example": "1990-05-15"
+        }
+      }
+    ],
+    "optional": [
+      "target"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/agify",
+    "required": [
+      {
+        "name": "name",
+        "in": "query",
+        "required": true,
+        "description": "Nama depan",
+        "schema": {
+          "type": "string",
+          "example": "alex"
+        }
+      }
+    ],
+    "optional": [
+      "country_id"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/arxiv",
+    "required": [
+      {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Query pencarian",
+        "schema": {
+          "type": "string",
+          "example": "transformer attention"
+        }
+      }
+    ],
+    "optional": [
+      "max"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/avatar",
+    "required": [],
+    "optional": [
+      "seed",
+      "style",
+      "format"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/books",
+    "required": [
+      {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Query pencarian",
+        "schema": {
+          "type": "string",
+          "example": "harry potter"
+        }
+      }
+    ],
+    "optional": [
+      "limit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/bored",
+    "required": [],
+    "optional": [
+      "type",
+      "participants"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/breaking-bad",
+    "required": [],
+    "optional": [
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/cat-facts",
+    "required": [],
+    "optional": [
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/chinese-zodiac",
+    "required": [
+      {
+        "name": "year",
+        "in": "query",
+        "required": true,
+        "description": "Tahun lahir (1900-2100)",
+        "schema": {
+          "type": "integer",
+          "example": 1990
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/cocktail",
+    "required": [],
+    "optional": [
+      "name",
+      "random"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/country",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Nama negara atau kode ISO 2/3 huruf (mis. indonesia, ID, IDN)",
+        "schema": {
+          "type": "string",
+          "example": "indonesia"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/crossref",
+    "required": [
+      {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Query pencarian",
+        "schema": {
+          "type": "string",
+          "example": "climate change"
+        }
+      }
+    ],
+    "optional": [
+      "limit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/crypto-coingecko",
+    "required": [
+      {
+        "name": "ids",
+        "in": "query",
+        "required": true,
+        "description": "Coin IDs (comma-separated): bitcoin,ethereum,solana",
+        "schema": {
+          "type": "string",
+          "example": "bitcoin,ethereum"
+        }
+      }
+    ],
+    "optional": [
+      "vs_currencies",
+      "include_24hr_change",
+      "include_last_updated_at"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/crypto-price",
+    "required": [],
+    "optional": [
+      "coin",
+      "vs"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/currency",
+    "required": [
+      {
+        "name": "from",
+        "in": "query",
+        "required": true,
+        "description": "Kode mata uang sumber (mis. USD)",
+        "schema": {
+          "type": "string",
+          "example": "USD"
+        }
+      },
+      {
+        "name": "to",
+        "in": "query",
+        "required": true,
+        "description": "Kode mata uang tujuan (mis. IDR)",
+        "schema": {
+          "type": "string",
+          "example": "IDR"
+        }
+      }
+    ],
+    "optional": [
+      "amount"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/dictionary",
+    "required": [
+      {
+        "name": "word",
+        "in": "query",
+        "required": true,
+        "description": "Kata yang dicari",
+        "schema": {
+          "type": "string",
+          "example": "hello"
+        }
+      }
+    ],
+    "optional": [
+      "lang"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/dns",
+    "required": [
+      {
+        "name": "domain",
+        "in": "query",
+        "required": true,
+        "description": "Nama domain (mis. example.com)",
+        "schema": {
+          "type": "string",
+          "example": "google.com"
+        }
+      }
+    ],
+    "optional": [
+      "type"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/dog-ceo",
+    "required": [],
+    "optional": [
+      "breed",
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/dog-facts",
+    "required": [],
+    "optional": [
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/dog-facts-v2",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/exchangerate",
+    "required": [],
+    "optional": [
+      "base",
+      "target"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/fact",
+    "required": [],
+    "optional": [
+      "number",
+      "type"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/genderize",
+    "required": [
+      {
+        "name": "name",
+        "in": "query",
+        "required": true,
+        "description": "Nama depan",
+        "schema": {
+          "type": "string",
+          "example": "alex"
+        }
+      }
+    ],
+    "optional": [
+      "country_id"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/geocode",
+    "required": [
+      {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Nama lokasi",
+        "schema": {
+          "type": "string",
+          "example": "Jakarta"
+        }
+      }
+    ],
+    "optional": [
+      "count",
+      "lang"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/github-api",
+    "required": [
+      {
+        "name": "endpoint",
+        "in": "query",
+        "required": true,
+        "description": "Endpoint GitHub (tanpa /api/v3): users/octocat, repos/octocat/Hello-World, repos/octocat/Hello-World/releases",
+        "schema": {
+          "type": "string",
+          "example": "users/octocat"
+        }
+      }
+    ],
+    "optional": [
+      "per_page",
+      "page"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/github-repo",
+    "required": [
+      {
+        "name": "owner",
+        "in": "query",
+        "required": true,
+        "description": "Owner repo",
+        "schema": {
+          "type": "string",
+          "example": "torvalds"
+        }
+      },
+      {
+        "name": "repo",
+        "in": "query",
+        "required": true,
+        "description": "Nama repo",
+        "schema": {
+          "type": "string",
+          "example": "linux"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/github-search",
+    "required": [
+      {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Query pencarian",
+        "schema": {
+          "type": "string",
+          "example": "elysia bun"
+        }
+      }
+    ],
+    "optional": [
+      "sort",
+      "order",
+      "per_page"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/github-user",
+    "required": [
+      {
+        "name": "username",
+        "in": "query",
+        "required": true,
+        "description": "Username GitHub",
+        "schema": {
+          "type": "string",
+          "example": "torvalds"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/hackernews",
+    "required": [],
+    "optional": [
+      "limit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/holidays",
+    "required": [
+      {
+        "name": "country",
+        "in": "query",
+        "required": true,
+        "description": "Kode negara 2 huruf (mis. ID, US, GB)",
+        "schema": {
+          "type": "string",
+          "example": "ID"
+        }
+      }
+    ],
+    "optional": [
+      "year"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/http-headers",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL target",
+        "schema": {
+          "type": "string",
+          "example": "https://example.com"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/http-status",
+    "required": [],
+    "optional": [
+      "code"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/ip",
+    "required": [],
+    "optional": [
+      "ip"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/iss-location",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/joke",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/markdown",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks Markdown",
+        "schema": {
+          "type": "string",
+          "example": "# Halo\nIni **bold** dan *italic*."
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/meal",
+    "required": [],
+    "optional": [
+      "name",
+      "random"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/moon-phase",
+    "required": [],
+    "optional": [
+      "date"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/nationalize",
+    "required": [
+      {
+        "name": "name",
+        "in": "query",
+        "required": true,
+        "description": "Nama depan",
+        "schema": {
+          "type": "string",
+          "example": "rahmat"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/npm",
+    "required": [
+      {
+        "name": "name",
+        "in": "query",
+        "required": true,
+        "description": "Nama paket NPM",
+        "schema": {
+          "type": "string",
+          "example": "axios"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/numbers",
+    "required": [],
+    "optional": [
+      "number",
+      "type"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/open-weather",
+    "required": [
+      {
+        "name": "lat",
+        "in": "query",
+        "required": true,
+        "description": "Latitude",
+        "schema": {
+          "type": "number",
+          "example": -6.2088
+        }
+      },
+      {
+        "name": "lon",
+        "in": "query",
+        "required": true,
+        "description": "Longitude",
+        "schema": {
+          "type": "number",
+          "example": 106.8456
+        }
+      }
+    ],
+    "optional": [
+      "days"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/placeholder",
+    "required": [],
+    "optional": [
+      "width",
+      "height",
+      "text",
+      "bg",
+      "fg",
+      "format"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/pokemon",
+    "required": [
+      {
+        "name": "name",
+        "in": "query",
+        "required": true,
+        "description": "Nama atau ID Pokemon",
+        "schema": {
+          "type": "string",
+          "example": "pikachu"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/pokemon-list",
+    "required": [],
+    "optional": [
+      "limit",
+      "offset"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/qr-api",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks/URL yang akan di-encode",
+        "schema": {
+          "type": "string",
+          "example": "https://kangwifi.eu.org"
+        }
+      }
+    ],
+    "optional": [
+      "size",
+      "margin",
+      "dark",
+      "light"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/quotable",
+    "required": [],
+    "optional": [
+      "author",
+      "tags",
+      "maxLength"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/quote",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/quotes-categories",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/random",
+    "required": [],
+    "optional": [
+      "mode",
+      "min",
+      "max",
+      "count",
+      "list"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/random-quotes",
+    "required": [],
+    "optional": [
+      "userId",
+      "category",
+      "count",
+      "reset"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/rickandmorty",
+    "required": [],
+    "optional": [
+      "name",
+      "page"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/space-people",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/swapi",
+    "required": [],
+    "optional": [
+      "type",
+      "id",
+      "search"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/time",
+    "required": [],
+    "optional": [
+      "tz"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/timezone",
+    "required": [],
+    "optional": [
+      "tz"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/tv-maze",
+    "required": [
+      {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Query pencarian",
+        "schema": {
+          "type": "string",
+          "example": "breaking bad"
+        }
+      }
+    ],
+    "optional": [
+      "limit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/university",
+    "required": [],
+    "optional": [
+      "name",
+      "country"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/useless-fact",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/user-agent",
+    "required": [],
+    "optional": [
+      "ua"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/weather-coord",
+    "required": [
+      {
+        "name": "lat",
+        "in": "query",
+        "required": true,
+        "description": "Latitude (-90 to 90)",
+        "schema": {
+          "type": "number",
+          "example": -6.2
+        }
+      },
+      {
+        "name": "lon",
+        "in": "query",
+        "required": true,
+        "description": "Longitude (-180 to 180)",
+        "schema": {
+          "type": "number",
+          "example": 106.8
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/info/xkcd",
+    "required": [],
+    "optional": [
+      "id",
+      "random"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/info/zodiac",
+    "required": [
+      {
+        "name": "month",
+        "in": "query",
+        "required": true,
+        "description": "Bulan lahir 1-12",
+        "schema": {
+          "type": "integer",
+          "example": 7
+        }
+      },
+      {
+        "name": "day",
+        "in": "query",
+        "required": true,
+        "description": "Tanggal lahir 1-31",
+        "schema": {
+          "type": "integer",
+          "example": 15
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/islamic/asmaul-husna",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/islamic/doa-harian",
+    "required": [],
+    "optional": [
+      "source",
+      "search"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/islamic/hadits",
+    "required": [],
+    "optional": [
+      "kitab",
+      "no",
+      "search"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/islamic/jadwal-sholat",
+    "required": [],
+    "optional": [
+      "kota",
+      "negara",
+      "lat",
+      "lng",
+      "metode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/islamic/quran-list",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/islamic/quran-surah",
+    "required": [
+      {
+        "name": "id",
+        "in": "query",
+        "required": true,
+        "description": "Nomor surah (1-114)",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 114,
+          "example": 1
+        }
+      }
+    ],
+    "optional": [
+      "qari",
+      "tafsir"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/maker/brat",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks yang ditampilkan (otomatis lowercase, maks 20 kata)",
+        "schema": {
+          "type": "string",
+          "example": "brat"
+        }
+      }
+    ],
+    "optional": [
+      "style",
+      "blur"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/maker/bratanim",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks. Tiap kata muncul bergantian. (maks 10 kata)",
+        "schema": {
+          "type": "string",
+          "example": "i'm so julia"
+        }
+      }
+    ],
+    "optional": [
+      "style",
+      "blur",
+      "speed"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/maker/iqc",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Isi pesan (maks 400 karakter, auto-wrap, mendukung markdown *tebal* _miring_ ~coret~)",
+        "schema": {
+          "type": "string",
+          "example": "Ini adalah *contoh* fake chat iPhone.\nMendukung _markdown_ ~juga~."
+        }
+      }
+    ],
+    "optional": [
+      "time",
+      "clock",
+      "bubble"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/maker/jj-capcut-generator",
+    "required": [],
+    "optional": [
+      "mode",
+      "style",
+      "title",
+      "short",
+      "author",
+      "username",
+      "template_id",
+      "duration_s",
+      "fragment",
+      "photo",
+      "video",
+      "resolution",
+      "ratio",
+      "template_name",
+      "format"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/maker/qc",
+    "required": [
+      {
+        "name": "username",
+        "in": "query",
+        "required": true,
+        "description": "Nama yang ditampilkan (maks 40 karakter)",
+        "schema": {
+          "type": "string",
+          "example": "jauhariel.cc"
+        }
+      },
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Isi pesan (maks 500 karakter, auto-wrap)",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia apa kabar"
+        }
+      }
+    ],
+    "optional": [
+      "avatar",
+      "color",
+      "bubble"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/appstore",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": [
+      "country",
+      "media",
+      "limit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/cek-nik",
+    "required": [
+      {
+        "name": "nik",
+        "in": "query",
+        "required": true,
+        "description": "Nomor Induk Kependudukan 16 digit",
+        "schema": {
+          "type": "string",
+          "example": "3271011708950001"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/search/cek-plat",
+    "required": [
+      {
+        "name": "plate",
+        "in": "query",
+        "required": true,
+        "description": "Plat nomor kendaraan (contoh: B 1234 ABC)",
+        "schema": {
+          "type": "string",
+          "example": "B 1234 ABC"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/search/ff-verify",
+    "required": [
+      {
+        "name": "id",
+        "in": "query",
+        "required": true,
+        "description": "User ID akun Free Fire",
+        "schema": {
+          "type": "string",
+          "example": "1000695760"
+        }
+      }
+    ],
+    "optional": [
+      "source",
+      "proxy"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/github-code",
+    "required": [
+      {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Query pencarian (contoh: 'react hooks language:javascript')",
+        "schema": {
+          "type": "string",
+          "example": "elysia language:javascript"
+        }
+      }
+    ],
+    "optional": [
+      "per_page",
+      "page",
+      "sort",
+      "order"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/gsm-area",
+    "required": [
+      {
+        "name": "nomor",
+        "in": "query",
+        "required": true,
+        "description": "Nomor telepon Indonesia. Format apa pun diterima: 08xxx, +628xxx, 628xxx, 021xxx, dll.",
+        "schema": {
+          "type": "string",
+          "example": "081234567890"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/search/gsmarena",
+    "required": [],
+    "optional": [
+      "query",
+      "url",
+      "slug"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/ik21",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/search/image",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci gambar",
+        "schema": {
+          "type": "string",
+          "example": "kucing lucu"
+        }
+      }
+    ],
+    "optional": [
+      "limit",
+      "safe"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/iq-search-drama",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/search/manhwalist02",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/search/moviev2",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/search/otakudesu",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/search/pinterest",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian",
+        "schema": {
+          "type": "string",
+          "example": "furina"
+        }
+      }
+    ],
+    "optional": [
+      "limit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/pinterest2",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian",
+        "schema": {
+          "type": "string",
+          "example": "furina genshin"
+        }
+      }
+    ],
+    "optional": [
+      "limit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/spotify",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian lagu",
+        "schema": {
+          "type": "string",
+          "example": "introvert lirik"
+        }
+      }
+    ],
+    "optional": [
+      "limit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/spotify-playlist",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL playlist, album, atau artist Spotify",
+        "schema": {
+          "type": "string",
+          "example": "https://open.spotify.com/playlist/3Lf9PqUBWQMeOtfuCNPnoY"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/search/stackoverflow",
+    "required": [
+      {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian",
+        "schema": {
+          "type": "string",
+          "example": "react hooks useEffect"
+        }
+      }
+    ],
+    "optional": [
+      "tagged",
+      "sort",
+      "order",
+      "pagesize",
+      "page",
+      "key"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/stalk-game",
+    "required": [
+      {
+        "name": "game",
+        "in": "query",
+        "required": true,
+        "description": "Game yang dicek: ml, ff, gi (Genshin), pubgm, codm, aov",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "ml",
+            "ff",
+            "gi",
+            "pubgm",
+            "codm",
+            "aov"
+          ],
+          "example": "ml"
+        }
+      },
+      {
+        "name": "id",
+        "in": "query",
+        "required": true,
+        "description": "User ID / UID akun game",
+        "schema": {
+          "type": "string",
+          "example": "157228049"
+        }
+      }
+    ],
+    "optional": [
+      "zone"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/tokopedia",
+    "required": [
+      {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian produk",
+        "schema": {
+          "type": "string",
+          "example": "vivo x300"
+        }
+      }
+    ],
+    "optional": [
+      "page",
+      "limit",
+      "sort",
+      "pmin",
+      "pmax"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/unsplash",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian",
+        "schema": {
+          "type": "string",
+          "example": "mountain landscape"
+        }
+      }
+    ],
+    "optional": [
+      "per_page",
+      "orientation"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/wikipedia",
+    "required": [
+      {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": [
+      "lang",
+      "limit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/youtube",
+    "required": [
+      {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Kata kunci pencarian",
+        "schema": {
+          "type": "string",
+          "example": "never gonna give you up"
+        }
+      }
+    ],
+    "optional": [
+      "limit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/search/youtube-playlist",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL playlist YouTube atau ID playlist (PL..., OLAK..., dst.)",
+        "schema": {
+          "type": "string",
+          "example": "https://youtube.com/playlist?list=PL4fGSI1pDJn5QPpj0R4vVgRWk8sSq549G"
+        }
+      }
+    ],
+    "optional": [
+      "limit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/affine",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "AFFINE CIPHER"
+        }
+      }
+    ],
+    "optional": [
+      "a",
+      "b",
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/anagram",
+    "required": [
+      {
+        "name": "a",
+        "in": "query",
+        "required": true,
+        "description": "String pertama",
+        "schema": {
+          "type": "string",
+          "example": "listen"
+        }
+      },
+      {
+        "name": "b",
+        "in": "query",
+        "required": true,
+        "description": "String kedua",
+        "schema": {
+          "type": "string",
+          "example": "silent"
+        }
+      }
+    ],
+    "optional": [
+      "ignore_case",
+      "ignore_non_alnum"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/case",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia selamat"
+        }
+      }
+    ],
+    "optional": [
+      "to"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/char-frequency",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      }
+    ],
+    "optional": [
+      "ignore_case",
+      "ignore_whitespace"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/char-info",
+    "required": [
+      {
+        "name": "char",
+        "in": "query",
+        "required": true,
+        "description": "Satu karakter (atau string, hanya karakter pertama)",
+        "schema": {
+          "type": "string",
+          "example": "A"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/text/count",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "Halo dunia. Selamat datang di API."
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/text/diff",
+    "required": [
+      {
+        "name": "a",
+        "in": "query",
+        "required": true,
+        "description": "Teks pertama",
+        "schema": {
+          "type": "string",
+          "example": "baris 1\nbaris 2\nbaris 3"
+        }
+      },
+      {
+        "name": "b",
+        "in": "query",
+        "required": true,
+        "description": "Teks kedua",
+        "schema": {
+          "type": "string",
+          "example": "baris 1\nbaris baru\nbaris 3"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/text/escape",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "<b>halo & dunia</b>"
+        }
+      }
+    ],
+    "optional": [
+      "type",
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/find-replace",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia halo semua"
+        }
+      },
+      {
+        "name": "find",
+        "in": "query",
+        "required": true,
+        "description": "Pattern yang dicari (string atau /regex/flags)",
+        "schema": {
+          "type": "string",
+          "example": "halo"
+        }
+      },
+      {
+        "name": "replace",
+        "in": "query",
+        "required": true,
+        "description": "Teks pengganti",
+        "schema": {
+          "type": "string",
+          "example": "hi"
+        }
+      }
+    ],
+    "optional": [
+      "regex",
+      "flags"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/leetspeak",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      }
+    ],
+    "optional": [
+      "level"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/line-numbers",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "baris 1\nbaris 2\nbaris 3"
+        }
+      }
+    ],
+    "optional": [
+      "start",
+      "separator",
+      "pad"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/pad",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo"
+        }
+      }
+    ],
+    "optional": [
+      "length",
+      "char",
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/palindrome",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "Kasur ini rusak"
+        }
+      }
+    ],
+    "optional": [
+      "ignore_case",
+      "ignore_non_alnum"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/pig-latin",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "hello world"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/text/rail-fence",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "HELLO WORLD"
+        }
+      }
+    ],
+    "optional": [
+      "rails",
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/reading-time",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks yang dihitung",
+        "schema": {
+          "type": "string",
+          "example": "This is a sample text for reading time estimation."
+        }
+      }
+    ],
+    "optional": [
+      "wpm"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/regex",
+    "required": [
+      {
+        "name": "pattern",
+        "in": "query",
+        "required": true,
+        "description": "Pattern regex tanpa delimiter",
+        "schema": {
+          "type": "string",
+          "example": "\\d+"
+        }
+      },
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks yang diuji",
+        "schema": {
+          "type": "string",
+          "example": "abc 123 def 456"
+        }
+      }
+    ],
+    "optional": [
+      "flags"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/reverse",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/rot47",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "Hello World"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/text/sort",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "banana\napple\ncherry"
+        }
+      }
+    ],
+    "optional": [
+      "by",
+      "order",
+      "unique"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/strip-html",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks HTML input",
+        "schema": {
+          "type": "string",
+          "example": "<p>Halo <b>dunia</b> &amp; semuanya</p>"
+        }
+      }
+    ],
+    "optional": [
+      "decode_entities",
+      "trim"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/syllable-count",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "Hello beautiful world"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/text/text-stat",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "This is a sample sentence. It contains several words for analysis."
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/text/truncate",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "Lorem ipsum dolor sit amet consectetur adipiscing elit"
+        }
+      }
+    ],
+    "optional": [
+      "length",
+      "ellipsis",
+      "word_boundary"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/unique",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "apple\nbanana\napple\ncherry"
+        }
+      }
+    ],
+    "optional": [
+      "by",
+      "ci",
+      "sort"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/word-frequency",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "the quick brown fox jumps over the lazy dog the the"
+        }
+      }
+    ],
+    "optional": [
+      "limit",
+      "order"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/text/wrap",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod"
+        }
+      }
+    ],
+    "optional": [
+      "width",
+      "break_long"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/alight-motion",
+    "required": [
+      {
+        "name": "email",
+        "in": "query",
+        "required": true,
+        "description": "Alamat email akun Alight Motion yang akan dipromosikan",
+        "schema": {
+          "type": "string",
+          "example": "user@example.com"
+        }
+      }
+    ],
+    "optional": [
+      "link",
+      "orderId"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/alight-motion/refresh",
+    "required": [
+      {
+        "name": "refreshToken",
+        "in": "query",
+        "required": true,
+        "description": "Refresh token yang didapat dari response /tools/alight-motion (field `auth.refreshToken`).",
+        "schema": {
+          "type": "string",
+          "example": "AMf-vBx...long-token-string..."
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/alight-motion/status",
+    "required": [
+      {
+        "name": "idToken",
+        "in": "query",
+        "required": true,
+        "description": "Firebase idToken (Bearer token) dari /tools/alight-motion Tahap 2 atau dari /tools/alight-motion/refresh. Wajib dikirim via query string (v4.1 GET-only API).",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/bmkg",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/bmkg-cuaca",
+    "required": [],
+    "optional": [
+      "provinsi",
+      "kota",
+      "jenis"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/cuaca",
+    "required": [],
+    "optional": [
+      "daerah",
+      "adm4",
+      "list"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/cuaca-global",
+    "required": [
+      {
+        "name": "kota",
+        "in": "query",
+        "required": true,
+        "description": "Nama kota (mis. Tokyo, Sumenep, Bandung)",
+        "schema": {
+          "type": "string",
+          "example": "Tokyo"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/farestop",
+    "required": [
+      {
+        "name": "query",
+        "in": "query",
+        "required": true,
+        "description": "Nama game atau game ID yang dicari (mis. 'roblox' atau '100')",
+        "schema": {
+          "type": "string",
+          "example": "roblox"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/gempa",
+    "required": [],
+    "optional": [
+      "tipe"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/hd",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL gambar yang akan diperbesar",
+        "schema": {
+          "type": "string",
+          "example": "https://picsum.photos/200/200.jpg"
+        }
+      }
+    ],
+    "optional": [
+      "scale"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/idnapp",
+    "required": [
+      {
+        "name": "input",
+        "in": "query",
+        "required": true,
+        "description": "Parameter input",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/ihancer",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL gambar publik yang akan dienhance",
+        "schema": {
+          "type": "string",
+          "example": "https://example.com/photo.jpg"
+        }
+      }
+    ],
+    "optional": [
+      "method"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/ip-geo",
+    "required": [],
+    "optional": [
+      "ip",
+      "fields",
+      "lang"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/linkpreview",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL yang ingin di-preview",
+        "schema": {
+          "type": "string",
+          "example": "https://www.youtube.com"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/nyckel-nsfw",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL gambar yang akan diperiksa",
+        "schema": {
+          "type": "string",
+          "example": "https://github.com/fluidicon.png"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/photoihancer",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL gambar/video yang akan diproses",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/picsart",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL gambar publik yang akan di-enhance",
+        "schema": {
+          "type": "string",
+          "example": "https://example.com/photo.jpg"
+        }
+      }
+    ],
+    "optional": [
+      "scale",
+      "face",
+      "face_blend"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/qrcode",
+    "required": [],
+    "optional": [
+      "text",
+      "size",
+      "url"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/removalai",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL gambar publik yang akan dihapus background-nya.",
+        "schema": {
+          "type": "string",
+          "example": "https://example.com/foto.jpg"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/removebg",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL gambar publik yang akan dihapus background-nya (hindari URL yang redirect lintas-host).",
+        "schema": {
+          "type": "string",
+          "example": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=512&h=512&fit=crop"
+        }
+      }
+    ],
+    "optional": [
+      "mode",
+      "prompt"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/restoredphoto",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL gambar/video yang akan diproses",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/sekolah",
+    "required": [
+      {
+        "name": "type",
+        "in": "query",
+        "required": true,
+        "description": "Jenis aksi: `search` (cari sekolah) atau `detail` (detail sekolah berdasarkan NPSN).",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "search",
+            "detail"
+          ],
+          "example": "search"
+        }
+      }
+    ],
+    "optional": [
+      "query",
+      "npsn"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/shortlink",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL yang akan dipersingkat",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/shorturl",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL yang ingin dipersingkat",
+        "schema": {
+          "type": "string",
+          "example": "https://example.com/halaman-yang-sangat-panjang"
+        }
+      }
+    ],
+    "optional": [
+      "provider",
+      "custom"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/tempmail",
+    "required": [],
+    "optional": [
+      "email"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/translate",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks yang ingin diterjemahkan",
+        "schema": {
+          "type": "string",
+          "example": "Selamat pagi, apa kabar?"
+        }
+      }
+    ],
+    "optional": [
+      "to",
+      "from"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/tts",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks yang ingin dijadikan audio",
+        "schema": {
+          "type": "string",
+          "example": "Selamat pagi semuanya"
+        }
+      }
+    ],
+    "optional": [
+      "to",
+      "translate",
+      "from"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/ttsbrando",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks yang akan dijadikan suara",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/ufile",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL file yang akan diunggah ulang",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/uploader",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL file/gambar yang akan diunggah ulang",
+        "schema": {
+          "type": "string",
+          "example": "https://picsum.photos/id/237/400/400.jpg"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/uuid-variants",
+    "required": [],
+    "optional": [
+      "type",
+      "namespace",
+      "name",
+      "encode",
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/validate-json",
+    "required": [
+      {
+        "name": "json",
+        "in": "query",
+        "required": true,
+        "description": "String JSON yang divalidasi",
+        "schema": {
+          "type": "string",
+          "example": "{\"name\":\"John\",\"age\":30}"
+        }
+      }
+    ],
+    "optional": [
+      "indent"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/visualparadigm",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL gambar publik yang akan di-enhance",
+        "schema": {
+          "type": "string",
+          "example": "https://example.com/photo.jpg"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/webshot",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL website yang ingin di-screenshot",
+        "schema": {
+          "type": "string",
+          "example": "https://www.google.com"
+        }
+      }
+    ],
+    "optional": [
+      "width",
+      "fullpage"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/tools/ytmeta",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL atau ID video YouTube (watch, youtu.be, shorts, music, embed)",
+        "schema": {
+          "type": "string",
+          "example": "https://youtu.be/pNNnrE_RSdE"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/zoneai/img2txt",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL gambar yang akan diproses",
+        "schema": {
+          "type": "string",
+          "example": "https://example.com/image.jpg"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/tools/zoneai/text2img",
+    "required": [
+      {
+        "name": "prompt",
+        "in": "query",
+        "required": true,
+        "description": "Teks deskripsi gambar",
+        "schema": {
+          "type": "string",
+          "example": "anime maid girl with red hair glasses"
+        }
+      }
+    ],
+    "optional": [
+      "size",
+      "upscale",
+      "image_url"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/aes",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input (plaintext atau base64 ciphertext)",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      },
+      {
+        "name": "password",
+        "in": "query",
+        "required": true,
+        "description": "Password/kunci",
+        "schema": {
+          "type": "string",
+          "example": "s3cr3t"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/armstrong",
+    "required": [
+      {
+        "name": "n",
+        "in": "query",
+        "required": true,
+        "description": "Bilangan yang diperiksa",
+        "schema": {
+          "type": "string",
+          "example": "153"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/ascii85",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/atbash",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/base-converter",
+    "required": [
+      {
+        "name": "value",
+        "in": "query",
+        "required": true,
+        "description": "Nilai yang akan dikonversi",
+        "schema": {
+          "type": "string",
+          "example": "255"
+        }
+      }
+    ],
+    "optional": [
+      "from",
+      "to"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/base32",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/base58",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "hello"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/base62",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "hello"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/base64",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/base85",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "hello"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/binary",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/binomial-coefficient",
+    "required": [
+      {
+        "name": "n",
+        "in": "query",
+        "required": true,
+        "description": "Total",
+        "schema": {
+          "type": "integer",
+          "example": 10
+        }
+      },
+      {
+        "name": "k",
+        "in": "query",
+        "required": true,
+        "description": "Pilih",
+        "schema": {
+          "type": "integer",
+          "example": 3
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/bitwise",
+    "required": [
+      {
+        "name": "a",
+        "in": "query",
+        "required": true,
+        "description": "Bilangan pertama",
+        "schema": {
+          "type": "integer",
+          "example": 12
+        }
+      },
+      {
+        "name": "op",
+        "in": "query",
+        "required": true,
+        "description": "Operasi",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "and",
+            "or",
+            "xor",
+            "not",
+            "left_shift",
+            "right_shift",
+            "right_shift_unsigned"
+          ],
+          "example": "and"
+        }
+      }
+    ],
+    "optional": [
+      "b"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/bmi",
+    "required": [
+      {
+        "name": "weight",
+        "in": "query",
+        "required": true,
+        "description": "Berat badan dalam kg",
+        "schema": {
+          "type": "number",
+          "example": 70
+        }
+      },
+      {
+        "name": "height",
+        "in": "query",
+        "required": true,
+        "description": "Tinggi badan dalam cm",
+        "schema": {
+          "type": "number",
+          "example": 170
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/braille",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/caesar",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo"
+        }
+      }
+    ],
+    "optional": [
+      "shift"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/catalan",
+    "required": [],
+    "optional": [
+      "n"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/char-code",
+    "required": [],
+    "optional": [
+      "text",
+      "codes",
+      "base"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/collatz",
+    "required": [
+      {
+        "name": "n",
+        "in": "query",
+        "required": true,
+        "description": "Bilangan awal (positif)",
+        "schema": {
+          "type": "string",
+          "example": "27"
+        }
+      }
+    ],
+    "optional": [
+      "maxSteps"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/color",
+    "required": [
+      {
+        "name": "color",
+        "in": "query",
+        "required": true,
+        "description": "Warna input (#RRGGBB atau r,g,b)",
+        "schema": {
+          "type": "string",
+          "example": "#ff6600"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/color-scheme",
+    "required": [
+      {
+        "name": "color",
+        "in": "query",
+        "required": true,
+        "description": "Warna dasar (HEX)",
+        "schema": {
+          "type": "string",
+          "example": "#3498db"
+        }
+      }
+    ],
+    "optional": [
+      "scheme"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/complex-number",
+    "required": [
+      {
+        "name": "a",
+        "in": "query",
+        "required": true,
+        "description": "Bilangan kompleks pertama (cth: 3+4i)",
+        "schema": {
+          "type": "string",
+          "example": "3+4i"
+        }
+      },
+      {
+        "name": "b",
+        "in": "query",
+        "required": true,
+        "description": "Bilangan kompleks kedua (cth: 1-2i)",
+        "schema": {
+          "type": "string",
+          "example": "1-2i"
+        }
+      }
+    ],
+    "optional": [
+      "op"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/crc32",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/credit-card",
+    "required": [],
+    "optional": [
+      "number",
+      "issuer",
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/csv-to-json",
+    "required": [
+      {
+        "name": "csv",
+        "in": "query",
+        "required": true,
+        "description": "String CSV",
+        "schema": {
+          "type": "string",
+          "example": "name,age\nAlice,30\nBob,25"
+        }
+      }
+    ],
+    "optional": [
+      "delimiter",
+      "header"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/cuid",
+    "required": [],
+    "optional": [
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/decimal-codec",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo"
+        }
+      }
+    ],
+    "optional": [
+      "mode",
+      "sep"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/ean13",
+    "required": [
+      {
+        "name": "code",
+        "in": "query",
+        "required": true,
+        "description": "Kode EAN-13 (12 atau 13 digit)",
+        "schema": {
+          "type": "string",
+          "example": "590123412345"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/email-check",
+    "required": [
+      {
+        "name": "email",
+        "in": "query",
+        "required": true,
+        "description": "Alamat email",
+        "schema": {
+          "type": "string",
+          "example": "test@gmail.com"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/emoji-info",
+    "required": [
+      {
+        "name": "emoji",
+        "in": "query",
+        "required": true,
+        "description": "Emoji yang akan diperiksa",
+        "schema": {
+          "type": "string",
+          "example": "😀"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/factorial",
+    "required": [
+      {
+        "name": "n",
+        "in": "query",
+        "required": true,
+        "description": "Bilangan (0-1000)",
+        "schema": {
+          "type": "integer",
+          "example": 10
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/fibonacci",
+    "required": [],
+    "optional": [
+      "count",
+      "at"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/fraction",
+    "required": [],
+    "optional": [
+      "decimal",
+      "fraction",
+      "maxDenom"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/gcd-lcm",
+    "required": [
+      {
+        "name": "numbers",
+        "in": "query",
+        "required": true,
+        "description": "Daftar angka dipisah koma",
+        "schema": {
+          "type": "string",
+          "example": "12,18,24"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/geographic-distance",
+    "required": [
+      {
+        "name": "lat1",
+        "in": "query",
+        "required": true,
+        "description": "Latitude titik 1",
+        "schema": {
+          "type": "number",
+          "example": -6.2088
+        }
+      },
+      {
+        "name": "lon1",
+        "in": "query",
+        "required": true,
+        "description": "Longitude titik 1",
+        "schema": {
+          "type": "number",
+          "example": 106.8456
+        }
+      },
+      {
+        "name": "lat2",
+        "in": "query",
+        "required": true,
+        "description": "Latitude titik 2",
+        "schema": {
+          "type": "number",
+          "example": -7.7956
+        }
+      },
+      {
+        "name": "lon2",
+        "in": "query",
+        "required": true,
+        "description": "Longitude titik 2",
+        "schema": {
+          "type": "number",
+          "example": 110.3695
+        }
+      }
+    ],
+    "optional": [
+      "unit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/hash",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks yang akan dihash",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      }
+    ],
+    "optional": [
+      "algo"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/hex-codec",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/hmac",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks yang akan di-HMAC",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      },
+      {
+        "name": "key",
+        "in": "query",
+        "required": true,
+        "description": "Kunci rahasia",
+        "schema": {
+          "type": "string",
+          "example": "s3cr3t"
+        }
+      }
+    ],
+    "optional": [
+      "algo",
+      "encoding"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/html-entities",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "<a href='x'>halo & dunia</a>"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/id-generator",
+    "required": [],
+    "optional": [
+      "type",
+      "count",
+      "size"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/imei",
+    "required": [],
+    "optional": [
+      "imei",
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/interest",
+    "required": [
+      {
+        "name": "principal",
+        "in": "query",
+        "required": true,
+        "description": "Pokok pinjaman/investasi",
+        "schema": {
+          "type": "number",
+          "example": 1000000
+        }
+      },
+      {
+        "name": "rate",
+        "in": "query",
+        "required": true,
+        "description": "Suku bunga tahunan (%)",
+        "schema": {
+          "type": "number",
+          "example": 5
+        }
+      },
+      {
+        "name": "time",
+        "in": "query",
+        "required": true,
+        "description": "Periode (tahun)",
+        "schema": {
+          "type": "number",
+          "example": 3
+        }
+      }
+    ],
+    "optional": [
+      "type",
+      "n"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/ipv4-info",
+    "required": [
+      {
+        "name": "ip",
+        "in": "query",
+        "required": true,
+        "description": "Alamat IPv4",
+        "schema": {
+          "type": "string",
+          "example": "192.168.1.1"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/ipv4-subnet",
+    "required": [
+      {
+        "name": "cidr",
+        "in": "query",
+        "required": true,
+        "description": "CIDR",
+        "schema": {
+          "type": "string",
+          "example": "192.168.1.0/24"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/isbn",
+    "required": [
+      {
+        "name": "isbn",
+        "in": "query",
+        "required": true,
+        "description": "Nomor ISBN",
+        "schema": {
+          "type": "string",
+          "example": "978-3-16-148410-0"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/isbn-validator",
+    "required": [
+      {
+        "name": "isbn",
+        "in": "query",
+        "required": true,
+        "description": "Nomor ISBN (boleh dengan tanda hubung)",
+        "schema": {
+          "type": "string",
+          "example": "978-3-16-148410-0"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/js-escape",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "Halo \"dunia\"\\nBaris 2"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/json-format",
+    "required": [
+      {
+        "name": "json",
+        "in": "query",
+        "required": true,
+        "description": "String JSON",
+        "schema": {
+          "type": "string",
+          "example": "{\"name\":\"halo\",\"age\":25,\"items\":[1,2,3]}"
+        }
+      }
+    ],
+    "optional": [
+      "mode",
+      "indent"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/json-to-csv",
+    "required": [
+      {
+        "name": "json",
+        "in": "query",
+        "required": true,
+        "description": "JSON array of objects",
+        "schema": {
+          "type": "string",
+          "example": "[{\"name\":\"Alice\",\"age\":30},{\"name\":\"Bob\",\"age\":25}]"
+        }
+      }
+    ],
+    "optional": [
+      "delimiter"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/json-validate",
+    "required": [
+      {
+        "name": "json",
+        "in": "query",
+        "required": true,
+        "description": "String JSON",
+        "schema": {
+          "type": "string",
+          "example": "{\"name\":\"halo\"}"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/jwt-create",
+    "required": [],
+    "optional": [
+      "payload",
+      "secret",
+      "issuer",
+      "subject",
+      "audience",
+      "expiresIn"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/jwt-decode",
+    "required": [
+      {
+        "name": "token",
+        "in": "query",
+        "required": true,
+        "description": "JWT token",
+        "schema": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/logarithm",
+    "required": [
+      {
+        "name": "x",
+        "in": "query",
+        "required": true,
+        "description": "Nilai",
+        "schema": {
+          "type": "number",
+          "example": 100
+        }
+      }
+    ],
+    "optional": [
+      "func",
+      "base"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/lorem-ipsum",
+    "required": [],
+    "optional": [
+      "type",
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/luhn",
+    "required": [
+      {
+        "name": "number",
+        "in": "query",
+        "required": true,
+        "description": "Nomor kartu (digit 13-19)",
+        "schema": {
+          "type": "string",
+          "example": "4111111111111111"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/mac-address",
+    "required": [],
+    "optional": [
+      "mac",
+      "prefix",
+      "separator",
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/matrix-op",
+    "required": [
+      {
+        "name": "a",
+        "in": "query",
+        "required": true,
+        "description": "Matriks A (JSON 2D array)",
+        "schema": {
+          "type": "string",
+          "example": "[[1,2],[3,4]]"
+        }
+      }
+    ],
+    "optional": [
+      "b",
+      "op"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/modular-arithmetic",
+    "required": [
+      {
+        "name": "a",
+        "in": "query",
+        "required": true,
+        "description": "Bilangan a",
+        "schema": {
+          "type": "string",
+          "example": "7"
+        }
+      },
+      {
+        "name": "m",
+        "in": "query",
+        "required": true,
+        "description": "Modulus",
+        "schema": {
+          "type": "string",
+          "example": "11"
+        }
+      }
+    ],
+    "optional": [
+      "b",
+      "op"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/morse",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "SOS"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/nanoid",
+    "required": [],
+    "optional": [
+      "size",
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/nato-phonetic",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "SOS"
+        }
+      }
+    ],
+    "optional": [
+      "sep"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/number-to-words",
+    "required": [
+      {
+        "name": "number",
+        "in": "query",
+        "required": true,
+        "description": "Angka",
+        "schema": {
+          "type": "integer",
+          "example": 12345
+        }
+      }
+    ],
+    "optional": [
+      "lang"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/octal-codec",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo"
+        }
+      }
+    ],
+    "optional": [
+      "mode",
+      "sep"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/password",
+    "required": [],
+    "optional": [
+      "length",
+      "lower",
+      "upper",
+      "digits",
+      "symbols"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/password-strength",
+    "required": [
+      {
+        "name": "password",
+        "in": "query",
+        "required": true,
+        "description": "Password yang akan dicek",
+        "schema": {
+          "type": "string",
+          "example": "P@ssw0rd123"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/pbkdf2",
+    "required": [
+      {
+        "name": "password",
+        "in": "query",
+        "required": true,
+        "description": "Password input",
+        "schema": {
+          "type": "string",
+          "example": "s3cr3t"
+        }
+      }
+    ],
+    "optional": [
+      "salt",
+      "iterations",
+      "keylen",
+      "algo"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/percentage",
+    "required": [
+      {
+        "name": "mode",
+        "in": "query",
+        "required": true,
+        "description": "Mode: of (X% dari Y), is (X adalah % dari Y), change (% perubahan dari X ke Y)",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "of",
+            "is",
+            "change"
+          ],
+          "example": "of"
+        }
+      },
+      {
+        "name": "x",
+        "in": "query",
+        "required": true,
+        "description": "Nilai X",
+        "schema": {
+          "type": "number",
+          "example": 20
+        }
+      },
+      {
+        "name": "y",
+        "in": "query",
+        "required": true,
+        "description": "Nilai Y",
+        "schema": {
+          "type": "number",
+          "example": 150
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/perfect-number",
+    "required": [],
+    "optional": [
+      "n",
+      "list"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/permutation-combination",
+    "required": [
+      {
+        "name": "n",
+        "in": "query",
+        "required": true,
+        "description": "Total items",
+        "schema": {
+          "type": "integer",
+          "example": 10
+        }
+      },
+      {
+        "name": "r",
+        "in": "query",
+        "required": true,
+        "description": "Items terpilih",
+        "schema": {
+          "type": "integer",
+          "example": 3
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/prime",
+    "required": [
+      {
+        "name": "n",
+        "in": "query",
+        "required": true,
+        "description": "Bilangan yang dicek (integer 1-1e12)",
+        "schema": {
+          "type": "integer",
+          "example": 97
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/prime-factorization",
+    "required": [
+      {
+        "name": "n",
+        "in": "query",
+        "required": true,
+        "description": "Bilangan bulat positif",
+        "schema": {
+          "type": "string",
+          "example": "123456789"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/punycode",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input (label domain tanpa dot)",
+        "schema": {
+          "type": "string",
+          "example": "münchen"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/quadratic",
+    "required": [
+      {
+        "name": "a",
+        "in": "query",
+        "required": true,
+        "description": "Koefisien a",
+        "schema": {
+          "type": "number",
+          "example": 1
+        }
+      },
+      {
+        "name": "b",
+        "in": "query",
+        "required": true,
+        "description": "Koefisien b",
+        "schema": {
+          "type": "number",
+          "example": -3
+        }
+      },
+      {
+        "name": "c",
+        "in": "query",
+        "required": true,
+        "description": "Koefisien c",
+        "schema": {
+          "type": "number",
+          "example": 2
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/query-string",
+    "required": [
+      {
+        "name": "mode",
+        "in": "query",
+        "required": true,
+        "description": "parse atau build",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "parse",
+            "build"
+          ],
+          "example": "parse"
+        }
+      }
+    ],
+    "optional": [
+      "qs",
+      "params"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/random-bytes",
+    "required": [],
+    "optional": [
+      "length",
+      "encoding"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/random-int",
+    "required": [],
+    "optional": [
+      "min",
+      "max",
+      "count",
+      "unique"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/random-string",
+    "required": [],
+    "optional": [
+      "length",
+      "charset",
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/roman",
+    "required": [
+      {
+        "name": "value",
+        "in": "query",
+        "required": true,
+        "description": "Angka (1-3999) atau angka Romawi (mis. XIV)",
+        "schema": {
+          "type": "string",
+          "example": "2024"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/root",
+    "required": [
+      {
+        "name": "x",
+        "in": "query",
+        "required": true,
+        "description": "Bilangan",
+        "schema": {
+          "type": "number",
+          "example": 27
+        }
+      }
+    ],
+    "optional": [
+      "n"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/rot13",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/scrypt",
+    "required": [
+      {
+        "name": "password",
+        "in": "query",
+        "required": true,
+        "description": "Password input",
+        "schema": {
+          "type": "string",
+          "example": "s3cr3t"
+        }
+      }
+    ],
+    "optional": [
+      "salt",
+      "keylen",
+      "N",
+      "r",
+      "p"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/sha3",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks yang akan dihash",
+        "schema": {
+          "type": "string",
+          "example": "hello world"
+        }
+      }
+    ],
+    "optional": [
+      "algo"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/shake",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "hello"
+        }
+      }
+    ],
+    "optional": [
+      "algo",
+      "length"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/slugify",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "Halo Dunia! Ini adalah Test."
+        }
+      }
+    ],
+    "optional": [
+      "separator"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/snowflake",
+    "required": [],
+    "optional": [
+      "decode",
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/statistics",
+    "required": [
+      {
+        "name": "numbers",
+        "in": "query",
+        "required": true,
+        "description": "Daftar angka dipisah koma",
+        "schema": {
+          "type": "string",
+          "example": "1,2,3,4,5,5,6"
+        }
+      }
+    ],
+    "optional": [
+      "sample"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/timestamp",
+    "required": [],
+    "optional": [
+      "value",
+      "tz"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/trig",
+    "required": [
+      {
+        "name": "func",
+        "in": "query",
+        "required": true,
+        "description": "Fungsi",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "sin",
+            "cos",
+            "tan",
+            "asin",
+            "acos",
+            "atan",
+            "sinh",
+            "cosh",
+            "tanh"
+          ],
+          "example": "sin"
+        }
+      },
+      {
+        "name": "x",
+        "in": "query",
+        "required": true,
+        "description": "Nilai input",
+        "schema": {
+          "type": "number",
+          "example": 0.5
+        }
+      }
+    ],
+    "optional": [
+      "unit"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/ulid",
+    "required": [],
+    "optional": [
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/unicode-escape",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/unicode-info",
+    "required": [],
+    "optional": [
+      "char",
+      "codepoint"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/unit-angle",
+    "required": [
+      {
+        "name": "value",
+        "in": "query",
+        "required": true,
+        "description": "Nilai",
+        "schema": {
+          "type": "number",
+          "example": 90
+        }
+      },
+      {
+        "name": "from",
+        "in": "query",
+        "required": true,
+        "description": "Satuan asal",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "deg",
+            "rad",
+            "grad",
+            "turn",
+            "arcmin",
+            "arcsec"
+          ],
+          "example": "deg"
+        }
+      }
+    ],
+    "optional": [
+      "to"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/unit-data",
+    "required": [
+      {
+        "name": "value",
+        "in": "query",
+        "required": true,
+        "description": "Nilai",
+        "schema": {
+          "type": "number",
+          "example": 1
+        }
+      },
+      {
+        "name": "from",
+        "in": "query",
+        "required": true,
+        "description": "Satuan asal",
+        "schema": {
+          "type": "string",
+          "example": "GB"
+        }
+      }
+    ],
+    "optional": [
+      "to"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/unit-length",
+    "required": [
+      {
+        "name": "value",
+        "in": "query",
+        "required": true,
+        "description": "Nilai",
+        "schema": {
+          "type": "number",
+          "example": 1
+        }
+      },
+      {
+        "name": "from",
+        "in": "query",
+        "required": true,
+        "description": "Satuan asal",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "mm",
+            "cm",
+            "m",
+            "km",
+            "in",
+            "ft",
+            "yd",
+            "mi",
+            "nmi",
+            "league",
+            "furlong",
+            "chain"
+          ],
+          "example": "km"
+        }
+      }
+    ],
+    "optional": [
+      "to"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/unit-speed",
+    "required": [
+      {
+        "name": "value",
+        "in": "query",
+        "required": true,
+        "description": "Nilai",
+        "schema": {
+          "type": "number",
+          "example": 100
+        }
+      },
+      {
+        "name": "from",
+        "in": "query",
+        "required": true,
+        "description": "Satuan asal",
+        "schema": {
+          "type": "string",
+          "example": "km/h"
+        }
+      }
+    ],
+    "optional": [
+      "to"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/unit-temperature",
+    "required": [
+      {
+        "name": "value",
+        "in": "query",
+        "required": true,
+        "description": "Nilai",
+        "schema": {
+          "type": "number",
+          "example": 100
+        }
+      },
+      {
+        "name": "from",
+        "in": "query",
+        "required": true,
+        "description": "Satuan asal (c/f/k/r)",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "c",
+            "f",
+            "k",
+            "r"
+          ],
+          "example": "c"
+        }
+      }
+    ],
+    "optional": [
+      "to"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/unit-time",
+    "required": [
+      {
+        "name": "value",
+        "in": "query",
+        "required": true,
+        "description": "Nilai",
+        "schema": {
+          "type": "number",
+          "example": 1
+        }
+      },
+      {
+        "name": "from",
+        "in": "query",
+        "required": true,
+        "description": "Satuan asal",
+        "schema": {
+          "type": "string",
+          "example": "day"
+        }
+      }
+    ],
+    "optional": [
+      "to"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/unit-weight",
+    "required": [
+      {
+        "name": "value",
+        "in": "query",
+        "required": true,
+        "description": "Nilai",
+        "schema": {
+          "type": "number",
+          "example": 1
+        }
+      },
+      {
+        "name": "from",
+        "in": "query",
+        "required": true,
+        "description": "Satuan asal",
+        "schema": {
+          "type": "string",
+          "example": "kg"
+        }
+      }
+    ],
+    "optional": [
+      "to"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/url-codec",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia & selamat"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/url-parse",
+    "required": [
+      {
+        "name": "url",
+        "in": "query",
+        "required": true,
+        "description": "URL",
+        "schema": {
+          "type": "string",
+          "example": "https://example.com:8080/path/to/page?foo=bar&baz=qux#section"
+        }
+      }
+    ],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/utils/uuid",
+    "required": [],
+    "optional": [
+      "count"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/vector-op",
+    "required": [
+      {
+        "name": "a",
+        "in": "query",
+        "required": true,
+        "description": "Vektor A (JSON array)",
+        "schema": {
+          "type": "string",
+          "example": "[1,2,3]"
+        }
+      }
+    ],
+    "optional": [
+      "b",
+      "op"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/utils/vigenere",
+    "required": [
+      {
+        "name": "text",
+        "in": "query",
+        "required": true,
+        "description": "Teks input",
+        "schema": {
+          "type": "string",
+          "example": "halo dunia"
+        }
+      },
+      {
+        "name": "key",
+        "in": "query",
+        "required": true,
+        "description": "Kunci cipher (alfabet)",
+        "schema": {
+          "type": "string",
+          "example": "rahasia"
+        }
+      }
+    ],
+    "optional": [
+      "mode"
+    ]
+  },
+  {
+    "method": "get",
+    "path": "/admin/sync",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/admin/ddos-status",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/admin/ddos-mode",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/ddos-mode",
+    "required": [],
+    "optional": []
+  },
+  {
+    "method": "get",
+    "path": "/health",
+    "required": [],
+    "optional": []
+  }
+]
