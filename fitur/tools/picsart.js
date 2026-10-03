@@ -11,12 +11,18 @@ import fs from "fs"
 import path from "path"
 import os from "os"
 
+// Token & chunk yang memuatnya di-cache di level modul: landing PicsArt redeploy
+// rutin dan URL bundle versi-pinned cepat 404, jadi token ditambang dinamis dari
+// chunk Next.js terbaru (satu kali per proses, bukan per request).
+let cachedToken = null
+let cachedChunk = null
+
 class PicsartEnhancer {
   constructor() {
     this.uploadUrl = "https://upload.picsart.com/files"
     this.aiUrl = "https://ai.picsart.com"
-    this.jsUrl = "https://picsart.com/-/landings/4.310.0/static/index-C3-HwnoW-GZgP7cLS.js"
-    this.token = null
+    this.landingUrl = "https://picsart.com/ai-image-enhancer/"
+    this.token = cachedToken
     this.headers = {
       origin: "https://picsart.com",
       referer: "https://picsart.com/",
@@ -25,15 +31,40 @@ class PicsartEnhancer {
     }
   }
 
-  async getToken() {
-    const resp = await fetch(this.jsUrl, { headers: this.headers })
-    const text = await resp.text()
-    const match = text.match(/"x-app-authorization":"Bearer\s+([^"]+)"/)
-    if (match?.[1]) {
-      this.token = match[1]
-      return this.token
+  async extractTokenFrom(chunks) {
+    for (const c of chunks) {
+      try {
+        const res = await fetch(`https://picsart.com${c}`, { headers: this.headers, signal: AbortSignal.timeout(15000) })
+        if (!res.ok) continue
+        const text = await res.text()
+        const m = text.match(/"x-app-authorization":"Bearer\s+([^"]+)"/) || text.match(/x-app-authorization[^a-zA-Z0-9]*Bearer\s+([A-Za-z0-9._-]{20,})/)
+        if (m?.[1]) {
+          cachedChunk = c
+          return m[1]
+        }
+      } catch {}
     }
-    throw new Error("Token PicsArt tidak ditemukan di JS bundle")
+    return null
+  }
+
+  async getToken() {
+    if (this.token) return this.token
+    // chunk yang terbukti memuat token dicoba dulu sebelum pindai ulang
+    if (cachedChunk) {
+      const t = await this.extractTokenFrom([cachedChunk])
+      if (t) { cachedToken = t; this.token = t; return t }
+      cachedChunk = null
+    }
+    const res = await fetch(this.landingUrl, { headers: this.headers, signal: AbortSignal.timeout(20000) })
+    if (!res.ok) throw new Error(`Landing PicsArt HTTP ${res.status}`)
+    const html = await res.text()
+    const chunks = [...new Set([...html.matchAll(/["'](\/landings-ssr\/_next\/static\/chunks\/[^"']*\.js)["']/g)].map(m => m[1]))]
+    if (!chunks.length) throw new Error("Chunk JS PicsArt tidak ditemukan di landing page")
+    const t = await this.extractTokenFrom(chunks)
+    if (!t) throw new Error("Token PicsArt tidak ditemukan di chunk JS (situs berubah lagi?)")
+    cachedToken = t
+    this.token = t
+    return t
   }
 
   async upload(buffer) {

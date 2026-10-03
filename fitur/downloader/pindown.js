@@ -164,7 +164,7 @@ export default {
                 in: "query",
                 required: true,
                 description: "URL Pinterest (pin.it atau pinterest.com)",
-                schema: { type: "string", example: "https://pin.it/uWysLLKpr" },
+                schema: { type: "string", example: "https://www.pinterest.com/pin/140806233979362/" },
             },
         ],
         responses: {

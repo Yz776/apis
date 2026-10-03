@@ -573,7 +573,7 @@
         "description": "URL Pinterest (pin.it atau pinterest.com)",
         "schema": {
           "type": "string",
-          "example": "https://pin.it/uWysLLKpr"
+          "example": "https://www.pinterest.com/pin/140806233979362/"
         }
       }
     ],
@@ -618,23 +618,6 @@
         "schema": {
           "type": "string",
           "example": "https://www.threads.com/@derahmatsyuhada/post/DaIUHnSjyIb"
-        }
-      }
-    ],
-    "optional": []
-  },
-  {
-    "method": "get",
-    "path": "/downloader/threadsdl",
-    "required": [
-      {
-        "name": "url",
-        "in": "query",
-        "required": true,
-        "description": "URL postingan Threads",
-        "schema": {
-          "type": "string",
-          "example": "https://www.threads.com/@esports.ku/post/DZm4eSFEiDs"
         }
       }
     ],
@@ -1953,22 +1936,6 @@
   {
     "method": "get",
     "path": "/search/iq-search-drama",
-    "required": [
-      {
-        "name": "query",
-        "in": "query",
-        "required": true,
-        "description": "Kata kunci pencarian",
-        "schema": {
-          "type": "string"
-        }
-      }
-    ],
-    "optional": []
-  },
-  {
-    "method": "get",
-    "path": "/search/manhwalist02",
     "required": [
       {
         "name": "query",
